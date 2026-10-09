@@ -14,13 +14,21 @@ const routeMeta = {
     title: 'Our Services | College Admissions, Career Counselling & Study Abroad — Vidyapaths',
     description: 'Explore Vidyapaths comprehensive education guidance services: UG/PG admissions, career counselling, internship assistance, and international degrees.'
   },
+  '/colleges': {
+    title: 'Explore Colleges & Courses | UG, PG & Specialized Programs — Vidyapaths',
+    description: 'Discover colleges and explore undergraduate, postgraduate, and specialized programs. Get personalized guidance to choose a course that fits your career goals.'
+  },
   '/study-abroad': {
     title: 'Study Abroad Consultancy | UK, USA, Canada, Australia & More — Vidyapaths',
     description: 'End-to-end overseas education guidance for 9 top destinations: UK, USA, Canada, Australia, Germany, Ireland, New Zealand, UAE, and Singapore.'
   },
+  '/internships': {
+    title: 'Internship Assistance & Corporate Readiness — Vidyapaths',
+    description: 'Bridge academic learning with corporate exposure. Guidance on ATS resume optimization, project portfolios, and interview mastery.'
+  },
   '/internships-admissions': {
-    title: 'Internships & College Admissions Hub | Vidyapaths',
-    description: 'Explore undergraduate and postgraduate college admissions, cutoff trends, ATS resume optimization, and high-impact corporate internships.'
+    title: 'Internship Assistance & Corporate Readiness — Vidyapaths',
+    description: 'Bridge academic learning with corporate exposure. Guidance on ATS resume optimization, project portfolios, and interview mastery.'
   },
   '/contact': {
     title: 'Contact Vidyapaths | Book Free Career & Admission Counselling',

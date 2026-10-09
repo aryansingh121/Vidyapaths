@@ -69,7 +69,7 @@ export default function InternshipSection({ onOpenEnquiry }) {
               </button>
 
               <Link
-                to="/internships-admissions"
+                to="/internships"
                 className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl font-semibold text-sm text-navy-900 bg-slate-100 hover:bg-slate-200 transition-colors"
               >
                 <span>Explore Process</span>

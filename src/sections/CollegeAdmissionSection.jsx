@@ -218,10 +218,10 @@ export default function CollegeAdmissionSection({ onOpenEnquiry }) {
               Get Free College Comparison
             </button>
             <Link
-              to="/internships-admissions"
+              to="/colleges"
               className="px-6 py-3 rounded-xl font-semibold text-sm text-navy-900 bg-slate-100 hover:bg-slate-200 transition-colors"
             >
-              View Admissions Guide
+              Explore Colleges Catalogue
             </Link>
           </div>
         </div>

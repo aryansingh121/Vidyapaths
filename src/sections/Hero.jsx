@@ -40,7 +40,7 @@ export default function Hero({ onOpenEnquiry }) {
               </button>
 
               <Link
-                to="/internships-admissions"
+                to="/colleges"
                 className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-4 rounded-xl text-base font-semibold text-navy-900 bg-white hover:bg-slate-50 border border-slate-200 hover:border-slate-300 shadow-sm transition-all min-h-[48px]"
               >
                 <span>Explore Colleges</span>

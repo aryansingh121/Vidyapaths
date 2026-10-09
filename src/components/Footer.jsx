@@ -7,9 +7,9 @@ export default function Footer({ onOpenEnquiry }) {
   const currentYear = new Date().getFullYear();
 
   const services = [
-    { name: "College Admission & Guidance", path: "/internships-admissions" },
+    { name: "College Admission & Guidance", path: "/colleges" },
     { name: "Career Counselling", path: "/services" },
-    { name: "Internship Assistance", path: "/internships-admissions" },
+    { name: "Internship Assistance", path: "/internships" },
     { name: "Study Abroad", path: "/study-abroad" },
     { name: "Resume & Interview Support", path: "/services" },
     { name: "Scholarship & Loan Guidance", path: "/services" },
@@ -80,10 +80,13 @@ export default function Footer({ onOpenEnquiry }) {
                 <Link to="/services" className="text-slate-400 hover:text-white transition-colors">All Services</Link>
               </li>
               <li>
+                <Link to="/colleges" className="text-slate-400 hover:text-white transition-colors">Colleges & Courses</Link>
+              </li>
+              <li>
                 <Link to="/study-abroad" className="text-slate-400 hover:text-white transition-colors">Study Abroad</Link>
               </li>
               <li>
-                <Link to="/internships-admissions" className="text-slate-400 hover:text-white transition-colors">Internships & Admissions</Link>
+                <Link to="/internships" className="text-slate-400 hover:text-white transition-colors">Internships</Link>
               </li>
               <li>
                 <Link to="/contact" className="text-slate-400 hover:text-white transition-colors">Contact & Enquire</Link>

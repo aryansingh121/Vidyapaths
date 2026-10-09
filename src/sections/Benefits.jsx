@@ -10,7 +10,7 @@ export default function Benefits({ onOpenEnquiry }) {
       icon: GraduationCap,
       color: "text-blue-600",
       bgColor: "bg-blue-50",
-      link: "/internships-admissions"
+      link: "/colleges"
     },
     {
       title: "Career Guidance",
@@ -34,7 +34,7 @@ export default function Benefits({ onOpenEnquiry }) {
       icon: Briefcase,
       color: "text-indigo-600",
       bgColor: "bg-indigo-50",
-      link: "/internships-admissions"
+      link: "/internships"
     }
   ];
 

@@ -14,7 +14,7 @@ export const servicesData = [
       "Spot admission & management quota clarity"
     ],
     ctaText: "Explore Colleges",
-    link: "/internships-admissions"
+    link: "/colleges"
   },
   {
     id: "career-counselling",
@@ -48,7 +48,7 @@ export const servicesData = [
       "Internship completion certificate orientation"
     ],
     ctaText: "Find Internships",
-    link: "/internships-admissions"
+    link: "/internships"
   },
   {
     id: "study-abroad",

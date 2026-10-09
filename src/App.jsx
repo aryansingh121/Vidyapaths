@@ -10,8 +10,9 @@ import { usePageMeta } from './utils/usePageMeta';
 import Home from './pages/Home';
 import About from './pages/About';
 import Services from './pages/Services';
+import Colleges from './pages/Colleges';
 import StudyAbroad from './pages/StudyAbroad';
-import InternshipsAdmissions from './pages/InternshipsAdmissions';
+import Internships from './pages/Internships';
 import Contact from './pages/Contact';
 
 function AppContent() {
@@ -40,8 +41,11 @@ function AppContent() {
           <Route path="/" element={<Home onOpenEnquiry={handleOpenEnquiry} />} />
           <Route path="/about" element={<About onOpenEnquiry={handleOpenEnquiry} />} />
           <Route path="/services" element={<Services onOpenEnquiry={handleOpenEnquiry} />} />
+          <Route path="/colleges" element={<Colleges onOpenEnquiry={handleOpenEnquiry} />} />
           <Route path="/study-abroad" element={<StudyAbroad onOpenEnquiry={handleOpenEnquiry} />} />
-          <Route path="/internships-admissions" element={<InternshipsAdmissions onOpenEnquiry={handleOpenEnquiry} />} />
+          <Route path="/internships" element={<Internships onOpenEnquiry={handleOpenEnquiry} />} />
+          {/* Legacy route alias */}
+          <Route path="/internships-admissions" element={<Internships onOpenEnquiry={handleOpenEnquiry} />} />
           <Route path="/contact" element={<Contact />} />
           {/* Fallback to Home */}
           <Route path="*" element={<Home onOpenEnquiry={handleOpenEnquiry} />} />

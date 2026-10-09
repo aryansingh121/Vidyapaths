@@ -9,6 +9,7 @@ import {
   Home, 
   Users, 
   Sparkles, 
+  GraduationCap,
   Globe, 
   Briefcase, 
   Mail,
@@ -38,13 +39,15 @@ export default function Navbar({ onOpenEnquiry }) {
     { name: 'Home', path: '/', icon: Home },
     { name: 'About', path: '/about', icon: Users },
     { name: 'Services', path: '/services', icon: Sparkles },
+    { name: 'Colleges', path: '/colleges', icon: GraduationCap },
     { name: 'Study Abroad', path: '/study-abroad', icon: Globe },
-    { name: 'Internships', path: '/internships-admissions', icon: Briefcase },
+    { name: 'Internships', path: '/internships', icon: Briefcase },
     { name: 'Contact', path: '/contact', icon: Mail },
   ];
 
   const isActive = (path) => {
     if (path === '/') return location.pathname === '/';
+    if (path === '/internships' && location.pathname === '/internships-admissions') return true;
     return location.pathname.startsWith(path);
   };
 
@@ -57,7 +60,7 @@ export default function Navbar({ onOpenEnquiry }) {
       }`}
     >
       <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 w-full">
-        <div className="flex items-center justify-between gap-2 sm:gap-4 w-full">
+        <div className="flex items-center justify-between gap-1.5 sm:gap-4 w-full">
           
           {/* Logo & Tagline */}
           <Link 
@@ -70,7 +73,7 @@ export default function Navbar({ onOpenEnquiry }) {
             </div>
             
             <div className="flex flex-col text-left">
-              <span className="text-base min-[360px]:text-lg sm:text-xl xl:text-2xl font-bold tracking-tight text-navy-950 leading-none whitespace-nowrap">
+              <span className="text-base min-[360px]:text-lg sm:text-xl font-bold tracking-tight text-navy-950 leading-none whitespace-nowrap">
                 Vidya<span className="text-orange-500">paths</span>
               </span>
               <span className="hidden min-[380px]:block text-[8px] sm:text-[9px] uppercase tracking-[0.14em] sm:tracking-[0.16em] font-semibold text-slate-400 mt-1 leading-none whitespace-nowrap">
@@ -79,9 +82,9 @@ export default function Navbar({ onOpenEnquiry }) {
             </div>
           </Link>
 
-          {/* Desktop Navigation Links (Single Line, Balanced on 1024px+) */}
+          {/* Desktop Navigation Links (Positioned with Colleges between Services & Study Abroad) */}
           <nav 
-            className="hidden lg:flex items-center gap-0.5 xl:gap-1.5 shrink-0" 
+            className="hidden lg:flex items-center gap-0.5 xl:gap-1 shrink-0" 
             aria-label="Primary Navigation"
           >
             {navLinks.map((link) => {
@@ -90,7 +93,7 @@ export default function Navbar({ onOpenEnquiry }) {
                 <Link
                   key={link.path}
                   to={link.path}
-                  className={`px-2.5 xl:px-3 py-1.5 xl:py-2 rounded-lg text-xs xl:text-sm font-medium transition-all whitespace-nowrap relative ${
+                  className={`px-2 xl:px-2.5 py-1.5 xl:py-2 rounded-lg text-xs xl:text-sm font-medium transition-all whitespace-nowrap relative ${
                     active
                       ? 'text-orange-600 bg-orange-50/80 font-semibold shadow-xs'
                       : 'text-slate-600 hover:text-navy-950 hover:bg-slate-50'
@@ -99,7 +102,7 @@ export default function Navbar({ onOpenEnquiry }) {
                   <span>{link.name}</span>
                   {active && (
                     <span 
-                      className="absolute bottom-0 left-2.5 right-2.5 h-0.5 bg-orange-500 rounded-full" 
+                      className="absolute bottom-0 left-2 right-2 h-0.5 bg-orange-500 rounded-full" 
                       aria-hidden="true" 
                     />
                   )}
@@ -108,12 +111,12 @@ export default function Navbar({ onOpenEnquiry }) {
             })}
           </nav>
 
-          {/* Desktop Right Actions (Phone Secondary on XL + Primary CTA) */}
-          <div className="hidden lg:flex items-center gap-2 xl:gap-3 shrink-0">
-            {/* Secondary Phone (only on xl screens to avoid tablet/laptop crowding) */}
+          {/* Desktop Right Actions (Phone Secondary on 2XL + Primary CTA) */}
+          <div className="hidden lg:flex items-center gap-2 xl:gap-2.5 shrink-0">
+            {/* Secondary Phone (only on wide screens to prevent crowding) */}
             <a
               href={`tel:${siteConfig.phoneRaw}`}
-              className="hidden xl:inline-flex items-center gap-1.5 text-xs font-medium text-slate-500 hover:text-navy-950 px-2.5 py-2 rounded-lg hover:bg-slate-50 transition-colors whitespace-nowrap group"
+              className="hidden 2xl:inline-flex items-center gap-1.5 text-xs font-medium text-slate-500 hover:text-navy-950 px-2.5 py-2 rounded-lg hover:bg-slate-50 transition-colors whitespace-nowrap group"
               title={`Call ${siteConfig.phone}`}
             >
               <Phone className="w-3.5 h-3.5 text-slate-400 group-hover:text-orange-500 transition-colors" />
@@ -123,10 +126,10 @@ export default function Navbar({ onOpenEnquiry }) {
             {/* Primary Orange CTA */}
             <button
               onClick={() => onOpenEnquiry('Header Main CTA')}
-              className="inline-flex items-center justify-center gap-1.5 xl:gap-2 px-3.5 xl:px-4.5 py-2 xl:py-2.5 rounded-xl text-xs xl:text-sm font-semibold text-white bg-orange-500 hover:bg-orange-600 shadow-sm hover:shadow-md hover:shadow-orange-500/20 active:scale-[0.98] transition-all cursor-pointer whitespace-nowrap min-h-[40px] xl:min-h-[42px] group"
+              className="inline-flex items-center justify-center gap-1.5 px-3.5 xl:px-4 py-2 xl:py-2.5 rounded-xl text-xs xl:text-sm font-semibold text-white bg-orange-500 hover:bg-orange-600 shadow-sm hover:shadow-md hover:shadow-orange-500/20 active:scale-[0.98] transition-all cursor-pointer whitespace-nowrap min-h-[40px] xl:min-h-[42px] group"
             >
               <span>Get Free Counselling</span>
-              <ArrowRight className="w-3.5 h-3.5 xl:w-4 xl:h-4 transform group-hover:translate-x-0.5 transition-transform" />
+              <ArrowRight className="w-3.5 h-3.5 transform group-hover:translate-x-0.5 transition-transform" />
             </button>
           </div>
 
