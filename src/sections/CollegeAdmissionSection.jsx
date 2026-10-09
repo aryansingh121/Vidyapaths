@@ -42,8 +42,8 @@ export default function CollegeAdmissionSection({ onOpenEnquiry }) {
         />
 
         {/* Tab Switcher */}
-        <div className="flex justify-center mb-10">
-          <div className="inline-flex p-1.5 rounded-xl bg-slate-200/80 border border-slate-300/50">
+        <div className="flex justify-center mb-10 overflow-x-auto max-w-full pb-2">
+          <div className="inline-flex p-1.5 rounded-xl bg-slate-200/80 border border-slate-300/50 shrink-0">
             <button
               onClick={() => setActiveTab('ug')}
               className={`px-5 py-2.5 rounded-lg text-sm font-semibold transition-all cursor-pointer ${

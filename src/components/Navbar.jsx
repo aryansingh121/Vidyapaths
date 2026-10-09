@@ -1,6 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, Phone, ArrowRight, Compass } from 'lucide-react';
+import { 
+  Menu, 
+  X, 
+  Phone, 
+  ArrowRight, 
+  Compass, 
+  Home, 
+  Users, 
+  Sparkles, 
+  Globe, 
+  Briefcase, 
+  Mail,
+  ChevronRight
+} from 'lucide-react';
 import { siteConfig } from '../data/siteData';
 
 export default function Navbar({ onOpenEnquiry }) {
@@ -10,25 +23,24 @@ export default function Navbar({ onOpenEnquiry }) {
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
+      setScrolled(window.scrollY > 15);
     };
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Close mobile menu upon navigation
+  // Ensure mobile menu closes on route change
   useEffect(() => {
     setIsOpen(false);
-    window.scrollTo(0, 0);
   }, [location.pathname]);
 
   const navLinks = [
-    { name: 'Home', path: '/' },
-    { name: 'About', path: '/about' },
-    { name: 'Services', path: '/services' },
-    { name: 'Study Abroad', path: '/study-abroad' },
-    { name: 'Internships & Admissions', path: '/internships-admissions' },
-    { name: 'Contact', path: '/contact' },
+    { name: 'Home', path: '/', icon: Home },
+    { name: 'About', path: '/about', icon: Users },
+    { name: 'Services', path: '/services', icon: Sparkles },
+    { name: 'Study Abroad', path: '/study-abroad', icon: Globe },
+    { name: 'Internships', path: '/internships-admissions', icon: Briefcase },
+    { name: 'Contact', path: '/contact', icon: Mail },
   ];
 
   const isActive = (path) => {
@@ -37,116 +49,172 @@ export default function Navbar({ onOpenEnquiry }) {
   };
 
   return (
-    <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-      scrolled ? 'bg-white/95 backdrop-blur-md shadow-sm border-b border-slate-100 py-2.5' : 'bg-white py-3.5 border-b border-slate-100'
-    }`}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between">
+    <header 
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-in-out w-full ${
+        scrolled 
+          ? 'bg-white/95 backdrop-blur-md border-b border-slate-200/80 shadow-[0_4px_20px_-4px_rgba(11,31,58,0.06)] py-2 sm:py-2.5' 
+          : 'bg-white border-b border-slate-100 shadow-[0_1px_3px_0_rgba(11,31,58,0.02)] py-2.5 sm:py-3.5'
+      }`}
+    >
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 w-full">
+        <div className="flex items-center justify-between gap-2 sm:gap-4 w-full">
           
-          {/* Logo */}
-          <Link to="/" className="flex items-center gap-3 group focus:outline-none min-h-[44px]">
-            <div className="w-10 h-10 rounded-xl bg-navy-900 flex items-center justify-center text-white shadow-md group-hover:bg-navy-800 transition-colors">
-              <Compass className="w-6 h-6 text-orange-500 transform group-hover:rotate-45 transition-transform duration-300" />
+          {/* Logo & Tagline */}
+          <Link 
+            to="/" 
+            className="flex items-center gap-2 sm:gap-2.5 group focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 rounded-xl min-h-[44px] shrink-0"
+            aria-label="Vidyapaths Home"
+          >
+            <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-gradient-to-br from-navy-950 via-navy-900 to-navy-800 flex items-center justify-center text-white shadow-md shadow-navy-900/10 ring-1 ring-white/10 group-hover:scale-[1.03] transition-transform duration-200 shrink-0">
+              <Compass className="w-4.5 h-4.5 sm:w-5 sm:h-5 text-orange-500 transform group-hover:rotate-45 transition-transform duration-300" />
             </div>
-            <div className="flex flex-col">
-              <span className="text-2xl font-bold tracking-tight text-navy-900 leading-none">
+            
+            <div className="flex flex-col text-left">
+              <span className="text-base min-[360px]:text-lg sm:text-xl xl:text-2xl font-bold tracking-tight text-navy-950 leading-none whitespace-nowrap">
                 Vidya<span className="text-orange-500">paths</span>
               </span>
-              <span className="text-[10px] uppercase tracking-wider text-slate-500 font-medium mt-0.5">
+              <span className="hidden min-[380px]:block text-[8px] sm:text-[9px] uppercase tracking-[0.14em] sm:tracking-[0.16em] font-semibold text-slate-400 mt-1 leading-none whitespace-nowrap">
                 Right Guidance • Brighter Future
               </span>
             </div>
           </Link>
 
-          {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center space-x-1 xl:space-x-2" aria-label="Main Navigation">
-            {navLinks.map((link) => (
-              <Link
-                key={link.path}
-                to={link.path}
-                className={`px-3.5 py-2.5 rounded-lg text-sm font-medium transition-all min-h-[44px] flex items-center ${
-                  isActive(link.path)
-                    ? 'text-orange-600 bg-orange-50 font-semibold'
-                    : 'text-slate-700 hover:text-navy-900 hover:bg-slate-50'
-                }`}
-              >
-                {link.name}
-              </Link>
-            ))}
+          {/* Desktop Navigation Links (Single Line, Balanced on 1024px+) */}
+          <nav 
+            className="hidden lg:flex items-center gap-0.5 xl:gap-1.5 shrink-0" 
+            aria-label="Primary Navigation"
+          >
+            {navLinks.map((link) => {
+              const active = isActive(link.path);
+              return (
+                <Link
+                  key={link.path}
+                  to={link.path}
+                  className={`px-2.5 xl:px-3 py-1.5 xl:py-2 rounded-lg text-xs xl:text-sm font-medium transition-all whitespace-nowrap relative ${
+                    active
+                      ? 'text-orange-600 bg-orange-50/80 font-semibold shadow-xs'
+                      : 'text-slate-600 hover:text-navy-950 hover:bg-slate-50'
+                  }`}
+                >
+                  <span>{link.name}</span>
+                  {active && (
+                    <span 
+                      className="absolute bottom-0 left-2.5 right-2.5 h-0.5 bg-orange-500 rounded-full" 
+                      aria-hidden="true" 
+                    />
+                  )}
+                </Link>
+              );
+            })}
           </nav>
 
-          {/* Right Action Buttons */}
-          <div className="hidden lg:flex items-center gap-3">
+          {/* Desktop Right Actions (Phone Secondary on XL + Primary CTA) */}
+          <div className="hidden lg:flex items-center gap-2 xl:gap-3 shrink-0">
+            {/* Secondary Phone (only on xl screens to avoid tablet/laptop crowding) */}
             <a
               href={`tel:${siteConfig.phoneRaw}`}
-              className="flex items-center gap-2 text-xs font-semibold text-slate-700 hover:text-navy-900 px-3.5 py-2.5 rounded-lg border border-slate-200 hover:border-slate-300 transition-all min-h-[44px]"
+              className="hidden xl:inline-flex items-center gap-1.5 text-xs font-medium text-slate-500 hover:text-navy-950 px-2.5 py-2 rounded-lg hover:bg-slate-50 transition-colors whitespace-nowrap group"
+              title={`Call ${siteConfig.phone}`}
             >
-              <Phone className="w-3.5 h-3.5 text-orange-500" />
+              <Phone className="w-3.5 h-3.5 text-slate-400 group-hover:text-orange-500 transition-colors" />
               <span>{siteConfig.phone}</span>
             </a>
+
+            {/* Primary Orange CTA */}
             <button
-              onClick={onOpenEnquiry}
-              className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold text-white bg-orange-500 hover:bg-orange-600 shadow-sm hover:shadow transition-all cursor-pointer transform active:scale-95 min-h-[44px]"
+              onClick={() => onOpenEnquiry('Header Main CTA')}
+              className="inline-flex items-center justify-center gap-1.5 xl:gap-2 px-3.5 xl:px-4.5 py-2 xl:py-2.5 rounded-xl text-xs xl:text-sm font-semibold text-white bg-orange-500 hover:bg-orange-600 shadow-sm hover:shadow-md hover:shadow-orange-500/20 active:scale-[0.98] transition-all cursor-pointer whitespace-nowrap min-h-[40px] xl:min-h-[42px] group"
             >
               <span>Get Free Counselling</span>
-              <ArrowRight className="w-4 h-4" />
+              <ArrowRight className="w-3.5 h-3.5 xl:w-4 xl:h-4 transform group-hover:translate-x-0.5 transition-transform" />
             </button>
           </div>
 
-          {/* Mobile Menu & Enquire Buttons (Touch-friendly 44px min-height) */}
-          <div className="flex items-center gap-2 lg:hidden">
+          {/* Mobile & Tablet Header Controls */}
+          <div className="flex items-center gap-1.5 sm:gap-2 lg:hidden shrink-0">
+            {/* Compact Header CTA Button (available on 350px+) */}
             <button
-              onClick={onOpenEnquiry}
-              className="text-xs px-3.5 py-2 rounded-lg font-semibold text-white bg-orange-500 hover:bg-orange-600 min-h-[44px] min-w-[44px] flex items-center justify-center cursor-pointer shadow-xs"
+              onClick={() => onOpenEnquiry('Mobile Header Button')}
+              className="hidden min-[350px]:inline-flex text-[11px] sm:text-xs px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-lg font-semibold text-white bg-orange-500 hover:bg-orange-600 shadow-xs active:scale-95 transition-all min-h-[38px] sm:min-h-[40px] items-center justify-center cursor-pointer whitespace-nowrap"
             >
               Enquire
             </button>
+
+            {/* Accessible Hamburger Button */}
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="p-2.5 rounded-lg text-slate-700 hover:text-navy-900 hover:bg-slate-100 focus:outline-none min-h-[44px] min-w-[44px] flex items-center justify-center cursor-pointer"
-              aria-label="Toggle menu"
+              className="p-2 rounded-lg text-slate-700 hover:text-navy-950 hover:bg-slate-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 min-h-[44px] min-w-[44px] flex items-center justify-center cursor-pointer transition-colors"
+              aria-label={isOpen ? "Close main menu" : "Open main menu"}
               aria-expanded={isOpen}
             >
-              {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              {isOpen ? (
+                <X className="w-5 h-5 sm:w-6 sm:h-6 text-navy-900" />
+              ) : (
+                <Menu className="w-5 h-5 sm:w-6 sm:h-6 text-navy-900" />
+              )}
             </button>
           </div>
+
         </div>
       </div>
 
-      {/* Mobile Navigation Dropdown */}
+      {/* Mobile & Tablet Dropdown Navigation */}
       {isOpen && (
-        <div className="lg:hidden bg-white border-b border-slate-200 px-4 pt-3 pb-6 shadow-xl animate-in slide-in-from-top-4 duration-200">
+        <div 
+          className="lg:hidden bg-white/98 backdrop-blur-md border-b border-slate-200 shadow-xl px-4 pt-3 pb-6 animate-in slide-in-from-top-2 duration-200 max-h-[85vh] overflow-y-auto"
+          id="mobile-navigation-menu"
+        >
           <div className="flex flex-col space-y-1">
-            {navLinks.map((link) => (
-              <Link
-                key={link.path}
-                to={link.path}
-                className={`px-4 py-3 rounded-lg text-base font-medium min-h-[44px] flex items-center ${
-                  isActive(link.path)
-                    ? 'text-orange-600 bg-orange-50 font-semibold'
-                    : 'text-slate-800 hover:bg-slate-50'
-                }`}
-              >
-                {link.name}
-              </Link>
-            ))}
-            <div className="pt-4 border-t border-slate-100 mt-2 space-y-2">
+            <span className="text-[10px] uppercase font-bold tracking-wider text-slate-400 px-3 py-1 mb-1">
+              Navigation Menu
+            </span>
+
+            {navLinks.map((link) => {
+              const active = isActive(link.path);
+              const Icon = link.icon;
+              return (
+                <Link
+                  key={link.path}
+                  to={link.path}
+                  onClick={() => setIsOpen(false)}
+                  className={`px-3.5 py-3 rounded-xl text-sm font-medium min-h-[44px] flex items-center justify-between transition-colors ${
+                    active
+                      ? 'text-orange-600 bg-orange-50/80 font-semibold'
+                      : 'text-slate-800 hover:bg-slate-50 active:bg-slate-100'
+                  }`}
+                >
+                  <div className="flex items-center gap-3">
+                    <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${
+                      active ? 'bg-orange-100 text-orange-600' : 'bg-slate-100 text-slate-500'
+                    }`}>
+                      <Icon className="w-4 h-4" />
+                    </div>
+                    <span className="truncate">{link.name}</span>
+                  </div>
+                  <ChevronRight className={`w-4 h-4 shrink-0 ${active ? 'text-orange-500' : 'text-slate-300'}`} />
+                </Link>
+              );
+            })}
+
+            {/* Mobile Contact & CTA Footer */}
+            <div className="pt-4 border-t border-slate-100 mt-2 space-y-2.5">
               <a
                 href={`tel:${siteConfig.phoneRaw}`}
-                className="flex items-center justify-center gap-2 w-full py-3 rounded-lg text-sm font-semibold text-slate-700 border border-slate-200 min-h-[44px]"
+                className="flex items-center justify-center gap-2 w-full py-2.5 px-4 rounded-xl text-xs font-semibold text-slate-700 bg-slate-50 hover:bg-slate-100 border border-slate-200 min-h-[44px] transition-colors"
               >
-                <Phone className="w-4 h-4 text-orange-500" />
-                <span>Call {siteConfig.phone}</span>
+                <Phone className="w-4 h-4 text-orange-500 shrink-0" />
+                <span className="truncate">Direct Support: {siteConfig.phone}</span>
               </a>
+
               <button
                 onClick={() => {
                   setIsOpen(false);
-                  onOpenEnquiry();
+                  onOpenEnquiry('Mobile Menu Big CTA');
                 }}
-                className="w-full flex items-center justify-center gap-2 py-3 rounded-lg text-sm font-semibold text-white bg-orange-500 hover:bg-orange-600 shadow-sm min-h-[44px] cursor-pointer"
+                className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl text-sm font-semibold text-white bg-orange-500 hover:bg-orange-600 shadow-md shadow-orange-500/20 min-h-[44px] active:scale-[0.99] transition-all cursor-pointer"
               >
                 <span>Get Free Counselling</span>
-                <ArrowRight className="w-4 h-4" />
+                <ArrowRight className="w-4 h-4 shrink-0" />
               </button>
             </div>
           </div>

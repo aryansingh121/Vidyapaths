@@ -6,7 +6,7 @@ export default function Hero({ onOpenEnquiry }) {
   return (
     <section className="relative pt-28 pb-16 md:pt-36 md:pb-24 overflow-hidden bg-gradient-to-b from-slate-50 via-white to-white">
       {/* Background Decorative Accents */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-96 pointer-events-none opacity-40">
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-96 pointer-events-none opacity-40 overflow-hidden">
         <div className="absolute -top-20 right-10 w-80 h-80 bg-orange-200/50 rounded-full blur-3xl"></div>
         <div className="absolute top-20 left-10 w-96 h-96 bg-blue-100/60 rounded-full blur-3xl"></div>
       </div>

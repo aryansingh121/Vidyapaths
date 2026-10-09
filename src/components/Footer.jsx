@@ -121,7 +121,7 @@ export default function Footer({ onOpenEnquiry }) {
               </li>
               <li className="flex items-center gap-3">
                 <Mail className="w-4 h-4 text-orange-400 shrink-0" />
-                <a href={`mailto:${siteConfig.email}`} className="hover:text-white transition-colors">
+                <a href={`mailto:${siteConfig.email}`} className="hover:text-white transition-colors break-all text-xs sm:text-sm">
                   {siteConfig.email}
                 </a>
               </li>
