@@ -1,4 +1,4 @@
-import React, { useState, useId } from 'react';
+import React, { useState, useEffect, useId } from 'react';
 import { Send, CheckCircle, AlertCircle, MessageSquare, Sparkles } from 'lucide-react';
 import { siteConfig } from '../data/siteData';
 
@@ -19,6 +19,40 @@ export default function EnquiryForm({ defaultService = '', source = 'Lead Form' 
     preferredIntake: '',
     message: ''
   });
+
+  useEffect(() => {
+    if (defaultService) {
+      setFormData(prev => {
+        let matchedService = prev.serviceRequired;
+        let prefCollege = prev.preferredCollege;
+        let defaultMsg = prev.message;
+
+        if (defaultService.includes('Admission') || defaultService.includes('College')) {
+          matchedService = 'College Admission';
+        }
+
+        if (defaultService.startsWith('Admission Guidance - ')) {
+          const collegeName = defaultService.replace('Admission Guidance - ', '').trim();
+          prefCollege = collegeName;
+          if (!defaultMsg) {
+            defaultMsg = `Seeking admission guidance for ${collegeName}.`;
+          }
+        } else if (defaultService.startsWith('Admission Guidance: ')) {
+          const details = defaultService.replace('Admission Guidance: ', '').trim();
+          if (!defaultMsg) {
+            defaultMsg = `Seeking admission guidance for ${details}.`;
+          }
+        }
+
+        return {
+          ...prev,
+          serviceRequired: matchedService || prev.serviceRequired,
+          preferredCollege: prefCollege || prev.preferredCollege,
+          message: defaultMsg || prev.message
+        };
+      });
+    }
+  }, [defaultService]);
 
   const [errors, setErrors] = useState({});
   const [submitted, setSubmitted] = useState(false);
