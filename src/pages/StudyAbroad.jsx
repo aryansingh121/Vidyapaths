@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import SectionHeading from '../components/SectionHeading';
 import FinalCTA from '../sections/FinalCTA';
+import CountryFlag from '../components/CountryFlag';
 import { countriesData } from '../data/countriesData';
 import { 
   Globe, 
@@ -94,10 +95,14 @@ export default function StudyAbroad({ onOpenEnquiry }) {
               >
                 <div>
                   <div className="flex items-center justify-between mb-4">
-                    <div className="flex items-center gap-3">
-                      <span className="text-4xl">{country.flag}</span>
+                    <div className="flex items-center gap-3.5">
+                      <CountryFlag 
+                        countryId={country.id} 
+                        countryName={country.name}
+                        className="w-12 h-8.5 sm:w-14 sm:h-9.5 rounded-lg border border-slate-200/90 shadow-xs" 
+                      />
                       <div>
-                        <h3 className="text-xl font-bold text-navy-900 group-hover:text-orange-600 transition-colors">
+                        <h3 className="text-xl font-bold text-navy-900 group-hover:text-orange-600 transition-colors leading-snug">
                           {country.name}
                         </h3>
                         <span className="text-xs font-semibold text-slate-500">

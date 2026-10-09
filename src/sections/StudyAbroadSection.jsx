@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import SectionHeading from '../components/SectionHeading';
+import CountryFlag from '../components/CountryFlag';
 import { countriesData } from '../data/countriesData';
 import { Globe, Plane, Award, ArrowRight, ShieldCheck, CheckCircle2 } from 'lucide-react';
 
@@ -29,12 +30,14 @@ export default function StudyAbroadSection({ onOpenEnquiry }) {
             >
               <div>
                 <div className="flex items-center justify-between mb-4">
-                  <div className="flex items-center gap-3">
-                    <span className="text-3xl" role="img" aria-label={country.name}>
-                      {country.flag}
-                    </span>
+                  <div className="flex items-center gap-3.5">
+                    <CountryFlag 
+                      countryId={country.id} 
+                      countryName={country.name}
+                      className="w-12 h-8.5 rounded-lg border border-navy-700 shadow-sm" 
+                    />
                     <div>
-                      <h3 className="text-lg font-bold text-white group-hover:text-orange-400 transition-colors">
+                      <h3 className="text-lg font-bold text-white group-hover:text-orange-400 transition-colors leading-snug">
                         {country.name}
                       </h3>
                       <span className="text-xs text-slate-400 font-medium">PSW: {country.workPermit}</span>
