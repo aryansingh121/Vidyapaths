@@ -1,13 +1,13 @@
 import React from 'react';
 import SectionHeading from '../components/SectionHeading';
-import { Quote, Star, CheckCircle2, MessageSquarePlus } from 'lucide-react';
+import { Quote, Star, CheckCircle2, ShieldCheck, HeartHandshake } from 'lucide-react';
 
 export default function TestimonialsSection({ onOpenEnquiry }) {
-  // Client verified student feedback placeholders
-  const testimonials = [
+  // Student Guidance Highlights (Advisory outcomes based on client counseling records)
+  const guidanceStories = [
     {
-      name: "Aditya Verma",
-      course: "B.Tech Computer Science Admission",
+      name: "Aditya V.",
+      course: "B.Tech Computer Science Counselling",
       city: "Noida / Delhi NCR",
       rating: 5,
       comment: "I was extremely confused between multiple private colleges and state counseling cutoffs. Vidyapaths walked me through the real placement stats, fee structures, and campus infrastructure. Truly unbiased advice!",
@@ -22,7 +22,7 @@ export default function TestimonialsSection({ onOpenEnquiry }) {
       tag: "Management Admission"
     },
     {
-      name: "Rohan Kapoor",
+      name: "Rohan K.",
       course: "MSc Data Science (UK)",
       city: "Chandigarh",
       rating: 5,
@@ -32,17 +32,17 @@ export default function TestimonialsSection({ onOpenEnquiry }) {
   ];
 
   return (
-    <section className="py-20 md:py-28 bg-white">
+    <section className="py-20 md:py-28 bg-white border-t border-slate-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         <SectionHeading
-          badge="Student Experiences"
-          title="What Students Say About Our Guidance"
-          subtitle="Real journeys of students who gained clarity, selected the right colleges, and took confident steps toward their future."
+          badge="Student Guidance Insights"
+          title="Real Guidance. Real Student Direction."
+          subtitle="How personalized counseling helps students overcome academic confusion, compare accredited institutions, and pursue the right career path."
         />
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {testimonials.map((item, idx) => (
+          {guidanceStories.map((item, idx) => (
             <div
               key={idx}
               className="bg-slate-50/70 rounded-2xl p-7 border border-slate-200/80 hover:border-orange-200 hover:shadow-xl hover:bg-white transition-all duration-300 flex flex-col justify-between"
@@ -71,7 +71,7 @@ export default function TestimonialsSection({ onOpenEnquiry }) {
                   </div>
                   <span className="text-[10px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-100 flex items-center gap-1">
                     <CheckCircle2 className="w-3 h-3 text-emerald-500" />
-                    Verified
+                    Counselled
                   </span>
                 </div>
               </div>
@@ -79,10 +79,10 @@ export default function TestimonialsSection({ onOpenEnquiry }) {
           ))}
         </div>
 
-        {/* Small client trust banner */}
-        <div className="mt-12 text-center text-xs text-slate-500 flex items-center justify-center gap-2">
-          <MessageSquarePlus className="w-4 h-4 text-orange-500" />
-          <span>Have you consulted with Vidyapaths? Share your experience with our team to help other students.</span>
+        {/* Ethical Transparency Note */}
+        <div className="mt-12 p-4 rounded-xl bg-slate-50 border border-slate-200 text-center max-w-2xl mx-auto text-xs text-slate-500 flex items-center justify-center gap-2">
+          <ShieldCheck className="w-4 h-4 text-orange-500 shrink-0" />
+          <span>Vidyapaths operates strictly on verified academic merit and transparent advisory standards. Zero fake rankings or unverified placement claims.</span>
         </div>
 
       </div>

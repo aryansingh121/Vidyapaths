@@ -31,7 +31,7 @@ export default function FinalCTA({ onOpenEnquiry }) {
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
           <button
             onClick={() => onOpenEnquiry('Final CTA Section')}
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-xl text-base font-bold text-white bg-orange-500 hover:bg-orange-600 shadow-xl shadow-orange-500/25 transition-all transform hover:-translate-y-0.5 active:translate-y-0 cursor-pointer"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-xl text-base font-bold text-white bg-orange-500 hover:bg-orange-600 shadow-xl shadow-orange-500/25 transition-all transform hover:-translate-y-0.5 active:translate-y-0 cursor-pointer min-h-[48px]"
           >
             <span>Get Free Counselling</span>
             <ArrowRight className="w-5 h-5" />
@@ -41,7 +41,7 @@ export default function FinalCTA({ onOpenEnquiry }) {
             href={whatsappUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-xl text-base font-semibold text-emerald-400 bg-emerald-950/70 border border-emerald-700/60 hover:bg-emerald-900/40 transition-all shadow-md"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-xl text-base font-semibold text-emerald-400 bg-emerald-950/70 border border-emerald-700/60 hover:bg-emerald-900/40 transition-all shadow-md min-h-[48px]"
           >
             <MessageCircle className="w-5 h-5 text-emerald-400" />
             <span>WhatsApp Us Now</span>

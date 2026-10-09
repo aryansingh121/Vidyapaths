@@ -33,7 +33,7 @@ export default function Hero({ onOpenEnquiry }) {
             <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-2">
               <button
                 onClick={onOpenEnquiry}
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-7 py-4 rounded-xl text-base font-bold text-white bg-orange-500 hover:bg-orange-600 shadow-lg shadow-orange-500/25 hover:shadow-orange-500/35 transition-all transform hover:-translate-y-0.5 active:translate-y-0 cursor-pointer"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-7 py-4 rounded-xl text-base font-bold text-white bg-orange-500 hover:bg-orange-600 shadow-lg shadow-orange-500/25 hover:shadow-orange-500/35 transition-all transform hover:-translate-y-0.5 active:translate-y-0 cursor-pointer min-h-[48px]"
               >
                 <span>Get Free Counselling</span>
                 <ArrowRight className="w-5 h-5" />
@@ -41,7 +41,7 @@ export default function Hero({ onOpenEnquiry }) {
 
               <Link
                 to="/internships-admissions"
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-4 rounded-xl text-base font-semibold text-navy-900 bg-white hover:bg-slate-50 border border-slate-200 hover:border-slate-300 shadow-sm transition-all"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-4 rounded-xl text-base font-semibold text-navy-900 bg-white hover:bg-slate-50 border border-slate-200 hover:border-slate-300 shadow-sm transition-all min-h-[48px]"
               >
                 <span>Explore Colleges</span>
               </Link>
