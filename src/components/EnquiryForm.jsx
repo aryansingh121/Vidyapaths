@@ -2,7 +2,7 @@ import React, { useState, useEffect, useId } from 'react';
 import { Send, CheckCircle, AlertCircle, MessageSquare, Sparkles } from 'lucide-react';
 import { siteConfig } from '../data/siteData';
 
-export default function EnquiryForm({ defaultService = '', source = 'Lead Form' }) {
+export default function EnquiryForm({ defaultService = '', source = 'Lead Form', isModal = false }) {
   const formUid = useId();
 
   const [formData, setFormData] = useState({
@@ -155,16 +155,16 @@ export default function EnquiryForm({ defaultService = '', source = 'Lead Form' 
 
   if (submitted) {
     return (
-      <div className="bg-white rounded-2xl p-8 border border-emerald-100 shadow-sm text-center animate-in fade-in duration-300">
-        <div className="w-16 h-16 bg-emerald-50 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-4">
-          <CheckCircle className="w-10 h-10" />
+      <div className={`text-center animate-in fade-in duration-300 ${isModal ? 'py-4' : 'bg-white rounded-2xl p-6 sm:p-8 border border-slate-200/80 shadow-sm'}`}>
+        <div className="w-14 h-14 bg-emerald-50 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-3">
+          <CheckCircle className="w-8 h-8" />
         </div>
-        <h3 className="text-2xl font-bold text-navy-900 mb-2">Thank you!</h3>
-        <p className="text-slate-600 max-w-md mx-auto mb-6 text-sm leading-relaxed">
-          Thank you! Your enquiry has been received. Our team will get in touch with you shortly.
+        <h3 className="text-xl sm:text-2xl font-bold text-navy-900 mb-1.5">Thank you!</h3>
+        <p className="text-slate-600 max-w-md mx-auto mb-4 text-xs sm:text-sm leading-relaxed">
+          Your enquiry has been received. Our team will get in touch with you shortly.
         </p>
 
-        <div className="bg-slate-50 rounded-xl p-4 mb-6 border border-slate-100 text-left text-sm max-w-md mx-auto space-y-2">
+        <div className="bg-slate-50 rounded-xl p-3.5 mb-4 border border-slate-100 text-left text-xs sm:text-sm max-w-md mx-auto space-y-1.5">
           <div className="flex justify-between">
             <span className="text-slate-500">Candidate:</span>
             <span className="font-semibold text-navy-900">{formData.fullName}</span>
@@ -183,10 +183,10 @@ export default function EnquiryForm({ defaultService = '', source = 'Lead Form' 
           </div>
         </div>
 
-        <div className="flex flex-col sm:flex-row gap-3 justify-center max-w-md mx-auto">
+        <div className="flex flex-col sm:flex-row gap-2.5 justify-center max-w-md mx-auto">
           <button
             onClick={openWhatsAppWithData}
-            className="flex-1 inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl font-semibold text-white bg-emerald-600 hover:bg-emerald-700 transition-colors shadow-sm min-h-[44px] cursor-pointer"
+            className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold text-white bg-emerald-600 hover:bg-emerald-700 transition-colors shadow-sm min-h-[42px] cursor-pointer"
           >
             <MessageSquare className="w-4 h-4" />
             <span>Chat on WhatsApp Now</span>
@@ -209,7 +209,7 @@ export default function EnquiryForm({ defaultService = '', source = 'Lead Form' 
                 message: ''
               });
             }}
-            className="px-5 py-3 rounded-xl font-medium text-slate-700 bg-slate-100 hover:bg-slate-200 transition-colors min-h-[44px] cursor-pointer"
+            className="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-medium text-slate-700 bg-slate-100 hover:bg-slate-200 transition-colors min-h-[42px] cursor-pointer"
           >
             Submit Another Query
           </button>
@@ -219,27 +219,33 @@ export default function EnquiryForm({ defaultService = '', source = 'Lead Form' 
   }
 
   return (
-    <form onSubmit={handleSubmit} noValidate className="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200/80 shadow-sm">
-      <div className="flex items-center gap-2 mb-6">
-        <span className="w-8 h-8 rounded-lg bg-orange-100 text-orange-600 flex items-center justify-center">
-          <Sparkles className="w-4 h-4" />
-        </span>
-        <div>
-          <h3 className="text-xl font-bold text-navy-900">Request Free Counselling</h3>
-          <p className="text-xs text-slate-500">100% unbiased student guidance. No consultation fees.</p>
+    <form 
+      onSubmit={handleSubmit} 
+      noValidate 
+      className={isModal ? "w-full box-border" : "bg-white rounded-2xl p-6 sm:p-8 border border-slate-200/80 shadow-sm box-border"}
+    >
+      {!isModal && (
+        <div className="flex items-center gap-2 mb-5">
+          <span className="w-8 h-8 rounded-lg bg-orange-100 text-orange-600 flex items-center justify-center shrink-0">
+            <Sparkles className="w-4 h-4" />
+          </span>
+          <div>
+            <h3 className="text-lg sm:text-xl font-bold text-navy-900">Request Free Counselling</h3>
+            <p className="text-xs text-slate-500">100% unbiased student guidance. No consultation fees.</p>
+          </div>
         </div>
-      </div>
+      )}
 
       {submitError && (
-        <div className="mb-4 p-3 rounded-lg bg-red-50 border border-red-200 text-red-700 text-xs flex items-center gap-2">
+        <div className="mb-3 p-2.5 rounded-lg bg-red-50 border border-red-200 text-red-700 text-xs flex items-center gap-2">
           <AlertCircle className="w-4 h-4 shrink-0" />
           <span>{submitError}</span>
         </div>
       )}
 
-      <div className="space-y-4">
-        {/* Name & Mobile */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div className="space-y-2.5 sm:space-y-3">
+        {/* Row 1: Full Name | Mobile Number */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3">
           <div>
             <label htmlFor={`${formUid}-fullName`} className="block text-xs font-semibold text-slate-700 mb-1">
               Full Name <span className="text-red-500">*</span>
@@ -253,11 +259,11 @@ export default function EnquiryForm({ defaultService = '', source = 'Lead Form' 
               onChange={handleChange}
               aria-invalid={!!errors.fullName}
               aria-describedby={errors.fullName ? `${formUid}-fullName-err` : undefined}
-              className={`w-full px-3.5 py-2.5 text-sm rounded-lg border min-h-[44px] ${
+              className={`w-full px-3 py-2 text-xs sm:text-sm rounded-lg border h-10 sm:h-[42px] transition-colors ${
                 errors.fullName ? 'border-red-400 bg-red-50/30' : 'border-slate-300 focus:border-orange-500'
               } focus:outline-none focus:ring-1 focus:ring-orange-500`}
             />
-            {errors.fullName && <p id={`${formUid}-fullName-err`} className="text-xs text-red-500 mt-1">{errors.fullName}</p>}
+            {errors.fullName && <p id={`${formUid}-fullName-err`} className="text-xs text-red-500 mt-0.5">{errors.fullName}</p>}
           </div>
 
           <div>
@@ -273,16 +279,16 @@ export default function EnquiryForm({ defaultService = '', source = 'Lead Form' 
               onChange={handleChange}
               aria-invalid={!!errors.mobileNumber}
               aria-describedby={errors.mobileNumber ? `${formUid}-mobileNumber-err` : undefined}
-              className={`w-full px-3.5 py-2.5 text-sm rounded-lg border min-h-[44px] ${
+              className={`w-full px-3 py-2 text-xs sm:text-sm rounded-lg border h-10 sm:h-[42px] transition-colors ${
                 errors.mobileNumber ? 'border-red-400 bg-red-50/30' : 'border-slate-300 focus:border-orange-500'
               } focus:outline-none focus:ring-1 focus:ring-orange-500`}
             />
-            {errors.mobileNumber && <p id={`${formUid}-mobileNumber-err`} className="text-xs text-red-500 mt-1">{errors.mobileNumber}</p>}
+            {errors.mobileNumber && <p id={`${formUid}-mobileNumber-err`} className="text-xs text-red-500 mt-0.5">{errors.mobileNumber}</p>}
           </div>
         </div>
 
-        {/* Email & City */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        {/* Row 2: Email Address | Current City */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3">
           <div>
             <label htmlFor={`${formUid}-email`} className="block text-xs font-semibold text-slate-700 mb-1">
               Email Address <span className="text-red-500">*</span>
@@ -296,11 +302,11 @@ export default function EnquiryForm({ defaultService = '', source = 'Lead Form' 
               onChange={handleChange}
               aria-invalid={!!errors.email}
               aria-describedby={errors.email ? `${formUid}-email-err` : undefined}
-              className={`w-full px-3.5 py-2.5 text-sm rounded-lg border min-h-[44px] ${
+              className={`w-full px-3 py-2 text-xs sm:text-sm rounded-lg border h-10 sm:h-[42px] transition-colors ${
                 errors.email ? 'border-red-400 bg-red-50/30' : 'border-slate-300 focus:border-orange-500'
               } focus:outline-none focus:ring-1 focus:ring-orange-500`}
             />
-            {errors.email && <p id={`${formUid}-email-err`} className="text-xs text-red-500 mt-1">{errors.email}</p>}
+            {errors.email && <p id={`${formUid}-email-err`} className="text-xs text-red-500 mt-0.5">{errors.email}</p>}
           </div>
 
           <div>
@@ -316,16 +322,16 @@ export default function EnquiryForm({ defaultService = '', source = 'Lead Form' 
               onChange={handleChange}
               aria-invalid={!!errors.currentCity}
               aria-describedby={errors.currentCity ? `${formUid}-currentCity-err` : undefined}
-              className={`w-full px-3.5 py-2.5 text-sm rounded-lg border min-h-[44px] ${
+              className={`w-full px-3 py-2 text-xs sm:text-sm rounded-lg border h-10 sm:h-[42px] transition-colors ${
                 errors.currentCity ? 'border-red-400 bg-red-50/30' : 'border-slate-300 focus:border-orange-500'
               } focus:outline-none focus:ring-1 focus:ring-orange-500`}
             />
-            {errors.currentCity && <p id={`${formUid}-currentCity-err`} className="text-xs text-red-500 mt-1">{errors.currentCity}</p>}
+            {errors.currentCity && <p id={`${formUid}-currentCity-err`} className="text-xs text-red-500 mt-0.5">{errors.currentCity}</p>}
           </div>
         </div>
 
-        {/* Qualification & Service */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        {/* Row 3: Current Qualification | Service Required */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3">
           <div>
             <label htmlFor={`${formUid}-education`} className="block text-xs font-semibold text-slate-700 mb-1">
               Current Qualification <span className="text-red-500">*</span>
@@ -337,9 +343,9 @@ export default function EnquiryForm({ defaultService = '', source = 'Lead Form' 
               onChange={handleChange}
               aria-invalid={!!errors.education}
               aria-describedby={errors.education ? `${formUid}-education-err` : undefined}
-              className={`w-full px-3.5 py-2.5 text-sm rounded-lg border min-h-[44px] ${
+              className={`w-full px-3 py-2 text-xs sm:text-sm rounded-lg border h-10 sm:h-[42px] transition-colors bg-white ${
                 errors.education ? 'border-red-400 bg-red-50/30' : 'border-slate-300 focus:border-orange-500'
-              } focus:outline-none focus:ring-1 focus:ring-orange-500 bg-white`}
+              } focus:outline-none focus:ring-1 focus:ring-orange-500`}
             >
               <option value="">Select qualification</option>
               <option value="Class 10th / 11th">Class 10th / 11th</option>
@@ -349,7 +355,7 @@ export default function EnquiryForm({ defaultService = '', source = 'Lead Form' 
               <option value="Postgraduate (PG Student)">Postgraduate Student</option>
               <option value="Working Professional">Working Professional</option>
             </select>
-            {errors.education && <p id={`${formUid}-education-err`} className="text-xs text-red-500 mt-1">{errors.education}</p>}
+            {errors.education && <p id={`${formUid}-education-err`} className="text-xs text-red-500 mt-0.5">{errors.education}</p>}
           </div>
 
           <div>
@@ -363,25 +369,25 @@ export default function EnquiryForm({ defaultService = '', source = 'Lead Form' 
               onChange={handleChange}
               aria-invalid={!!errors.serviceRequired}
               aria-describedby={errors.serviceRequired ? `${formUid}-serviceRequired-err` : undefined}
-              className={`w-full px-3.5 py-2.5 text-sm rounded-lg border min-h-[44px] ${
+              className={`w-full px-3 py-2 text-xs sm:text-sm rounded-lg border h-10 sm:h-[42px] transition-colors bg-white ${
                 errors.serviceRequired ? 'border-red-400 bg-red-50/30' : 'border-slate-300 focus:border-orange-500'
-              } focus:outline-none focus:ring-1 focus:ring-orange-500 bg-white`}
+              } focus:outline-none focus:ring-1 focus:ring-orange-500`}
             >
               <option value="">Choose service</option>
               <option value="College Admission">College Admission</option>
               <option value="Career Counselling">Career Counselling</option>
-              <option value="Internship Assistance">Internship</option>
+              <option value="Internship Assistance">Internship Assistance</option>
               <option value="Study Abroad">Study Abroad</option>
-              <option value="Scholarship Guidance">Scholarship</option>
+              <option value="Scholarship Guidance">Scholarship & Loan Guidance</option>
               <option value="Resume & Interview">Resume & Interview Support</option>
               <option value="Other">Other</option>
             </select>
-            {errors.serviceRequired && <p id={`${formUid}-serviceRequired-err`} className="text-xs text-red-500 mt-1">{errors.serviceRequired}</p>}
+            {errors.serviceRequired && <p id={`${formUid}-serviceRequired-err`} className="text-xs text-red-500 mt-0.5">{errors.serviceRequired}</p>}
           </div>
         </div>
 
-        {/* Interested Course & Preferred Country */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        {/* Row 4: Interested Course | Preferred Country / Region */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3">
           <div>
             <label htmlFor={`${formUid}-interestedCourse`} className="block text-xs font-semibold text-slate-700 mb-1">
               Interested Course <span className="text-red-500">*</span>
@@ -395,11 +401,11 @@ export default function EnquiryForm({ defaultService = '', source = 'Lead Form' 
               onChange={handleChange}
               aria-invalid={!!errors.interestedCourse}
               aria-describedby={errors.interestedCourse ? `${formUid}-interestedCourse-err` : undefined}
-              className={`w-full px-3.5 py-2.5 text-sm rounded-lg border min-h-[44px] ${
+              className={`w-full px-3 py-2 text-xs sm:text-sm rounded-lg border h-10 sm:h-[42px] transition-colors ${
                 errors.interestedCourse ? 'border-red-400 bg-red-50/30' : 'border-slate-300 focus:border-orange-500'
               } focus:outline-none focus:ring-1 focus:ring-orange-500`}
             />
-            {errors.interestedCourse && <p id={`${formUid}-interestedCourse-err`} className="text-xs text-red-500 mt-1">{errors.interestedCourse}</p>}
+            {errors.interestedCourse && <p id={`${formUid}-interestedCourse-err`} className="text-xs text-red-500 mt-0.5">{errors.interestedCourse}</p>}
           </div>
 
           <div>
@@ -410,23 +416,23 @@ export default function EnquiryForm({ defaultService = '', source = 'Lead Form' 
               id={`${formUid}-preferredCountry`}
               type="text"
               name="preferredCountry"
-              placeholder="e.g. India (Delhi/NCR/Bangalore) or UK, USA, Canada"
+              placeholder="e.g. India (Delhi/NCR) or UK, USA, Canada"
               value={formData.preferredCountry}
               onChange={handleChange}
               aria-invalid={!!errors.preferredCountry}
               aria-describedby={errors.preferredCountry ? `${formUid}-preferredCountry-err` : undefined}
-              className={`w-full px-3.5 py-2.5 text-sm rounded-lg border min-h-[44px] ${
+              className={`w-full px-3 py-2 text-xs sm:text-sm rounded-lg border h-10 sm:h-[42px] transition-colors ${
                 errors.preferredCountry ? 'border-red-400 bg-red-50/30' : 'border-slate-300 focus:border-orange-500'
               } focus:outline-none focus:ring-1 focus:ring-orange-500`}
             />
-            {errors.preferredCountry && <p id={`${formUid}-preferredCountry-err`} className="text-xs text-red-500 mt-1">{errors.preferredCountry}</p>}
+            {errors.preferredCountry && <p id={`${formUid}-preferredCountry-err`} className="text-xs text-red-500 mt-0.5">{errors.preferredCountry}</p>}
           </div>
         </div>
 
-        {/* Optional Fields: WhatsApp Number, Preferred College, Target Intake */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
+        {/* Row 5: Optional Fields (WhatsApp Number, Target College, Target Intake) */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 sm:gap-3 pt-0.5">
           <div>
-            <label htmlFor={`${formUid}-whatsappNumber`} className="block text-[11px] font-medium text-slate-500 mb-1">
+            <label htmlFor={`${formUid}-whatsappNumber`} className="block text-[11px] sm:text-xs font-medium text-slate-500 mb-1">
               WhatsApp Number (Optional)
             </label>
             <input
@@ -436,12 +442,12 @@ export default function EnquiryForm({ defaultService = '', source = 'Lead Form' 
               placeholder="If different from mobile"
               value={formData.whatsappNumber}
               onChange={handleChange}
-              className="w-full px-3 py-2 text-xs rounded-lg border border-slate-200 focus:border-orange-500 focus:outline-none min-h-[40px]"
+              className="w-full px-3 py-1.5 text-xs sm:text-sm rounded-lg border border-slate-200 focus:border-orange-500 focus:outline-none h-9 sm:h-10 transition-colors"
             />
           </div>
 
           <div>
-            <label htmlFor={`${formUid}-preferredCollege`} className="block text-[11px] font-medium text-slate-500 mb-1">
+            <label htmlFor={`${formUid}-preferredCollege`} className="block text-[11px] sm:text-xs font-medium text-slate-500 mb-1">
               Target College (Optional)
             </label>
             <input
@@ -451,12 +457,12 @@ export default function EnquiryForm({ defaultService = '', source = 'Lead Form' 
               placeholder="e.g. Top Tier / Specific Campus"
               value={formData.preferredCollege}
               onChange={handleChange}
-              className="w-full px-3 py-2 text-xs rounded-lg border border-slate-200 focus:border-orange-500 focus:outline-none min-h-[40px]"
+              className="w-full px-3 py-1.5 text-xs sm:text-sm rounded-lg border border-slate-200 focus:border-orange-500 focus:outline-none h-9 sm:h-10 transition-colors"
             />
           </div>
 
           <div>
-            <label htmlFor={`${formUid}-preferredIntake`} className="block text-[11px] font-medium text-slate-500 mb-1">
+            <label htmlFor={`${formUid}-preferredIntake`} className="block text-[11px] sm:text-xs font-medium text-slate-500 mb-1">
               Target Intake / Year (Optional)
             </label>
             <input
@@ -466,12 +472,12 @@ export default function EnquiryForm({ defaultService = '', source = 'Lead Form' 
               placeholder="e.g. 2026 or 2027"
               value={formData.preferredIntake}
               onChange={handleChange}
-              className="w-full px-3 py-2 text-xs rounded-lg border border-slate-200 focus:border-orange-500 focus:outline-none min-h-[40px]"
+              className="w-full px-3 py-1.5 text-xs sm:text-sm rounded-lg border border-slate-200 focus:border-orange-500 focus:outline-none h-9 sm:h-10 transition-colors"
             />
           </div>
         </div>
 
-        {/* Message / Query */}
+        {/* Row 6: Query / Message */}
         <div>
           <label htmlFor={`${formUid}-message`} className="block text-xs font-semibold text-slate-700 mb-1">
             Your Query / What guidance do you need? <span className="text-red-500">*</span>
@@ -479,42 +485,43 @@ export default function EnquiryForm({ defaultService = '', source = 'Lead Form' 
           <textarea
             id={`${formUid}-message`}
             name="message"
-            rows="3"
+            rows="2"
             placeholder="Tell us about your background, score, or specific confusion so our counsellor can prepare the best advice."
             value={formData.message}
             onChange={handleChange}
             aria-invalid={!!errors.message}
             aria-describedby={errors.message ? `${formUid}-message-err` : undefined}
-            className={`w-full px-3.5 py-2.5 text-sm rounded-lg border ${
+            className={`w-full px-3 py-2 text-xs sm:text-sm rounded-lg border h-[64px] sm:h-[68px] resize-none transition-colors ${
               errors.message ? 'border-red-400 bg-red-50/30' : 'border-slate-300 focus:border-orange-500'
             } focus:outline-none focus:ring-1 focus:ring-orange-500`}
           ></textarea>
-          {errors.message && <p id={`${formUid}-message-err`} className="text-xs text-red-500 mt-1">{errors.message}</p>}
+          {errors.message && <p id={`${formUid}-message-err`} className="text-xs text-red-500 mt-0.5">{errors.message}</p>}
         </div>
 
-        {/* Privacy Note */}
-        <p className="text-[11px] text-slate-500 leading-relaxed">
-          By submitting this form, you agree to be contacted by Vidyapaths regarding your enquiry.
-        </p>
+        {/* Row 7: Submit Button & Privacy Note */}
+        <div className="pt-1 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2.5 sm:gap-4">
+          <p className="text-[11px] text-slate-500 leading-tight order-2 sm:order-1 sm:max-w-xs md:max-w-md">
+            By submitting this form, you agree to be contacted by Vidyapaths regarding your enquiry.
+          </p>
 
-        {/* Submit Button */}
-        <button
-          type="submit"
-          disabled={isSubmitting}
-          className="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl font-bold text-white bg-orange-500 hover:bg-orange-600 transition-all shadow-md hover:shadow-orange-500/20 active:scale-[0.99] cursor-pointer disabled:opacity-70 min-h-[44px]"
-        >
-          {isSubmitting ? (
-            <span className="flex items-center gap-2">
-              <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
-              Submitting Enquiry...
-            </span>
-          ) : (
-            <>
-              <span>Get Free Counselling</span>
-              <Send className="w-4 h-4" />
-            </>
-          )}
-        </button>
+          <button
+            type="submit"
+            disabled={isSubmitting}
+            className="order-1 sm:order-2 w-full sm:w-auto min-w-[200px] sm:min-w-[220px] inline-flex items-center justify-center gap-2 px-6 py-2.5 sm:py-3 rounded-xl font-bold text-white bg-orange-500 hover:bg-orange-600 transition-all shadow-md hover:shadow-orange-500/20 active:scale-[0.99] cursor-pointer disabled:opacity-70 min-h-[42px] shrink-0 text-xs sm:text-sm"
+          >
+            {isSubmitting ? (
+              <span className="flex items-center gap-2">
+                <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+                <span>Submitting Enquiry...</span>
+              </span>
+            ) : (
+              <>
+                <span>Get Free Counselling</span>
+                <Send className="w-4 h-4" />
+              </>
+            )}
+          </button>
+        </div>
       </div>
     </form>
   );
