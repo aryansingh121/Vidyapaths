@@ -78,7 +78,7 @@ export default function StudyAbroadSection({ onOpenEnquiry }) {
                 </Link>
 
                 <button
-                  onClick={() => onOpenEnquiry(`Study Abroad Counselling for ${country.name}`)}
+                  onClick={() => onOpenEnquiry({ service: 'study-abroad', country: country.name })}
                   className="text-xs px-3 py-1.5 rounded-lg font-semibold text-white bg-orange-500 hover:bg-orange-600 transition-colors cursor-pointer"
                 >
                   Apply {country.short}

@@ -108,7 +108,7 @@ export default function CollegeAdmissionSection({ onOpenEnquiry }) {
                 <div className="pt-4 border-t border-slate-100 flex items-center justify-between">
                   <span className="text-xs text-slate-500 font-medium">Admissions Open 2026</span>
                   <button
-                    onClick={() => onOpenEnquiry(`Admission Guidance for ${course.name}`)}
+                    onClick={() => onOpenEnquiry({ service: 'college-admission', course: course.name })}
                     className="text-xs font-bold text-orange-600 hover:text-orange-700 flex items-center gap-1 cursor-pointer"
                   >
                     <span>Get Guidance</span>
@@ -151,7 +151,7 @@ export default function CollegeAdmissionSection({ onOpenEnquiry }) {
                 <div className="pt-4 border-t border-slate-100 flex items-center justify-between">
                   <span className="text-xs text-slate-500 font-medium">Spot Counselling</span>
                   <button
-                    onClick={() => onOpenEnquiry(`Admission Guidance for ${course.name}`)}
+                    onClick={() => onOpenEnquiry({ service: 'college-admission', course: course.name })}
                     className="text-xs font-bold text-orange-600 hover:text-orange-700 flex items-center gap-1 cursor-pointer"
                   >
                     <span>Get Guidance</span>
@@ -192,10 +192,11 @@ export default function CollegeAdmissionSection({ onOpenEnquiry }) {
                       {spec.count}
                     </span>
                     <button
-                      onClick={() => onOpenEnquiry(`Colleges in ${spec.domain}`)}
-                      className="text-xs font-bold text-navy-900 hover:text-orange-600 cursor-pointer"
+                      onClick={() => onOpenEnquiry({ service: 'college-admission', course: spec.domain })}
+                      className="text-xs font-bold text-orange-600 hover:text-orange-700 flex items-center gap-1 cursor-pointer"
                     >
-                      Explore →
+                      <span>Get Guidance</span>
+                      <ArrowRight className="w-3.5 h-3.5" />
                     </button>
                   </div>
                 </div>
@@ -212,7 +213,7 @@ export default function CollegeAdmissionSection({ onOpenEnquiry }) {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <button
-              onClick={() => onOpenEnquiry('College Comparison Request')}
+              onClick={() => onOpenEnquiry({ service: 'college-comparison' })}
               className="px-6 py-3 rounded-xl font-bold text-sm text-white bg-orange-500 hover:bg-orange-600 transition-colors shadow-sm cursor-pointer"
             >
               Get Free College Comparison

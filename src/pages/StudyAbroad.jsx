@@ -149,7 +149,7 @@ export default function StudyAbroad({ onOpenEnquiry }) {
                 <div className="pt-6 mt-4 border-t border-slate-100 flex items-center justify-between">
                   <span className="text-xs text-slate-400">Applications Open</span>
                   <button
-                    onClick={() => onOpenEnquiry(`Study Abroad - ${country.name}`)}
+                    onClick={() => onOpenEnquiry({ service: 'study-abroad', country: country.name })}
                     className="inline-flex items-center gap-1.5 text-xs font-bold text-white bg-navy-900 hover:bg-orange-500 px-3.5 py-2 rounded-lg transition-colors cursor-pointer"
                   >
                     <span>Apply for {country.short}</span>

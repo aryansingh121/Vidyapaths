@@ -96,7 +96,7 @@ export default function ServicesPreview({ onOpenEnquiry }) {
             <p className="text-sm text-slate-300">Speak with our academic counsellors for a free 15-minute roadmap consultation.</p>
           </div>
           <button
-            onClick={() => onOpenEnquiry('General Counselling')}
+            onClick={() => onOpenEnquiry('Career Roadmap Consultation')}
             className="shrink-0 px-6 py-3 rounded-xl font-bold text-sm bg-orange-500 hover:bg-orange-600 text-white shadow-md transition-all active:scale-95 cursor-pointer"
           >
             Get Free Consultation

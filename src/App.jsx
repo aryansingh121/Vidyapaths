@@ -22,15 +22,132 @@ function AppContent() {
   usePageMeta();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedService, setSelectedService] = useState('');
+  const [initialFormData, setInitialFormData] = useState({});
 
-  const handleOpenEnquiry = (service = '') => {
+  const handleOpenEnquiry = (serviceOrOptions = '', maybeOptions = {}) => {
+    let service = '';
+    let initialValues = {};
+
+    if (serviceOrOptions && typeof serviceOrOptions === 'object') {
+      service = serviceOrOptions.service || serviceOrOptions.defaultService || 'college-admission';
+      if (serviceOrOptions.course) {
+        initialValues.preferredCourse = serviceOrOptions.course;
+      }
+      if (serviceOrOptions.college) {
+        initialValues.preferredCollege = serviceOrOptions.college;
+        initialValues.preferredCollege1 = serviceOrOptions.college;
+      }
+      if (serviceOrOptions.country) {
+        initialValues.intendedCountries = serviceOrOptions.country;
+        initialValues.country = serviceOrOptions.country;
+      }
+      if (serviceOrOptions.domain || serviceOrOptions.preferredDomain) {
+        const dom = serviceOrOptions.domain || serviceOrOptions.preferredDomain;
+        initialValues.preferredDomain = dom;
+        initialValues.domain = dom;
+      }
+      if (serviceOrOptions.initialValues) {
+        initialValues = { ...initialValues, ...serviceOrOptions.initialValues };
+      }
+    } else if (typeof serviceOrOptions === 'string') {
+      service = serviceOrOptions;
+      if (maybeOptions && typeof maybeOptions === 'object') {
+        if (maybeOptions.course) {
+          initialValues.preferredCourse = maybeOptions.course;
+        }
+        if (maybeOptions.college) {
+          initialValues.preferredCollege = maybeOptions.college;
+          initialValues.preferredCollege1 = maybeOptions.college;
+        }
+        if (maybeOptions.country) {
+          initialValues.intendedCountries = maybeOptions.country;
+          initialValues.country = maybeOptions.country;
+        }
+        if (maybeOptions.domain || maybeOptions.preferredDomain) {
+          const dom = maybeOptions.domain || maybeOptions.preferredDomain;
+          initialValues.preferredDomain = dom;
+          initialValues.domain = dom;
+        }
+        if (maybeOptions.initialValues) {
+          initialValues = { ...initialValues, ...maybeOptions.initialValues };
+        }
+      }
+
+      // Detect college comparison requests
+      if (
+        service === 'College Comparison Request' ||
+        service.toLowerCase().includes('comparison') ||
+        service.toLowerCase().includes('compare cutoffs') ||
+        service.toLowerCase().includes('college comparison sheet')
+      ) {
+        service = 'college-comparison';
+      }
+
+      // Detect study abroad requests from string
+      if (
+        service.startsWith('Study Abroad Counselling for ') ||
+        service.startsWith('Study Abroad - ')
+      ) {
+        const countryName = service
+          .replace('Study Abroad Counselling for ', '')
+          .replace('Study Abroad - ', '')
+          .trim();
+        initialValues.intendedCountries = countryName;
+        initialValues.country = countryName;
+        service = 'study-abroad';
+      } else if (
+        service === 'Study Abroad' ||
+        service === 'study-abroad' ||
+        service.toLowerCase().includes('study abroad')
+      ) {
+        service = 'study-abroad';
+      }
+
+      // Detect internship sector requests from string
+      if (service.startsWith('Internship in ')) {
+        const domainName = service.replace('Internship in ', '').trim();
+        initialValues.preferredDomain = domainName;
+        initialValues.domain = domainName;
+        service = 'internship-assistance';
+      }
+
+      // Fallback parsing for college and course guidance string format
+      if (service.startsWith('Admission Guidance - ')) {
+        const collegeName = service.replace('Admission Guidance - ', '').trim();
+        initialValues.preferredCollege = collegeName;
+        initialValues.preferredCollege1 = collegeName;
+        service = 'college-admission';
+      } else if (service.startsWith('Admission Guidance: ')) {
+        const details = service.replace('Admission Guidance: ', '').trim();
+        if (details.includes(' at ')) {
+          const [prog, col] = details.split(' at ');
+          initialValues.preferredCourse = prog.trim();
+          initialValues.preferredCollege = col.trim();
+          initialValues.preferredCollege1 = col.trim();
+        }
+        service = 'college-admission';
+      }
+
+      if (!initialValues.preferredCourse) {
+        if (service.startsWith('Admission Guidance for ')) {
+          initialValues.preferredCourse = service.replace('Admission Guidance for ', '').trim();
+          service = 'college-admission';
+        } else if (service.startsWith('Colleges in ')) {
+          initialValues.preferredCourse = service.replace('Colleges in ', '').trim();
+          service = 'college-admission';
+        }
+      }
+    }
+
     setSelectedService(service);
+    setInitialFormData(initialValues);
     setIsModalOpen(true);
   };
 
   const handleCloseEnquiry = () => {
     setIsModalOpen(false);
     setSelectedService('');
+    setInitialFormData({});
   };
 
   return (
@@ -73,6 +190,7 @@ function AppContent() {
         isOpen={isModalOpen}
         onClose={handleCloseEnquiry}
         defaultService={selectedService}
+        initialValues={initialFormData}
       />
     </div>
   );

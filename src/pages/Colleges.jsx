@@ -260,7 +260,7 @@ export default function Colleges({ onOpenEnquiry }) {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search by college name, university, or program (e.g. SRCC, BTech, Economics, AIIMS, Nursing)..."
-                className="w-full pl-11 pr-10 py-3.5 rounded-xl border border-slate-300 focus:border-orange-500 focus:ring-1 focus:ring-orange-500 text-sm placeholder-slate-400 transition-all shadow-xs min-h-[48px]"
+                className="w-full pl-11 pr-10 py-3.5 rounded-xl border border-slate-300 focus:border-orange-500 focus:ring-1 focus:ring-orange-500 text-sm bg-white text-navy-900 placeholder:text-slate-400 placeholder:font-normal placeholder:opacity-100 transition-all shadow-xs min-h-[48px]"
                 aria-label="Search college directory"
               />
               {searchQuery && (
@@ -412,7 +412,7 @@ export default function Colleges({ onOpenEnquiry }) {
 
                       {/* Get Admission Guidance */}
                       <button
-                        onClick={() => onOpenEnquiry(`Admission Guidance - ${college.name}`)}
+                        onClick={() => onOpenEnquiry({ service: 'college-admission', college: college.name })}
                         className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold text-white bg-orange-500 hover:bg-orange-600 shadow-sm active:scale-95 transition-all cursor-pointer min-h-[42px] whitespace-nowrap"
                       >
                         <span>Get Admission Guidance</span>
@@ -497,7 +497,7 @@ export default function Colleges({ onOpenEnquiry }) {
                                   Guidance Available
                                 </span>
                                 <button
-                                  onClick={() => onOpenEnquiry(`Admission Guidance: ${program.name} at ${college.name}`)}
+                                  onClick={() => onOpenEnquiry({ service: 'college-admission', college: college.name, course: program.name })}
                                   className="text-xs font-bold text-orange-600 hover:text-orange-700 cursor-pointer inline-flex items-center gap-1"
                                 >
                                   <span>Enquire</span>
@@ -511,12 +511,21 @@ export default function Colleges({ onOpenEnquiry }) {
 
                       <div className="mt-4 pt-3 border-t border-slate-200/60 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 text-xs text-slate-500">
                         <span>Check official university portal for exact syllabus, prerequisites, and seat reservations.</span>
-                        <button
-                          onClick={() => onOpenEnquiry(`Admission Guidance - ${college.name}`)}
-                          className="font-bold text-orange-600 hover:underline cursor-pointer"
-                        >
-                          Request Counselling for {college.name} →
-                        </button>
+                        <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
+                          <button
+                            onClick={() => onOpenEnquiry({ service: 'college-comparison', college: college.name })}
+                            className="font-semibold text-slate-600 hover:text-orange-600 hover:underline cursor-pointer"
+                          >
+                            Compare Options
+                          </button>
+                          <span className="text-slate-300">•</span>
+                          <button
+                            onClick={() => onOpenEnquiry({ service: 'college-admission', college: college.name })}
+                            className="font-bold text-orange-600 hover:underline cursor-pointer"
+                          >
+                            Request Counselling for {college.name} →
+                          </button>
+                        </div>
                       </div>
                     </div>
                   )}

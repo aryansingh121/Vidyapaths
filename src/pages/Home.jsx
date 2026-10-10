@@ -14,7 +14,7 @@ export default function Home({ onOpenEnquiry }) {
   return (
     <div>
       <Hero onOpenEnquiry={() => onOpenEnquiry('Hero')} />
-      <Benefits onOpenEnquiry={() => onOpenEnquiry('Benefits Section')} />
+      <Benefits onOpenEnquiry={onOpenEnquiry} />
       <ServicesPreview onOpenEnquiry={onOpenEnquiry} />
       <HowItWorks onOpenEnquiry={() => onOpenEnquiry('How It Works Section')} />
       <CollegeAdmissionSection onOpenEnquiry={onOpenEnquiry} />

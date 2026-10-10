@@ -52,8 +52,11 @@ export const SERVICE_FORM_CONFIGS = {
     modalHeading: 'College Admission & Guidance',
     shortDescription: 'Get personalized merit evaluation, cutoff analysis, and verified college options.',
     aliases: [
+      'college-admission',
+      'college-admissions',
       'college admission',
       'college admission & guidance',
+      'college guidance',
       'college admissions',
       'admission guidance',
       'colleges',
@@ -162,10 +165,11 @@ export const SERVICE_FORM_CONFIGS = {
     modalHeading: 'Book 1-on-1 Career Counselling',
     shortDescription: 'Discover career paths aligned with your interests, personality, and strengths.',
     aliases: [
+      'career-counselling',
+      'career-guidance',
+      'career guidance',
       'career counselling',
       'career counseling',
-      'counselling',
-      'career roadmap',
       'general counselling'
     ],
     fields: [
@@ -255,6 +259,9 @@ export const SERVICE_FORM_CONFIGS = {
     modalHeading: 'Internship Assistance & Placement Prep',
     shortDescription: 'Connect with industry internships, portfolio enhancement, and corporate prep.',
     aliases: [
+      'internship-assistance',
+      'internship-support',
+      'internship support',
       'internship assistance',
       'internships',
       'internship',
@@ -301,13 +308,13 @@ export const SERVICE_FORM_CONFIGS = {
         required: true,
         colSpan: 1,
         options: [
-          'Software / Web Development',
-          'Data Science & AI',
-          'Digital Marketing & Content',
-          'Finance & Accounting',
+          'Software & Web Development',
+          'Digital Marketing & Growth',
+          'Business & Sales Development',
+          'Finance & Data Analysis',
+          'UI/UX & Graphic Design',
           'Human Resources (HR)',
-          'Business Development & Sales',
-          'UI/UX Design',
+          'Data Science & AI',
           'Operations & Management'
         ],
         errorMessage: 'Please select preferred internship domain'
@@ -376,6 +383,8 @@ export const SERVICE_FORM_CONFIGS = {
       'study abroad',
       'study-abroad',
       'study abroad guidance',
+      'study abroad counselling',
+      'study abroad counseling',
       'international admissions',
       'overseas'
     ],
@@ -455,22 +464,23 @@ export const SERVICE_FORM_CONFIGS = {
       },
       {
         name: 'englishTestStatus',
-        label: 'English Test Status',
+        label: 'English / Standardized Test Status',
         type: 'select',
         required: false,
         colSpan: 1,
         options: [
           'Not Taken Yet',
-          'Planning to take IELTS / TOEFL / PTE',
+          'Planning to take IELTS / TOEFL / PTE / GRE',
           'IELTS Taken',
           'TOEFL Taken',
           'PTE Taken',
+          'GRE / GMAT Taken',
           'Exempted / Native Speaker'
         ]
       },
       {
         name: 'annualBudget',
-        label: 'Approximate Annual Budget',
+        label: 'Approximate Budget per Year',
         type: 'select',
         required: false,
         colSpan: 1,
@@ -483,12 +493,17 @@ export const SERVICE_FORM_CONFIGS = {
         ]
       },
       {
-        name: 'passportStatus',
-        label: 'Passport Status',
+        name: 'needScholarship',
+        label: 'Need Scholarship / Financial Aid',
         type: 'select',
         required: false,
         colSpan: 1,
-        options: ['Ready / Valid', 'Applied / In Process', 'Not Yet Applied']
+        options: [
+          'Yes - Merit / Need Based',
+          'Yes - Partial Aid',
+          'No - Self Funded',
+          'Exploring Aid Options'
+        ]
       },
       {
         name: 'message',
@@ -721,13 +736,311 @@ export const SERVICE_FORM_CONFIGS = {
         rows: 2
       }
     ]
+  },
+
+  'career-roadmap': {
+    id: 'career-roadmap',
+    displayName: 'Career Roadmap Consultation',
+    modalHeading: 'Book Your Free Career Roadmap Consultation',
+    badgeText: null,
+    shortDescription: 'Tell us a little about yourself so we can make your 15-minute consultation more useful.',
+    hideServiceSelector: true,
+    emailSubject: 'New Career Roadmap Consultation — Vidyapaths',
+    aliases: [
+      'career-roadmap',
+      'career roadmap',
+      'career roadmap consultation',
+      'roadmap consultation',
+      'free 15-minute roadmap consultation',
+      '15-minute consultation',
+      'career-roadmap-consultation'
+    ],
+    fields: [
+      // Academic Background
+      {
+        name: 'currentEducation',
+        label: 'Current Education / Qualification',
+        type: 'select',
+        required: true,
+        colSpan: 1,
+        options: [
+          'Class 10',
+          'Class 11',
+          'Class 12',
+          'Diploma',
+          'Undergraduate student',
+          'Graduate',
+          'Postgraduate student',
+          'Postgraduate',
+          'Working professional',
+          'Other'
+        ],
+        errorMessage: 'Please select your current education / qualification'
+      },
+      {
+        name: 'currentStream',
+        label: 'Current Stream / Field of Study',
+        type: 'text',
+        placeholder: 'e.g. Science (PCM), Commerce, Computer Science',
+        required: true,
+        colSpan: 1,
+        errorMessage: 'Please enter your current stream / field of study'
+      },
+      {
+        name: 'careerStage',
+        label: 'Current Study or Career Stage',
+        type: 'select',
+        required: true,
+        colSpan: 2,
+        options: [
+          'Choosing a stream after Class 10',
+          'Choosing a course after Class 12',
+          'Selecting a college or university',
+          'Currently pursuing a degree',
+          'Planning postgraduate studies',
+          'Exploring career options',
+          'Considering a career change',
+          'Other'
+        ],
+        errorMessage: 'Please select your current study or career stage'
+      },
+      // Career Guidance Requirements
+      {
+        name: 'guidanceNeeds',
+        label: 'What do you need help with?',
+        type: 'checkbox-group',
+        required: true,
+        colSpan: 2,
+        options: [
+          'Choosing a career path',
+          'Selecting a course or specialization',
+          'Identifying strengths and interests',
+          'Understanding career opportunities',
+          'Planning higher education',
+          'Exploring skill-development options',
+          'Other'
+        ],
+        errorMessage: 'Please select at least one area you need help with'
+      },
+      {
+        name: 'preferredCareerFields',
+        label: 'Preferred Career Fields',
+        type: 'text',
+        placeholder: 'e.g. Technology, Finance, Design, Healthcare',
+        required: false,
+        colSpan: 2
+      },
+      {
+        name: 'mainQuestion',
+        label: 'Main Question or Concern',
+        type: 'textarea',
+        placeholder: 'Tell us what you are confused about or what you want to achieve.',
+        required: false,
+        colSpan: 2,
+        rows: 2
+      },
+      // Consultation Preferences
+      {
+        name: 'consultationMode',
+        label: 'Preferred Consultation Mode',
+        type: 'select',
+        required: true,
+        colSpan: 1,
+        options: [
+          'Phone call',
+          'WhatsApp call',
+          'Online meeting',
+          'In-person, subject to availability'
+        ],
+        errorMessage: 'Please select preferred consultation mode'
+      },
+      {
+        name: 'preferredTime',
+        label: 'Preferred Time',
+        type: 'select',
+        required: false,
+        colSpan: 1,
+        options: [
+          'Morning',
+          'Afternoon',
+          'Evening'
+        ]
+      }
+    ]
+  },
+
+  'college-comparison': {
+    id: 'college-comparison',
+    displayName: 'College Comparison Request',
+    modalHeading: 'Compare Colleges With Confidence',
+    badgeText: 'FREE GUIDANCE',
+    bannerTitle: 'Dedicated College Comparison Request',
+    shortDescription: 'Tell us your academic profile, preferred course, and budget so we can help you evaluate suitable college options.',
+    hideServiceSelector: true,
+    emailSubject: 'New College Comparison Request — Vidyapaths',
+    aliases: [
+      'college-comparison',
+      'college comparison',
+      'college comparison request',
+      'compare colleges',
+      'compare-colleges',
+      'comparison-request',
+      'free college comparison'
+    ],
+    fields: [
+      // Academic Profile
+      {
+        name: 'currentQualification',
+        label: 'Current Qualification',
+        type: 'select',
+        required: true,
+        colSpan: 1,
+        options: [
+          'Class 10th / 11th',
+          'Class 12th (Appearing / Passed)',
+          'Undergraduate Student',
+          'Graduate / Degree Holder',
+          'Postgraduate Student',
+          'Other'
+        ],
+        errorMessage: 'Please select your current qualification'
+      },
+      {
+        name: 'passingYear',
+        label: 'Passing Year',
+        type: 'select',
+        required: true,
+        colSpan: 1,
+        options: ['2027 or later', '2026', '2025', '2024', '2023 or earlier'],
+        errorMessage: 'Please select your passing year'
+      },
+      {
+        name: 'preferredCourse',
+        label: 'Preferred Course / Specialization',
+        type: 'text',
+        placeholder: 'e.g. B.Tech Computer Science, MBA, BCA, BBA, MBBS',
+        required: true,
+        colSpan: 1,
+        errorMessage: 'Please enter your preferred course or specialization'
+      },
+      {
+        name: 'academicPercentage',
+        label: 'Academic Percentage / CGPA',
+        type: 'text',
+        placeholder: 'e.g. 85% or 8.2 CGPA',
+        required: true,
+        colSpan: 1,
+        errorMessage: 'Please enter your academic percentage or CGPA'
+      },
+      {
+        name: 'admissionYear',
+        label: 'Preferred Admission Year',
+        type: 'select',
+        required: true,
+        colSpan: 1,
+        options: ['2026', '2027', '2028'],
+        errorMessage: 'Please select preferred admission year'
+      },
+      {
+        name: 'entranceExam',
+        label: 'Entrance Exam',
+        type: 'text',
+        placeholder: 'e.g. JEE Main, CUET, CAT, NEET, None',
+        required: false,
+        colSpan: 1
+      },
+      {
+        name: 'entranceScore',
+        label: 'Entrance Exam Score / Percentile',
+        type: 'text',
+        placeholder: 'e.g. 92%ile, 540 Score, Appearing',
+        required: false,
+        colSpan: 1
+      },
+
+      // College Preferences
+      {
+        name: 'preferredStudyLocation',
+        label: 'Preferred Study Location',
+        type: 'text',
+        placeholder: 'e.g. Delhi NCR, Bangalore, Pune, Anywhere in India',
+        required: true,
+        colSpan: 1,
+        errorMessage: 'Please enter your preferred study location'
+      },
+      {
+        name: 'preferredCollege1',
+        label: 'Preferred College 1',
+        type: 'text',
+        placeholder: 'e.g. Specific College / University (or leave blank for recommendations)',
+        required: false,
+        colSpan: 1
+      },
+      {
+        name: 'preferredCollege2',
+        label: 'Preferred College 2',
+        type: 'text',
+        placeholder: 'e.g. Alternative College / Campus (optional)',
+        required: false,
+        colSpan: 1
+      },
+      {
+        name: 'preferredCollege3',
+        label: 'Preferred College 3',
+        type: 'text',
+        placeholder: 'e.g. Third College Choice (optional)',
+        required: false,
+        colSpan: 2
+      },
+
+      // Comparison Priorities
+      {
+        name: 'comparisonPriorities',
+        label: 'What factors are most important for your comparison?',
+        type: 'checkbox-group',
+        required: true,
+        colSpan: 2,
+        options: [
+          'Tuition Fees',
+          'Eligibility and Admission Requirements',
+          'Placements and Career Opportunities',
+          'Course Curriculum',
+          'Location and Accessibility',
+          'Scholarships and Financial Aid',
+          'Campus Facilities'
+        ],
+        errorMessage: 'Please select at least one comparison priority factor'
+      },
+
+      // Additional Requirements / Message
+      {
+        name: 'message',
+        label: 'Additional Requirements / Message',
+        type: 'textarea',
+        placeholder: 'Mention any specific cutoffs, hostel needs, accreditation criteria, or questions for our counselors.',
+        required: false,
+        colSpan: 2,
+        rows: 2
+      }
+    ]
   }
 };
 
-export const SERVICE_OPTIONS = Object.values(SERVICE_FORM_CONFIGS).map(cfg => ({
-  id: cfg.id,
-  displayName: cfg.displayName
-}));
+// Alias direct lookups so service IDs work directly
+SERVICE_FORM_CONFIGS['college-admission'] = SERVICE_FORM_CONFIGS['college-admissions'];
+SERVICE_FORM_CONFIGS['career-guidance'] = SERVICE_FORM_CONFIGS['career-counselling'];
+SERVICE_FORM_CONFIGS['internship-support'] = SERVICE_FORM_CONFIGS['internship-assistance'];
+SERVICE_FORM_CONFIGS['career-roadmap-consultation'] = SERVICE_FORM_CONFIGS['career-roadmap'];
+SERVICE_FORM_CONFIGS['college-comparison-request'] = SERVICE_FORM_CONFIGS['college-comparison'];
+
+export const SERVICE_OPTIONS = [
+  { id: 'college-admissions', displayName: 'College Admission & Guidance' },
+  { id: 'career-counselling', displayName: 'Career Counselling' },
+  { id: 'internship-assistance', displayName: 'Internship Assistance' },
+  { id: 'study-abroad', displayName: 'Study Abroad' },
+  { id: 'resume-interview', displayName: 'Resume & Interview Support' },
+  { id: 'scholarships-loans', displayName: 'Scholarships & Education Loans' }
+];
 
 /**
  * Resolves a given raw service string or ID to the corresponding service configuration.
@@ -736,11 +1049,66 @@ export const SERVICE_OPTIONS = Object.values(SERVICE_FORM_CONFIGS).map(cfg => ({
 export function getServiceConfig(rawService = '') {
   if (!rawService) return SERVICE_FORM_CONFIGS['college-admissions'];
 
+  // Guard against synthetic events or non-string parameters
+  if (typeof rawService !== 'string') {
+    return SERVICE_FORM_CONFIGS['college-admissions'];
+  }
+
   const normalized = rawService.toLowerCase().trim();
 
   // 1. Direct ID match
   if (SERVICE_FORM_CONFIGS[normalized]) {
     return SERVICE_FORM_CONFIGS[normalized];
+  }
+
+  // Direct fast paths for core and dedicated services
+  if (
+    normalized === 'college-comparison' ||
+    normalized === 'college-comparison-request' ||
+    normalized === 'college comparison' ||
+    normalized === 'college comparison request' ||
+    normalized === 'compare colleges' ||
+    normalized.includes('comparison') ||
+    normalized.includes('compare cutoffs') ||
+    normalized.includes('college comparison sheet')
+  ) {
+    return SERVICE_FORM_CONFIGS['college-comparison'];
+  }
+  if (
+    normalized === 'study-abroad' ||
+    normalized === 'study abroad' ||
+    normalized.startsWith('study abroad') ||
+    normalized.includes('study abroad') ||
+    normalized.includes('study-abroad')
+  ) {
+    return SERVICE_FORM_CONFIGS['study-abroad'];
+  }
+  if (normalized === 'college-admission' || normalized === 'college guidance' || normalized === 'college-guidance') {
+    return SERVICE_FORM_CONFIGS['college-admissions'];
+  }
+  if (normalized === 'career-counselling' || normalized === 'career-guidance' || normalized === 'career guidance') {
+    return SERVICE_FORM_CONFIGS['career-counselling'];
+  }
+  if (
+    normalized === 'internship-assistance' ||
+    normalized === 'internship-support' ||
+    normalized === 'internship support' ||
+    normalized === 'internship assistance' ||
+    normalized.startsWith('internship') ||
+    normalized.includes('internship')
+  ) {
+    return SERVICE_FORM_CONFIGS['internship-assistance'];
+  }
+  if (
+    normalized === 'career-roadmap' ||
+    normalized === 'career roadmap' ||
+    normalized === 'career roadmap consultation' ||
+    normalized === 'roadmap consultation' ||
+    normalized === 'free 15-minute roadmap consultation' ||
+    normalized === '15-minute consultation' ||
+    normalized === 'career-roadmap-consultation'
+  ) {
+    return SERVICE_FORM_CONFIGS['career-roadmap'];
   }
 
   // 2. Check aliases or exact displayName match
@@ -749,7 +1117,7 @@ export function getServiceConfig(rawService = '') {
     if (config.displayName.toLowerCase() === normalized) {
       return config;
     }
-    if (config.aliases.some(alias => normalized === alias || normalized.includes(alias))) {
+    if (config.aliases && config.aliases.some(alias => normalized === alias || normalized.includes(alias))) {
       return config;
     }
   }

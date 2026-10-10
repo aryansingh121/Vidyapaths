@@ -5,13 +5,32 @@ import { Link } from 'react-router-dom';
 
 export default function InternshipSection({ onOpenEnquiry }) {
   const domains = [
-    { title: "Software & Web Development", roles: "Frontend, Backend, Fullstack, Python/React interns" },
-    { title: "Digital Marketing & Growth", roles: "SEO, Social Media Marketing, Performance, Content" },
-    { title: "Business & Sales Development", roles: "Lead Generation, Client Relations, Market Research" },
-    { title: "Finance & Data Analysis", roles: "Financial Modeling, Excel/SQL Reporting, Valuation" },
-    { title: "UI/UX & Graphic Design", roles: "Figma wireframing, Brand design, User journeys" },
-    { title: "Human Resources (HR)", roles: "Talent acquisition, Employee engagement, Screening" }
+    { name: "Software & Web Development", title: "Software & Web Development", roles: "Frontend, Backend, Fullstack, Python/React interns" },
+    { name: "Digital Marketing & Growth", title: "Digital Marketing & Growth", roles: "SEO, Social Media Marketing, Performance, Content" },
+    { name: "Business & Sales Development", title: "Business & Sales Development", roles: "Lead Generation, Client Relations, Market Research" },
+    { name: "Finance & Data Analysis", title: "Finance & Data Analysis", roles: "Financial Modeling, Excel/SQL Reporting, Valuation" },
+    { name: "UI/UX & Graphic Design", title: "UI/UX & Graphic Design", roles: "Figma wireframing, Brand design, User journeys" },
+    { name: "Human Resources (HR)", title: "Human Resources (HR)", roles: "Talent acquisition, Employee engagement, Screening" }
   ];
+
+  const handleExploreProcess = (e) => {
+    const target = document.getElementById('internship-process');
+    if (target) {
+      e.preventDefault();
+      const navOffset = 95; // Fixed navbar offset
+      const elementPosition = target.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.scrollY - navOffset;
+
+      window.scrollTo({
+        top: Math.max(0, offsetPosition),
+        behavior: 'smooth'
+      });
+
+      if (window.location.hash !== '#internship-process') {
+        window.history.pushState(null, '', '/internships#internship-process');
+      }
+    }
+  };
 
   return (
     <section className="py-20 md:py-28 bg-white">
@@ -69,8 +88,9 @@ export default function InternshipSection({ onOpenEnquiry }) {
               </button>
 
               <Link
-                to="/internships"
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl font-semibold text-sm text-navy-900 bg-slate-100 hover:bg-slate-200 transition-colors"
+                to="/internships#internship-process"
+                onClick={handleExploreProcess}
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl font-semibold text-sm text-navy-900 bg-slate-100 hover:bg-slate-200 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 cursor-pointer"
               >
                 <span>Explore Process</span>
               </Link>
@@ -106,7 +126,7 @@ export default function InternshipSection({ onOpenEnquiry }) {
                       </p>
                     </div>
                     <button
-                      onClick={() => onOpenEnquiry(`Internship in ${dom.title}`)}
+                      onClick={() => onOpenEnquiry({ service: 'internship-assistance', domain: dom.name || dom.title })}
                       className="text-xs font-semibold text-orange-600 hover:text-orange-700 px-2 py-1 rounded bg-orange-50 group-hover:bg-orange-500 group-hover:text-white transition-colors cursor-pointer shrink-0 ml-2"
                     >
                       Apply

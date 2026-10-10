@@ -3,15 +3,20 @@ import { X } from 'lucide-react';
 import EnquiryForm from './EnquiryForm';
 import { SERVICE_FORM_CONFIGS, getServiceConfig } from '../data/serviceFormConfigs';
 
-export default function EnquiryModal({ isOpen, onClose, defaultService = '' }) {
+export default function EnquiryModal({ 
+  isOpen, 
+  onClose, 
+  defaultService = '',
+  initialValues = {}
+}) {
   const [activeServiceId, setActiveServiceId] = useState(() => getServiceConfig(defaultService).id);
 
-  // When defaultService prop changes, update active service
+  // When defaultService prop changes or modal opens, update active service
   useEffect(() => {
-    if (defaultService) {
+    if (isOpen) {
       setActiveServiceId(getServiceConfig(defaultService).id);
     }
-  }, [defaultService]);
+  }, [isOpen, defaultService]);
 
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -47,9 +52,11 @@ export default function EnquiryModal({ isOpen, onClose, defaultService = '' }) {
           <div className="pr-3">
             <h3 className="text-lg sm:text-[22px] lg:text-[23px] font-bold text-white flex items-center gap-2.5 leading-tight">
               <span>{currentConfig.modalHeading}</span>
-              <span className="text-[11px] sm:text-xs bg-orange-500 text-white px-2.5 py-0.5 rounded-full font-semibold tracking-wide shrink-0">
-                100% Free
-              </span>
+              {currentConfig.badgeText !== null && (
+                <span className="text-[11px] sm:text-xs bg-orange-500 text-white px-2.5 py-0.5 rounded-full font-semibold tracking-wide shrink-0">
+                  {currentConfig.badgeText || "100% Free"}
+                </span>
+              )}
             </h3>
             <p className="text-[13px] sm:text-[14px] text-slate-300 mt-1 leading-normal line-clamp-1 sm:line-clamp-none">
               {currentConfig.shortDescription}
@@ -70,6 +77,7 @@ export default function EnquiryModal({ isOpen, onClose, defaultService = '' }) {
             defaultService={defaultService} 
             activeServiceId={activeServiceId}
             onServiceChange={setActiveServiceId}
+            initialValues={initialValues}
             source="Popup Modal" 
             isModal={true} 
           />

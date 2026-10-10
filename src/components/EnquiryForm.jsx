@@ -13,6 +13,7 @@ export default function EnquiryForm({
   defaultService = '', 
   activeServiceId: propActiveServiceId,
   onServiceChange,
+  initialValues = {},
   source = 'Lead Form', 
   isModal = false 
 }) {
@@ -28,11 +29,16 @@ export default function EnquiryForm({
 
   // Sync when propActiveServiceId or defaultService changes
   useEffect(() => {
-    if (propActiveServiceId && SERVICE_FORM_CONFIGS[propActiveServiceId]) {
-      setCurrentServiceId(propActiveServiceId);
+    if (propActiveServiceId) {
+      const resolved = getServiceConfig(propActiveServiceId);
+      setCurrentServiceId(resolved.id);
+      setErrors({});
+      setSubmitError('');
     } else if (defaultService) {
       const resolved = getServiceConfig(defaultService);
       setCurrentServiceId(resolved.id);
+      setErrors({});
+      setSubmitError('');
     }
   }, [propActiveServiceId, defaultService]);
 
@@ -47,37 +53,181 @@ export default function EnquiryForm({
   });
 
   // Service-specific field states (isolated by service ID to prevent stale cross-service submission)
-  const [serviceFields, setServiceFields] = useState({
-    'college-admissions': {},
-    'career-counselling': {},
-    'internship-assistance': {},
-    'study-abroad': {},
-    'resume-interview': {},
-    'scholarships-loans': {}
+  const [serviceFields, setServiceFields] = useState(() => {
+    const base = {
+      'college-admissions': {},
+      'career-counselling': {},
+      'internship-assistance': {},
+      'study-abroad': {},
+      'resume-interview': {},
+      'scholarships-loans': {},
+      'career-roadmap': {
+        guidanceNeeds: []
+      },
+      'college-comparison': {
+        comparisonPriorities: []
+      }
+    };
+    if (initialValues && Object.keys(initialValues).length > 0) {
+      base['college-admissions'] = {
+        preferredCourse: initialValues.preferredCourse || '',
+        preferredCollege: initialValues.preferredCollege || initialValues.college || '',
+        ...initialValues
+      };
+      base['college-comparison'] = {
+        ...base['college-comparison'],
+        ...initialValues
+      };
+      if (initialValues.intendedCountries || initialValues.country) {
+        base['study-abroad'] = {
+          ...base['study-abroad'],
+          intendedCountries: initialValues.intendedCountries || initialValues.country,
+          ...initialValues
+        };
+      }
+      if (initialValues.preferredDomain || initialValues.domain) {
+        base['internship-assistance'] = {
+          ...base['internship-assistance'],
+          preferredDomain: initialValues.preferredDomain || initialValues.domain,
+          ...initialValues
+        };
+      }
+    }
+    return base;
   });
+
+  // Sync when initialValues prop updates
+  useEffect(() => {
+    if (initialValues && Object.keys(initialValues).length > 0) {
+      setServiceFields(prev => ({
+        ...prev,
+        'college-admissions': {
+          ...prev['college-admissions'],
+          preferredCourse: initialValues.preferredCourse !== undefined 
+            ? initialValues.preferredCourse 
+            : (initialValues.preferredCollege || initialValues.college ? '' : (prev['college-admissions']?.preferredCourse || '')),
+          preferredCollege: initialValues.preferredCollege !== undefined 
+            ? initialValues.preferredCollege 
+            : (initialValues.college !== undefined 
+                ? initialValues.college 
+                : (prev['college-admissions']?.preferredCollege || '')),
+          ...initialValues
+        },
+        'college-comparison': {
+          ...prev['college-comparison'],
+          ...initialValues
+        },
+        'study-abroad': {
+          ...prev['study-abroad'],
+          ...(initialValues.intendedCountries || initialValues.country
+            ? { intendedCountries: initialValues.intendedCountries || initialValues.country }
+            : {}),
+          ...initialValues
+        },
+        'internship-assistance': {
+          ...prev['internship-assistance'],
+          ...(initialValues.preferredDomain || initialValues.domain
+            ? { preferredDomain: initialValues.preferredDomain || initialValues.domain }
+            : {}),
+          ...initialValues
+        }
+      }));
+      if (initialValues.preferredDomain || initialValues.domain) {
+        setErrors(prev => {
+          if (prev.preferredDomain) {
+            const next = { ...prev };
+            delete next.preferredDomain;
+            return next;
+          }
+          return prev;
+        });
+      }
+      if (initialValues.preferredCourse) {
+        setErrors(prev => {
+          if (prev.preferredCourse) {
+            const next = { ...prev };
+            delete next.preferredCourse;
+            return next;
+          }
+          return prev;
+        });
+      }
+    }
+  }, [initialValues]);
 
   // Prefill specific prompts
   useEffect(() => {
     if (defaultService) {
-      if (defaultService.startsWith('Admission Guidance - ')) {
+      if (defaultService.startsWith('Admission Guidance for ')) {
+        const courseName = defaultService.replace('Admission Guidance for ', '').trim();
+        setServiceFields(prev => ({
+          ...prev,
+          'college-admissions': {
+            ...prev['college-admissions'],
+            preferredCourse: courseName
+          }
+        }));
+      } else if (defaultService.startsWith('Colleges in ')) {
+        const domainName = defaultService.replace('Colleges in ', '').trim();
+        setServiceFields(prev => ({
+          ...prev,
+          'college-admissions': {
+            ...prev['college-admissions'],
+            preferredCourse: domainName
+          }
+        }));
+      } else if (defaultService.startsWith('Admission Guidance - ')) {
         const collegeName = defaultService.replace('Admission Guidance - ', '').trim();
         setServiceFields(prev => ({
           ...prev,
           'college-admissions': {
             ...prev['college-admissions'],
             preferredCollege: collegeName,
+            preferredCourse: '',
             message: prev['college-admissions'].message || `Seeking admission guidance for ${collegeName}.`
+          },
+          'college-comparison': {
+            ...prev['college-comparison'],
+            preferredCollege1: collegeName
+          }
+        }));
+      } else if (defaultService.startsWith('College Comparison Request - ')) {
+        const item = defaultService.replace('College Comparison Request - ', '').trim();
+        setServiceFields(prev => ({
+          ...prev,
+          'college-comparison': {
+            ...prev['college-comparison'],
+            preferredCollege1: item
           }
         }));
       } else if (defaultService.startsWith('Admission Guidance: ')) {
         const details = defaultService.replace('Admission Guidance: ', '').trim();
+        let courseName = '';
+        let collegeName = '';
+        if (details.includes(' at ')) {
+          const parts = details.split(' at ');
+          courseName = parts[0].trim();
+          collegeName = parts[1].trim();
+        }
         setServiceFields(prev => ({
           ...prev,
           'college-admissions': {
             ...prev['college-admissions'],
+            ...(courseName ? { preferredCourse: courseName } : {}),
+            ...(collegeName ? { preferredCollege: collegeName } : {}),
             message: prev['college-admissions'].message || `Seeking guidance for ${details}.`
           }
         }));
+        if (courseName) {
+          setErrors(prev => {
+            if (prev.preferredCourse) {
+              const next = { ...prev };
+              delete next.preferredCourse;
+              return next;
+            }
+            return prev;
+          });
+        }
       } else if (defaultService.startsWith('Study Abroad - ') || defaultService.startsWith('Study Abroad Counselling for ')) {
         const countryName = defaultService
           .replace('Study Abroad - ', '')
@@ -99,6 +249,14 @@ export default function EnquiryForm({
             preferredDomain: domain
           }
         }));
+        setErrors(prev => {
+          if (prev.preferredDomain) {
+            const next = { ...prev };
+            delete next.preferredDomain;
+            return next;
+          }
+          return prev;
+        });
       }
     }
   }, [defaultService]);
@@ -174,7 +332,11 @@ export default function EnquiryForm({
       const val = currentValues[field.name];
 
       if (field.required) {
-        if (!val || (typeof val === 'string' && !val.trim())) {
+        if (field.type === 'checkbox-group') {
+          if (!val || !Array.isArray(val) || val.length === 0) {
+            newErrors[field.name] = field.errorMessage || 'Please select at least one option';
+          }
+        } else if (!val || (typeof val === 'string' && !val.trim())) {
           newErrors[field.name] = field.errorMessage || `${field.label} is required`;
         }
       }
@@ -202,15 +364,24 @@ export default function EnquiryForm({
     setSubmitError('');
 
     const currentValues = serviceFields[currentServiceId] || {};
+    const isCareerRoadmap = currentServiceId === 'career-roadmap';
+    const isCollegeComparison = currentServiceId === 'college-comparison';
+
+    let effectiveSource = source;
+    if (isCareerRoadmap) {
+      effectiveSource = 'Career Roadmap Consultation CTA';
+    } else if (isCollegeComparison) {
+      effectiveSource = 'College Comparison Request CTA';
+    }
 
     const leadRecord = {
       serviceId: currentServiceId,
       serviceName: activeConfig.displayName,
-      source,
-      fullName: sharedData.fullName,
-      mobileNumber: sharedData.mobileNumber,
-      email: sharedData.email,
-      currentCity: sharedData.currentCity,
+      source: effectiveSource,
+      fullName: sharedData.fullName.trim(),
+      mobileNumber: sharedData.mobileNumber.trim(),
+      email: sharedData.email.trim(),
+      currentCity: sharedData.currentCity.trim(),
       ...currentValues,
       timestamp: new Date().toISOString()
     };
@@ -228,10 +399,67 @@ export default function EnquiryForm({
     const formattedDetails = activeConfig.fields
       .map(f => {
         const val = currentValues[f.name];
-        return val ? `${f.label}: ${val}` : null;
+        if (!val) return null;
+        if (Array.isArray(val)) {
+          return val.length > 0 ? `${f.label}: ${val.join(', ')}` : null;
+        }
+        return `${f.label}: ${val}`;
       })
       .filter(Boolean)
       .join('\n');
+
+    const emailSubject = isCareerRoadmap
+      ? 'New Career Roadmap Consultation — Vidyapaths'
+      : isCollegeComparison
+      ? 'New College Comparison Request — Vidyapaths'
+      : (activeConfig.emailSubject || `New Vidyapaths Enquiry [${activeConfig.displayName}]: ${sharedData.fullName.trim()} (${sharedData.mobileNumber.trim()})`);
+
+    const emailBody = {
+      ...leadRecord,
+      _subject: emailSubject,
+      'Selected Service': activeConfig.displayName,
+      'Candidate Name': sharedData.fullName.trim(),
+      'Mobile': sharedData.mobileNumber.trim(),
+      'Email': sharedData.email.trim(),
+      'City': sharedData.currentCity.trim(),
+      'Source': effectiveSource
+    };
+
+    if (isCareerRoadmap) {
+      emailBody['Academic Background'] = `${currentValues.currentEducation || ''} | Stream: ${currentValues.currentStream || ''} | Stage: ${currentValues.careerStage || ''}`;
+      emailBody['Selected Guidance Concerns'] = Array.isArray(currentValues.guidanceNeeds) ? currentValues.guidanceNeeds.join(', ') : (currentValues.guidanceNeeds || 'None');
+      emailBody['Preferred Career Fields'] = currentValues.preferredCareerFields || 'Not specified';
+      emailBody['Main Question or Concern'] = currentValues.mainQuestion || 'None';
+      emailBody['Preferred Consultation Mode'] = currentValues.consultationMode || 'Not specified';
+      emailBody['Preferred Time'] = currentValues.preferredTime || 'Flexible';
+    } else if (isCollegeComparison) {
+      emailBody['Academic Profile'] = `${currentValues.currentQualification || ''} (Passing: ${currentValues.passingYear || ''}) | Course: ${currentValues.preferredCourse || ''} | Score: ${currentValues.academicPercentage || ''} | Year: ${currentValues.admissionYear || ''}`;
+      if (currentValues.entranceExam || currentValues.entranceScore) {
+        emailBody['Entrance Exam'] = `${currentValues.entranceExam || 'None'} (${currentValues.entranceScore || 'N/A'})`;
+      }
+      emailBody['Location Preference'] = currentValues.preferredStudyLocation || 'Not specified';
+      const targetColleges = [currentValues.preferredCollege1, currentValues.preferredCollege2, currentValues.preferredCollege3].filter(Boolean);
+      emailBody['Target Colleges'] = targetColleges.length > 0 ? targetColleges.join(', ') : 'Requested counselor recommendations';
+      emailBody['Comparison Factors'] = Array.isArray(currentValues.comparisonPriorities) ? currentValues.comparisonPriorities.join(', ') : (currentValues.comparisonPriorities || 'Not specified');
+      emailBody['Additional Note'] = currentValues.message || 'None';
+      emailBody['Service Details'] = formattedDetails;
+      emailBody['Disclaimer'] = 'Student requested comparative evaluation sheet. Will be provided after counselor cutoff and eligibility review.';
+    } else {
+      emailBody['Service Details'] = formattedDetails;
+    }
+
+    if (currentServiceId === 'internship-assistance') {
+      emailBody['Preferred Domain'] = currentValues.preferredDomain || 'Not specified';
+    }
+
+    if (currentServiceId === 'college-admissions') {
+      if (currentValues.preferredCollege) {
+        emailBody['Preferred College / University'] = currentValues.preferredCollege;
+      }
+      if (currentValues.preferredCourse) {
+        emailBody['Preferred Course'] = currentValues.preferredCourse;
+      }
+    }
 
     try {
       if (siteConfig.formSubmitEmail && siteConfig.formSubmitEmail !== 'admissions@vidyapaths.com') {
@@ -241,24 +469,20 @@ export default function EnquiryForm({
             'Content-Type': 'application/json',
             'Accept': 'application/json'
           },
-          body: JSON.stringify({
-            ...leadRecord,
-            _subject: `New Vidyapaths Enquiry [${activeConfig.displayName}]: ${sharedData.fullName} (${sharedData.mobileNumber})`,
-            'Selected Service': activeConfig.displayName,
-            'Candidate Name': sharedData.fullName,
-            'Mobile': sharedData.mobileNumber,
-            'Email': sharedData.email,
-            'City': sharedData.currentCity,
-            'Service Details': formattedDetails
-          })
+          body: JSON.stringify(emailBody)
         });
 
         if (!response.ok) {
-          // Graceful handling
+          throw new Error('Unable to send consultation request right now. Please try again or reach out on WhatsApp.');
         }
+      } else {
+        // Simulated latency for local test / placeholder environment
+        await new Promise(r => setTimeout(r, 600));
       }
-    } catch {
-      // Network graceful handling
+    } catch (err) {
+      setIsSubmitting(false);
+      setSubmitError(err.message || 'Submission failed. Please try again.');
+      return;
     }
 
     setIsSubmitting(false);
@@ -266,7 +490,14 @@ export default function EnquiryForm({
   };
 
   const openWhatsAppWithData = () => {
-    const text = `Hi Vidyapaths! I submitted an enquiry for ${activeConfig.displayName}.\nName: ${sharedData.fullName}\nCity: ${sharedData.currentCity}\nContact: ${sharedData.mobileNumber}`;
+    let text = `Hi Vidyapaths! I submitted an enquiry for ${activeConfig.displayName}.\nName: ${sharedData.fullName}\nCity: ${sharedData.currentCity}\nContact: ${sharedData.mobileNumber}`;
+    if (currentServiceId === 'career-roadmap') {
+      const cv = serviceFields['career-roadmap'] || {};
+      text = `Hi Vidyapaths! I requested a Free 15-Minute Career Roadmap Consultation.\nName: ${sharedData.fullName}\nCity: ${sharedData.currentCity}\nEducation: ${cv.currentEducation || ''} (${cv.currentStream || ''})\nMode: ${cv.consultationMode || ''}`;
+    } else if (currentServiceId === 'college-comparison') {
+      const cv = serviceFields['college-comparison'] || {};
+      text = `Hi Vidyapaths! I requested a Free College Comparison Sheet.\nName: ${sharedData.fullName}\nCity: ${sharedData.currentCity}\nCourse: ${cv.preferredCourse || ''}\nLocation: ${cv.preferredStudyLocation || ''}`;
+    }
     window.open(`https://wa.me/${siteConfig.phoneRaw.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(text)}`, '_blank');
   };
 
@@ -279,7 +510,15 @@ export default function EnquiryForm({
         </div>
         <h3 className="text-xl sm:text-2xl font-bold text-navy-900 mb-1.5">Thank you!</h3>
         <p className="text-slate-600 max-w-md mx-auto mb-4 text-xs sm:text-[14px] leading-relaxed">
-          Your enquiry for <span className="font-semibold text-navy-900">{activeConfig.displayName}</span> has been received. Our dedicated mentors will get in touch shortly.
+          {currentServiceId === 'college-comparison' ? (
+            <span>
+              Your College Comparison Request has been received. Our academic counselors will review your profile, evaluate cutoff trends and eligibility, and prepare an unbiased comparison sheet for you shortly.
+            </span>
+          ) : (
+            <span>
+              Your enquiry for <span className="font-semibold text-navy-900">{activeConfig.displayName}</span> has been received. Our dedicated mentors will get in touch shortly.
+            </span>
+          )}
         </p>
 
         <div className="bg-slate-50 rounded-xl p-3.5 mb-4 border border-slate-100 text-left text-xs sm:text-[13px] max-w-md mx-auto space-y-1.5">
@@ -352,20 +591,31 @@ export default function EnquiryForm({
       {/* Form Scrollable Body (Refined 20-24px horizontal and 14-16px vertical padding) */}
       <div className={isModal ? "flex-1 overflow-y-auto px-5 sm:px-7 lg:px-8 py-3 sm:py-3.5 space-y-2 box-border" : "space-y-3"}>
         
-        {/* Premium Service Selector */}
-        <div className="mb-2">
-          <ServiceSelector
-            selectedServiceId={currentServiceId}
-            onSelectService={handleServiceSelect}
-            formUid={formUid}
-          />
-          <input 
-            type="hidden" 
-            id={`${formUid}-serviceCategory`} 
-            name="serviceCategory" 
-            value={currentServiceId} 
-          />
-        </div>
+        {/* Premium Service Selector or Dedicated Consultation Header */}
+        {activeConfig.hideServiceSelector ? (
+          <div className="flex items-center justify-between bg-orange-50/80 border border-orange-200/80 rounded-xl px-3.5 py-2 mb-2">
+            <div className="flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-orange-500 animate-pulse"></span>
+              <span className="text-xs font-semibold text-orange-950">
+                {activeConfig.bannerTitle || activeConfig.displayName}
+              </span>
+            </div>
+          </div>
+        ) : (
+          <div className="mb-2">
+            <ServiceSelector
+              selectedServiceId={currentServiceId}
+              onSelectService={handleServiceSelect}
+              formUid={formUid}
+            />
+            <input 
+              type="hidden" 
+              id={`${formUid}-serviceCategory`} 
+              name="serviceCategory" 
+              value={currentServiceId} 
+            />
+          </div>
+        )}
 
         {submitError && (
           <div className="p-2 rounded-lg bg-red-50 border border-red-200 text-red-700 text-xs flex items-center gap-2">
@@ -395,7 +645,7 @@ export default function EnquiryForm({
                 onChange={handleSharedChange}
                 aria-invalid={!!errors[field.name]}
                 aria-describedby={errors[field.name] ? `${formUid}-${field.name}-err` : undefined}
-                className={`w-full px-3 text-[13.5px] rounded-xl border h-[38px] sm:h-[40px] transition-colors ${
+                className={`w-full px-3 text-[13.5px] rounded-xl border h-[38px] sm:h-[40px] transition-colors bg-white text-navy-900 placeholder:text-slate-400 placeholder:font-normal placeholder:opacity-100 ${
                   errors[field.name] ? 'border-red-400 bg-red-50/30' : 'border-slate-300 focus:border-orange-500'
                 } focus:outline-none focus:ring-1 focus:ring-orange-500`}
               />
@@ -407,9 +657,9 @@ export default function EnquiryForm({
             </div>
           ))}
 
-          {/* Row 3 to 7: Service-Specific Fields */}
+          {/* Row 3 onwards: Service-Specific Fields */}
           {activeConfig.fields.map((field) => {
-            const isFullWidth = field.colSpan === 2 || field.type === 'textarea';
+            const isFullWidth = field.colSpan === 2 || field.type === 'textarea' || field.type === 'checkbox-group';
             const value = currentValues[field.name] || '';
             const fieldError = errors[field.name];
 
@@ -433,50 +683,100 @@ export default function EnquiryForm({
                   )}
                 </label>
 
-                {field.type === 'select' ? (
+                {field.type === 'checkbox-group' ? (
+                  <div className="space-y-1">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
+                      {field.options.map((opt, optIdx) => {
+                        const isChecked = Array.isArray(value) && value.includes(opt);
+                        const optId = `${formUid}-${field.name}-${optIdx}`;
+                        return (
+                          <label
+                            key={opt}
+                            htmlFor={optId}
+                            className={`flex items-start gap-2.5 p-2.5 rounded-xl border text-xs cursor-pointer transition-all select-none ${
+                              isChecked
+                                ? 'border-orange-500 bg-orange-50/80 text-navy-950 font-medium shadow-xs ring-1 ring-orange-500/30'
+                                : 'border-slate-200 bg-white hover:bg-slate-50 hover:border-slate-300 text-slate-700'
+                            }`}
+                          >
+                            <input
+                              id={optId}
+                              type="checkbox"
+                              name={field.name}
+                              value={opt}
+                              checked={isChecked}
+                              onChange={(e) => {
+                                const currentArr = Array.isArray(value) ? [...value] : [];
+                                const updated = e.target.checked
+                                  ? [...currentArr, opt]
+                                  : currentArr.filter(item => item !== opt);
+                                handleServiceFieldChange(field.name, updated);
+                              }}
+                              className="w-4 h-4 mt-0.5 rounded text-orange-600 focus:ring-orange-500 border-slate-300 cursor-pointer accent-orange-600 shrink-0"
+                            />
+                            <span className="leading-snug">{opt}</span>
+                          </label>
+                        );
+                      })}
+                    </div>
+                  </div>
+                ) : field.type === 'select' ? (
                   <div className="relative">
                     <select
                       id={`${formUid}-${field.name}`}
+                      name={field.name}
                       value={value}
                       onChange={(e) => handleServiceFieldChange(field.name, e.target.value)}
+                      style={{ color: !value ? '#94A3B8' : '#0B1F3A' }}
                       aria-invalid={!!fieldError}
                       aria-describedby={fieldError ? `${formUid}-${field.name}-err` : undefined}
                       className={`w-full px-3 text-[13.5px] rounded-xl border h-[38px] sm:h-[40px] transition-colors bg-white appearance-none pr-8 cursor-pointer ${
+                        !value ? 'text-[#94A3B8]' : 'text-[#0B1F3A] font-normal'
+                      } ${
                         fieldError ? 'border-red-400 bg-red-50/30' : 'border-slate-300 focus:border-orange-500'
                       } focus:outline-none focus:ring-1 focus:ring-orange-500`}
                     >
-                      <option value="">Select {field.label.toLowerCase()}</option>
+                      <option value="" className="text-[#94A3B8]">
+                        Select {field.label.toLowerCase()}
+                      </option>
                       {field.options.map((opt) => (
-                        <option key={opt} value={opt}>
+                        <option key={opt} value={opt} className="text-[#0B1F3A]">
                           {opt}
                         </option>
                       ))}
+                      {value && !field.options.includes(value) && (
+                        <option key={value} value={value} className="text-[#0B1F3A]">
+                          {value}
+                        </option>
+                      )}
                     </select>
                     <ChevronDown className="w-4 h-4 text-slate-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
                   </div>
                 ) : field.type === 'textarea' ? (
                   <textarea
                     id={`${formUid}-${field.name}`}
+                    name={field.name}
                     rows={field.rows || 2}
                     placeholder={field.placeholder}
                     value={value}
                     onChange={(e) => handleServiceFieldChange(field.name, e.target.value)}
                     aria-invalid={!!fieldError}
                     aria-describedby={fieldError ? `${formUid}-${field.name}-err` : undefined}
-                    className={`w-full px-3 py-1.5 text-[13.5px] rounded-xl border h-[48px] sm:h-[50px] resize-none transition-colors leading-snug ${
+                    className={`w-full px-3 py-1.5 text-[13.5px] rounded-xl border h-[48px] sm:h-[50px] resize-none transition-colors leading-snug bg-white text-navy-900 placeholder:text-slate-400 placeholder:font-normal placeholder:opacity-100 ${
                       fieldError ? 'border-red-400 bg-red-50/30' : 'border-slate-300 focus:border-orange-500'
                     } focus:outline-none focus:ring-1 focus:ring-orange-500`}
                   />
                 ) : (
                   <input
                     id={`${formUid}-${field.name}`}
+                    name={field.name}
                     type={field.type}
                     placeholder={field.placeholder}
                     value={value}
                     onChange={(e) => handleServiceFieldChange(field.name, e.target.value)}
                     aria-invalid={!!fieldError}
                     aria-describedby={fieldError ? `${formUid}-${field.name}-err` : undefined}
-                    className={`w-full px-3 text-[13.5px] rounded-xl border h-[38px] sm:h-[40px] transition-colors ${
+                    className={`w-full px-3 text-[13.5px] rounded-xl border h-[38px] sm:h-[40px] transition-colors bg-white text-navy-900 placeholder:text-slate-400 placeholder:font-normal placeholder:opacity-100 ${
                       fieldError ? 'border-red-400 bg-red-50/30' : 'border-slate-300 focus:border-orange-500'
                     } focus:outline-none focus:ring-1 focus:ring-orange-500`}
                   />
@@ -514,7 +814,13 @@ export default function EnquiryForm({
             </span>
           ) : (
             <>
-              <span>Get Free Guidance</span>
+              <span>
+                {currentServiceId === 'career-roadmap'
+                  ? 'Get Free Consultation'
+                  : currentServiceId === 'college-comparison'
+                  ? 'Request Free Comparison'
+                  : 'Get Free Guidance'}
+              </span>
               <Send className="w-4 h-4" />
             </>
           )}

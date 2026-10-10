@@ -6,6 +6,7 @@ export default function Benefits({ onOpenEnquiry }) {
   const benefits = [
     {
       title: "College Guidance",
+      serviceId: "college-admission",
       description: "Find accredited colleges matching your academic profile, budget, and desired location with zero confusion.",
       icon: GraduationCap,
       color: "text-blue-600",
@@ -14,6 +15,7 @@ export default function Benefits({ onOpenEnquiry }) {
     },
     {
       title: "Career Guidance",
+      serviceId: "career-counselling",
       description: "Structured scientific counselling sessions to identify your true calling, emerging industries, and growth paths.",
       icon: Compass,
       color: "text-orange-600",
@@ -22,6 +24,7 @@ export default function Benefits({ onOpenEnquiry }) {
     },
     {
       title: "Study Abroad",
+      serviceId: "study-abroad",
       description: "Global admissions, country selection, scholarship options, and end-to-end visa application handholding.",
       icon: Globe,
       color: "text-emerald-600",
@@ -30,6 +33,7 @@ export default function Benefits({ onOpenEnquiry }) {
     },
     {
       title: "Internship Support",
+      serviceId: "internship-assistance",
       description: "Bridge the campus-to-corporate gap with resume revamps, mock interviews, and industry-aligned internship guidance.",
       icon: Briefcase,
       color: "text-indigo-600",
@@ -70,8 +74,10 @@ export default function Benefits({ onOpenEnquiry }) {
                     <ArrowUpRight className="w-3.5 h-3.5" />
                   </Link>
                   <button
-                    onClick={onOpenEnquiry}
-                    className="text-[11px] font-medium text-slate-500 hover:text-navy-900 transition-colors"
+                    type="button"
+                    onClick={() => onOpenEnquiry && onOpenEnquiry(item.serviceId)}
+                    className="text-[11px] font-medium text-slate-500 hover:text-navy-900 transition-colors cursor-pointer"
+                    aria-label={`Enquire about ${item.title}`}
                   >
                     Enquire
                   </button>

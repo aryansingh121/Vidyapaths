@@ -77,7 +77,11 @@ export default function Internships({ onOpenEnquiry }) {
       </div>
 
       {/* Structured Roadmap */}
-      <section className="py-20 bg-slate-50 border-t border-slate-200/80">
+      <section 
+        id="internship-process"
+        className="py-20 bg-slate-50 border-t border-slate-200/80 scroll-mt-24 sm:scroll-mt-28"
+        style={{ scrollMarginTop: '100px' }}
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeading
             badge="The Preparation Journey"
