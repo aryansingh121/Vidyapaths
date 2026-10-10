@@ -52,7 +52,7 @@ export default function Services({ onOpenEnquiry }) {
               <div
                 key={service.id}
                 id={service.id}
-                className={`grid grid-cols-1 lg:grid-cols-12 gap-10 items-center p-8 sm:p-10 rounded-3xl border border-slate-200/80 bg-slate-50/50 hover:bg-white hover:shadow-xl hover:border-orange-200 transition-all duration-300`}
+                className={`grid grid-cols-1 lg:grid-cols-12 gap-10 items-center p-8 sm:p-10 rounded-3xl border border-slate-200/80 bg-slate-50/50 hover:bg-white hover:shadow-xl hover:border-orange-200 transition-all duration-300 scroll-mt-28 target:border-orange-500 target:ring-2 target:ring-orange-500/20`}
               >
                 <div className={`lg:col-span-7 space-y-4 ${isEven ? 'lg:order-2' : ''}`}>
                   <div className="inline-flex items-center gap-2 px-3 py-1 rounded-lg bg-orange-50 text-orange-600 text-xs font-bold uppercase tracking-wider">

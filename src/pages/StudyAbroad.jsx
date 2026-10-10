@@ -91,7 +91,8 @@ export default function StudyAbroad({ onOpenEnquiry }) {
             {countriesData.map((country) => (
               <div
                 key={country.id}
-                className="bg-white rounded-2xl p-7 border border-slate-200/80 shadow-xs hover:shadow-xl hover:border-orange-300 transition-all duration-300 flex flex-col justify-between group"
+                id={country.id}
+                className="bg-white rounded-2xl p-7 border border-slate-200/80 shadow-xs hover:shadow-xl hover:border-orange-300 transition-all duration-300 flex flex-col justify-between group scroll-mt-28 target:border-orange-500 target:ring-2 target:ring-orange-500/20"
               >
                 <div>
                   <div className="flex items-center justify-between mb-4">

@@ -171,7 +171,7 @@ export default function Contact() {
             </div>
 
             {/* Right Column: Lead / Enquiry Form */}
-            <div className="lg:col-span-7">
+            <div id="enquiry-form" className="lg:col-span-7 scroll-mt-28">
               <EnquiryForm source="Contact Page" />
             </div>
 

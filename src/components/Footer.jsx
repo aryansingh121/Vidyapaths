@@ -8,20 +8,30 @@ export default function Footer({ onOpenEnquiry }) {
 
   const services = [
     { name: "College Admission & Guidance", path: "/colleges" },
-    { name: "Career Counselling", path: "/services" },
+    { name: "Career Counselling", path: "/services#career-counselling" },
     { name: "Internship Assistance", path: "/internships" },
     { name: "Study Abroad", path: "/study-abroad" },
-    { name: "Resume & Interview Support", path: "/services" },
-    { name: "Scholarship & Loan Guidance", path: "/services" },
+    { name: "Resume & Interview Support", path: "/services#resume-interview" },
+    { name: "Scholarship & Loan Guidance", path: "/services#scholarships-loans" },
   ];
 
-  const countries = [
-    "United Kingdom", "United States", "Canada", "Australia", 
-    "Germany", "Ireland", "New Zealand", "UAE (Dubai)", "Singapore"
+  const studyDestinations = [
+    { name: "United Kingdom", id: "uk" },
+    { name: "United States", id: "usa" },
+    { name: "Canada", id: "canada" },
+    { name: "Australia", id: "australia" },
+    { name: "Germany", id: "germany" },
+    { name: "Ireland", id: "ireland" },
+    { name: "New Zealand", id: "new-zealand" },
+    { name: "UAE (Dubai)", id: "uae" },
+    { name: "Singapore", id: "singapore" }
   ];
+
+  const cleanWhatsappNumber = siteConfig.phoneRaw.replace(/[^0-9]/g, '');
+  const encodedWhatsappMsg = encodeURIComponent(siteConfig.whatsappMessage);
 
   return (
-    <footer className="bg-navy-900 text-slate-300 pt-16 pb-12 border-t border-navy-800">
+    <footer className="bg-navy-900 text-slate-300 pt-16 pb-24 sm:pb-28 border-t border-navy-800 relative z-10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Top Grid */}
@@ -48,17 +58,17 @@ export default function Footer({ onOpenEnquiry }) {
 
             <div className="pt-2 flex items-center gap-3">
               <button
-                onClick={onOpenEnquiry}
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold text-white bg-orange-500 hover:bg-orange-600 transition-colors shadow-sm"
+                onClick={() => onOpenEnquiry('Footer Quick CTA')}
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold text-white bg-orange-500 hover:bg-orange-600 transition-colors shadow-sm cursor-pointer min-h-[38px]"
               >
                 <span>Free Counselling</span>
                 <ArrowUpRight className="w-3.5 h-3.5" />
               </button>
               <a
-                href={`https://wa.me/${siteConfig.phoneRaw.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(siteConfig.whatsappMessage)}`}
+                href={`https://wa.me/${cleanWhatsappNumber}?text=${encodedWhatsappMsg}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold text-emerald-400 bg-emerald-950/60 border border-emerald-800/60 hover:bg-emerald-900/40 transition-colors"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold text-emerald-400 bg-emerald-950/60 border border-emerald-800/60 hover:bg-emerald-900/40 transition-colors min-h-[38px]"
               >
                 <MessageCircle className="w-3.5 h-3.5" />
                 <span>WhatsApp</span>
@@ -89,7 +99,7 @@ export default function Footer({ onOpenEnquiry }) {
                 <Link to="/internships" className="text-slate-400 hover:text-white transition-colors">Internships</Link>
               </li>
               <li>
-                <Link to="/contact" className="text-slate-400 hover:text-white transition-colors">Contact & Enquire</Link>
+                <Link to="/contact#enquiry-form" className="text-slate-400 hover:text-white transition-colors">Contact & Enquire</Link>
               </li>
             </ul>
           </div>
@@ -114,7 +124,15 @@ export default function Footer({ onOpenEnquiry }) {
             <ul className="space-y-3 text-sm text-slate-400">
               <li className="flex items-start gap-3">
                 <MapPin className="w-4 h-4 text-orange-400 shrink-0 mt-1" />
-                <span>{siteConfig.address}</span>
+                <a 
+                  href={`https://maps.google.com/?q=${encodeURIComponent(siteConfig.address)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-white transition-colors"
+                  title="View on Google Maps"
+                >
+                  {siteConfig.address}
+                </a>
               </li>
               <li className="flex items-center gap-3">
                 <Phone className="w-4 h-4 text-orange-400 shrink-0" />
@@ -142,28 +160,28 @@ export default function Footer({ onOpenEnquiry }) {
           <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider mr-2">
             Study Destinations:
           </span>
-          {countries.map((country, idx) => (
+          {studyDestinations.map((dest) => (
             <Link
-              key={idx}
-              to="/study-abroad"
-              className="text-xs bg-navy-800/80 hover:bg-navy-700 text-slate-300 px-2.5 py-1 rounded-md transition-colors"
+              key={dest.id}
+              to={`/study-abroad#${dest.id}`}
+              className="text-xs bg-navy-800/80 hover:bg-navy-700 hover:text-white text-slate-300 px-2.5 py-1 rounded-md transition-colors"
             >
-              {country}
+              {dest.name}
             </Link>
           ))}
         </div>
 
         {/* Bottom Bar & Disclaimer */}
-        <div className="pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-slate-500">
+        <div className="pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-slate-500 sm:pr-28 md:pr-32">
           <p>
             © {currentYear} Vidyapaths. All rights reserved. Built with precision for student success.
           </p>
           <div className="flex items-center space-x-6">
-            <span className="text-[11px] text-slate-500">
+            <span className="text-[11px] text-slate-500 hidden sm:inline">
               Transparent, Merit-based Career Guidance
             </span>
-            <Link to="/contact" className="hover:text-slate-400 transition-colors">Privacy Policy</Link>
-            <Link to="/contact" className="hover:text-slate-400 transition-colors">Terms of Service</Link>
+            <Link to="/privacy-policy" className="hover:text-slate-400 transition-colors">Privacy Policy</Link>
+            <Link to="/terms-of-service" className="hover:text-slate-400 transition-colors">Terms of Service</Link>
           </div>
         </div>
 

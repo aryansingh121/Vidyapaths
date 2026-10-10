@@ -34,6 +34,11 @@
     outline: 2px solid var(--color-orange-500);
     outline-offset: 2px;
   }
+
+  /* Fixed sticky navbar offset for all ID anchor targets */
+  [id] {
+    scroll-margin-top: 5.5rem;
+  }
 }
 
 /* Reduced motion preference */

@@ -4,6 +4,7 @@ import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import FloatingWhatsApp from './components/FloatingWhatsApp';
 import EnquiryModal from './components/EnquiryModal';
+import ScrollToTop from './components/ScrollToTop';
 import { usePageMeta } from './utils/usePageMeta';
 
 // Pages
@@ -14,6 +15,8 @@ import Colleges from './pages/Colleges';
 import StudyAbroad from './pages/StudyAbroad';
 import Internships from './pages/Internships';
 import Contact from './pages/Contact';
+import PrivacyPolicy from './pages/PrivacyPolicy';
+import TermsOfService from './pages/TermsOfService';
 
 function AppContent() {
   usePageMeta();
@@ -32,6 +35,9 @@ function AppContent() {
 
   return (
     <div className="min-h-screen flex flex-col bg-white text-slate-800 selection:bg-orange-500 selection:text-white font-sans">
+      {/* Scroll restoration across route changes and hash navigation */}
+      <ScrollToTop />
+
       {/* Top Navbar */}
       <Navbar onOpenEnquiry={() => handleOpenEnquiry('General Counselling')} />
 
@@ -47,6 +53,10 @@ function AppContent() {
           {/* Legacy route alias */}
           <Route path="/internships-admissions" element={<Internships onOpenEnquiry={handleOpenEnquiry} />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+          <Route path="/privacy" element={<PrivacyPolicy />} />
+          <Route path="/terms-of-service" element={<TermsOfService />} />
+          <Route path="/terms" element={<TermsOfService />} />
           {/* Fallback to Home */}
           <Route path="*" element={<Home onOpenEnquiry={handleOpenEnquiry} />} />
         </Routes>
