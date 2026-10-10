@@ -6,7 +6,7 @@ import { SERVICE_FORM_CONFIGS, getServiceConfig } from '../data/serviceFormConfi
 export default function EnquiryModal({ isOpen, onClose, defaultService = '' }) {
   const [activeServiceId, setActiveServiceId] = useState(() => getServiceConfig(defaultService).id);
 
-  // When defaultService prop changes (e.g. user clicks different service card), update active service
+  // When defaultService prop changes, update active service
   useEffect(() => {
     if (defaultService) {
       setActiveServiceId(getServiceConfig(defaultService).id);
@@ -34,22 +34,22 @@ export default function EnquiryModal({ isOpen, onClose, defaultService = '' }) {
   const currentConfig = SERVICE_FORM_CONFIGS[activeServiceId] || getServiceConfig(defaultService);
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 md:p-6 overflow-y-auto bg-navy-950/70 backdrop-blur-sm animate-in fade-in duration-200 box-border">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 overflow-y-auto bg-navy-950/70 backdrop-blur-sm animate-in fade-in duration-200 box-border">
       <div 
         className="fixed inset-0" 
         onClick={onClose}
         aria-hidden="true"
       />
-      <div className="relative w-full max-w-[940px] xl:max-w-[980px] bg-white rounded-2xl shadow-2xl overflow-hidden z-10 max-h-[calc(100dvh-20px)] sm:max-h-[calc(100dvh-32px)] flex flex-col my-auto box-border border border-slate-100">
+      <div className="relative w-full max-w-[960px] bg-white rounded-2xl shadow-2xl overflow-hidden z-10 max-h-[calc(100dvh-32px)] flex flex-col my-auto box-border border border-slate-200/80">
         
-        {/* Dynamic Service-Specific Header */}
-        <div className="px-4 sm:px-6 py-2.5 sm:py-3 bg-navy-900 text-white flex items-center justify-between border-b border-navy-800 shrink-0">
-          <div className="pr-2">
-            <h3 className="text-base sm:text-lg lg:text-xl font-bold text-white flex items-center gap-2">
+        {/* Compact Sticky Header (shrink-0: 12px 20px padding) */}
+        <div className="px-5 py-3 bg-navy-900 text-white flex items-center justify-between border-b border-navy-800 shrink-0">
+          <div className="pr-3">
+            <h3 className="text-lg sm:text-[20px] font-bold text-white flex items-center gap-2 leading-tight">
               <span>{currentConfig.modalHeading}</span>
-              <span className="text-[10px] sm:text-xs bg-orange-500 text-white px-2 py-0.5 rounded-full font-semibold shrink-0">100% Free</span>
+              <span className="text-[10px] bg-orange-500 text-white px-2 py-0.5 rounded-full font-semibold shrink-0">100% Free</span>
             </h3>
-            <p className="text-[11px] sm:text-xs text-slate-300 mt-0.5 leading-snug line-clamp-1 sm:line-clamp-none">
+            <p className="text-[12px] sm:text-[13px] text-slate-300 mt-0.5 leading-snug line-clamp-1 sm:line-clamp-none">
               {currentConfig.shortDescription}
             </p>
           </div>
@@ -62,8 +62,8 @@ export default function EnquiryModal({ isOpen, onClose, defaultService = '' }) {
           </button>
         </div>
 
-        {/* Modal Body without nested scroll container */}
-        <div className="p-3.5 sm:p-5 lg:p-6 overflow-y-auto box-border">
+        {/* Modal Body / Form Container (flex-1 flex flex-col min-h-0) */}
+        <div className="flex-1 flex flex-col min-h-0 overflow-hidden box-border">
           <EnquiryForm 
             defaultService={defaultService} 
             activeServiceId={activeServiceId}

@@ -55,7 +55,7 @@ export default function EnquiryForm({
     'scholarships-loans': {}
   });
 
-  // Prefill specific prompts (e.g. from college page or country cards)
+  // Prefill specific prompts
   useEffect(() => {
     if (defaultService) {
       if (defaultService.startsWith('Admission Guidance - ')) {
@@ -113,7 +113,6 @@ export default function EnquiryForm({
     if (onServiceChange) {
       onServiceChange(newServiceId);
     }
-    // Clear errors when switching service
     setErrors({});
     if (submitError) setSubmitError('');
   };
@@ -183,7 +182,7 @@ export default function EnquiryForm({
       if (field.type === 'url' && val && val.trim()) {
         const trimmed = val.trim();
         if (!/^https?:\/\/.+/i.test(trimmed)) {
-          newErrors[field.name] = field.errorMessage || 'Please enter a valid URL starting with http:// or https://';
+          newErrors[field.name] = field.errorMessage || 'Please enter a valid URL (http:// or https://)';
         }
       }
     });
@@ -203,7 +202,6 @@ export default function EnquiryForm({
 
     const currentValues = serviceFields[currentServiceId] || {};
 
-    // Assemble comprehensive lead payload (isolating only active service's fields)
     const leadRecord = {
       serviceId: currentServiceId,
       serviceName: activeConfig.displayName,
@@ -234,7 +232,6 @@ export default function EnquiryForm({
       .filter(Boolean)
       .join('\n');
 
-    // Attempt FormSubmit AJAX dispatch if configured
     try {
       if (siteConfig.formSubmitEmail && siteConfig.formSubmitEmail !== 'admissions@vidyapaths.com') {
         const response = await fetch(`https://formsubmit.co/ajax/${siteConfig.formSubmitEmail}`, {
@@ -256,7 +253,7 @@ export default function EnquiryForm({
         });
 
         if (!response.ok) {
-          // Fallback handled gracefully
+          // Graceful handling
         }
       }
     } catch {
@@ -275,16 +272,16 @@ export default function EnquiryForm({
   // Confirmation view
   if (submitted) {
     return (
-      <div className={`text-center animate-in fade-in duration-300 ${isModal ? 'py-3' : 'bg-white rounded-2xl p-6 sm:p-8 border border-slate-200/80 shadow-sm'}`}>
-        <div className="w-14 h-14 bg-emerald-50 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-3">
-          <CheckCircle className="w-8 h-8" />
+      <div className={`text-center animate-in fade-in duration-300 ${isModal ? 'py-4 px-5 my-auto' : 'bg-white rounded-2xl p-6 sm:p-8 border border-slate-200/80 shadow-sm'}`}>
+        <div className="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-2.5">
+          <CheckCircle className="w-7 h-7" />
         </div>
-        <h3 className="text-xl sm:text-2xl font-bold text-navy-900 mb-1.5">Thank you!</h3>
-        <p className="text-slate-600 max-w-md mx-auto mb-4 text-xs sm:text-sm leading-relaxed">
+        <h3 className="text-xl font-bold text-navy-900 mb-1">Thank you!</h3>
+        <p className="text-slate-600 max-w-md mx-auto mb-3.5 text-xs sm:text-[13px] leading-relaxed">
           Your enquiry for <span className="font-semibold text-navy-900">{activeConfig.displayName}</span> has been received. Our dedicated mentors will get in touch shortly.
         </p>
 
-        <div className="bg-slate-50 rounded-xl p-3.5 mb-4 border border-slate-100 text-left text-xs sm:text-sm max-w-md mx-auto space-y-1.5">
+        <div className="bg-slate-50 rounded-xl p-3 mb-3.5 border border-slate-100 text-left text-xs max-w-md mx-auto space-y-1">
           <div className="flex justify-between">
             <span className="text-slate-500">Service:</span>
             <span className="font-semibold text-orange-600">{activeConfig.displayName}</span>
@@ -303,12 +300,12 @@ export default function EnquiryForm({
           </div>
         </div>
 
-        <div className="flex flex-col sm:flex-row gap-2.5 justify-center max-w-md mx-auto">
+        <div className="flex flex-col sm:flex-row gap-2 justify-center max-w-md mx-auto">
           <button
             onClick={openWhatsAppWithData}
-            className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold text-white bg-emerald-600 hover:bg-emerald-700 transition-colors shadow-sm min-h-[42px] cursor-pointer"
+            className="flex-1 inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold text-white bg-emerald-600 hover:bg-emerald-700 transition-colors shadow-sm h-[38px] cursor-pointer"
           >
-            <MessageSquare className="w-4 h-4" />
+            <MessageSquare className="w-3.5 h-3.5" />
             <span>Chat on WhatsApp Now</span>
           </button>
           <button
@@ -319,7 +316,7 @@ export default function EnquiryForm({
                 [currentServiceId]: {}
               }));
             }}
-            className="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-medium text-slate-700 bg-slate-100 hover:bg-slate-200 transition-colors min-h-[42px] cursor-pointer"
+            className="px-4 py-2 rounded-xl text-xs font-medium text-slate-700 bg-slate-100 hover:bg-slate-200 transition-colors h-[38px] cursor-pointer"
           >
             Submit Another Query
           </button>
@@ -334,39 +331,38 @@ export default function EnquiryForm({
     <form 
       onSubmit={handleSubmit} 
       noValidate 
-      className={isModal ? "w-full box-border" : "bg-white rounded-2xl p-6 sm:p-8 border border-slate-200/80 shadow-sm box-border"}
+      className={isModal 
+        ? "flex flex-col flex-1 min-h-0 w-full box-border" 
+        : "bg-white rounded-2xl p-6 sm:p-8 border border-slate-200/80 shadow-sm box-border"
+      }
     >
       {!isModal && (
-        <div className="flex items-center gap-2 mb-5">
-          <span className="w-8 h-8 rounded-lg bg-orange-100 text-orange-600 flex items-center justify-center shrink-0">
-            <Sparkles className="w-4 h-4" />
+        <div className="flex items-center gap-2 mb-4">
+          <span className="w-7 h-7 rounded-lg bg-orange-100 text-orange-600 flex items-center justify-center shrink-0">
+            <Sparkles className="w-3.5 h-3.5" />
           </span>
           <div>
-            <h3 className="text-lg sm:text-xl font-bold text-navy-900">{activeConfig.modalHeading}</h3>
+            <h3 className="text-lg font-bold text-navy-900">{activeConfig.modalHeading}</h3>
             <p className="text-xs text-slate-500">{activeConfig.shortDescription}</p>
           </div>
         </div>
       )}
 
-      {submitError && (
-        <div className="mb-3 p-2.5 rounded-lg bg-red-50 border border-red-200 text-red-700 text-xs flex items-center gap-2">
-          <AlertCircle className="w-4 h-4 shrink-0" />
-          <span>{submitError}</span>
-        </div>
-      )}
-
-      <div className="space-y-3">
-        {/* Service Selector Dropdown */}
-        <div className="bg-slate-50 p-2.5 sm:p-3 rounded-xl border border-slate-200/80">
-          <label htmlFor={`${formUid}-serviceCategory`} className="block text-xs font-semibold text-navy-900 mb-1">
-            Service Required <span className="text-red-500">*</span>
-          </label>
-          <div className="relative">
+      {/* Form Scrollable Body (14px 20px padding on desktop) */}
+      <div className={isModal ? "flex-1 overflow-y-auto px-4 sm:px-5 py-3 sm:py-3.5 space-y-2 box-border" : "space-y-2.5"}>
+        
+        {/* Compact Single-Row Service Selector */}
+        <div className="flex items-center justify-between gap-2 pb-1 border-b border-slate-100 text-[11px] text-slate-600">
+          <span className="font-semibold text-slate-700 truncate">
+            Selected Service: <span className="text-orange-600 font-bold">{activeConfig.displayName}</span>
+          </span>
+          <div className="flex items-center gap-1.5 shrink-0">
+            <span className="text-slate-400 text-[11px] hidden sm:inline">Change:</span>
             <select
               id={`${formUid}-serviceCategory`}
               value={currentServiceId}
               onChange={(e) => handleServiceSelect(e.target.value)}
-              className="w-full px-3 py-2 text-xs sm:text-sm rounded-lg border border-slate-300 font-semibold text-navy-900 bg-white hover:border-orange-500 focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500 h-10 sm:h-[42px] transition-colors appearance-none pr-8 cursor-pointer"
+              className="h-[26px] px-2 py-0 text-[11px] font-medium text-navy-950 bg-slate-100 hover:bg-slate-200/70 border border-slate-200 rounded-md focus:outline-none focus:border-orange-500 cursor-pointer"
             >
               {SERVICE_OPTIONS.map((opt) => (
                 <option key={opt.id} value={opt.id}>
@@ -374,16 +370,27 @@ export default function EnquiryForm({
                 </option>
               ))}
             </select>
-            <ChevronDown className="w-4 h-4 text-slate-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
           </div>
         </div>
 
-        {/* Section 1: Shared Contact Details */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3">
+        {submitError && (
+          <div className="p-2 rounded-lg bg-red-50 border border-red-200 text-red-700 text-xs flex items-center gap-2">
+            <AlertCircle className="w-3.5 h-3.5 shrink-0" />
+            <span>{submitError}</span>
+          </div>
+        )}
+
+        {/* Unified Compact Two-Column Grid (Row Gap: 8px, Col Gap: 12px) */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-3 gap-y-2">
+          
+          {/* Row 1 & 2: Shared Contact Fields */}
           {SHARED_FIELDS.map((field) => (
-            <div key={field.name}>
-              <label htmlFor={`${formUid}-${field.name}`} className="block text-xs font-semibold text-slate-700 mb-1">
-                {field.label} {field.required && <span className="text-red-500">*</span>}
+            <div key={field.name} className="col-span-1">
+              <label 
+                htmlFor={`${formUid}-${field.name}`} 
+                className="block text-[12px] font-semibold text-slate-700 mb-[3px] leading-none"
+              >
+                {field.label} {field.required && <span className="text-red-500 font-bold ml-0.5">*</span>}
               </label>
               <input
                 id={`${formUid}-${field.name}`}
@@ -394,21 +401,19 @@ export default function EnquiryForm({
                 onChange={handleSharedChange}
                 aria-invalid={!!errors[field.name]}
                 aria-describedby={errors[field.name] ? `${formUid}-${field.name}-err` : undefined}
-                className={`w-full px-3 py-2 text-xs sm:text-sm rounded-lg border h-10 sm:h-[42px] transition-colors ${
+                className={`w-full px-2.5 text-[13px] rounded-lg border h-[36px] transition-colors ${
                   errors[field.name] ? 'border-red-400 bg-red-50/30' : 'border-slate-300 focus:border-orange-500'
                 } focus:outline-none focus:ring-1 focus:ring-orange-500`}
               />
               {errors[field.name] && (
-                <p id={`${formUid}-${field.name}-err`} className="text-xs text-red-500 mt-0.5">
+                <p id={`${formUid}-${field.name}-err`} className="text-[11px] text-red-500 leading-none mt-1">
                   {errors[field.name]}
                 </p>
               )}
             </div>
           ))}
-        </div>
 
-        {/* Section 2: Service-Specific Fields */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3">
+          {/* Row 3 to 7: Service-Specific Fields */}
           {activeConfig.fields.map((field) => {
             const isFullWidth = field.colSpan === 2 || field.type === 'textarea';
             const value = currentValues[field.name] || '';
@@ -417,17 +422,21 @@ export default function EnquiryForm({
             return (
               <div 
                 key={field.name} 
-                className={isFullWidth ? "sm:col-span-2" : "col-span-1"}
+                className={isFullWidth ? "sm:col-span-2 col-span-1" : "col-span-1"}
               >
                 <label 
                   htmlFor={`${formUid}-${field.name}`} 
-                  className={`block mb-1 ${
+                  className={`block mb-[3px] leading-none ${
                     field.required 
-                      ? 'text-xs font-semibold text-slate-700' 
-                      : 'text-[11px] sm:text-xs font-medium text-slate-500'
+                      ? 'text-[12px] font-semibold text-slate-700' 
+                      : 'text-[12px] font-medium text-slate-500'
                   }`}
                 >
-                  {field.label} {field.required ? <span className="text-red-500">*</span> : <span className="text-slate-400">(Optional)</span>}
+                  {field.label} {field.required ? (
+                    <span className="text-red-500 font-bold ml-0.5">*</span>
+                  ) : (
+                    <span className="text-slate-400 font-normal ml-1 text-[11px]">(Optional)</span>
+                  )}
                 </label>
 
                 {field.type === 'select' ? (
@@ -438,7 +447,7 @@ export default function EnquiryForm({
                       onChange={(e) => handleServiceFieldChange(field.name, e.target.value)}
                       aria-invalid={!!fieldError}
                       aria-describedby={fieldError ? `${formUid}-${field.name}-err` : undefined}
-                      className={`w-full px-3 py-2 text-xs sm:text-sm rounded-lg border h-10 sm:h-[42px] transition-colors bg-white appearance-none pr-8 cursor-pointer ${
+                      className={`w-full px-2.5 text-[13px] rounded-lg border h-[36px] transition-colors bg-white appearance-none pr-7 cursor-pointer ${
                         fieldError ? 'border-red-400 bg-red-50/30' : 'border-slate-300 focus:border-orange-500'
                       } focus:outline-none focus:ring-1 focus:ring-orange-500`}
                     >
@@ -449,7 +458,7 @@ export default function EnquiryForm({
                         </option>
                       ))}
                     </select>
-                    <ChevronDown className="w-4 h-4 text-slate-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+                    <ChevronDown className="w-3.5 h-3.5 text-slate-400 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
                   </div>
                 ) : field.type === 'textarea' ? (
                   <textarea
@@ -460,7 +469,7 @@ export default function EnquiryForm({
                     onChange={(e) => handleServiceFieldChange(field.name, e.target.value)}
                     aria-invalid={!!fieldError}
                     aria-describedby={fieldError ? `${formUid}-${field.name}-err` : undefined}
-                    className={`w-full px-3 py-2 text-xs sm:text-sm rounded-lg border h-[64px] sm:h-[68px] resize-none transition-colors ${
+                    className={`w-full px-2.5 py-1.5 text-[13px] rounded-lg border h-[48px] resize-none transition-colors leading-snug ${
                       fieldError ? 'border-red-400 bg-red-50/30' : 'border-slate-300 focus:border-orange-500'
                     } focus:outline-none focus:ring-1 focus:ring-orange-500`}
                   />
@@ -473,14 +482,14 @@ export default function EnquiryForm({
                     onChange={(e) => handleServiceFieldChange(field.name, e.target.value)}
                     aria-invalid={!!fieldError}
                     aria-describedby={fieldError ? `${formUid}-${field.name}-err` : undefined}
-                    className={`w-full px-3 py-2 text-xs sm:text-sm rounded-lg border h-10 sm:h-[42px] transition-colors ${
+                    className={`w-full px-2.5 text-[13px] rounded-lg border h-[36px] transition-colors ${
                       fieldError ? 'border-red-400 bg-red-50/30' : 'border-slate-300 focus:border-orange-500'
                     } focus:outline-none focus:ring-1 focus:ring-orange-500`}
                   />
                 )}
 
                 {fieldError && (
-                  <p id={`${formUid}-${field.name}-err`} className="text-xs text-red-500 mt-0.5">
+                  <p id={`${formUid}-${field.name}-err`} className="text-[11px] text-red-500 leading-none mt-1">
                     {fieldError}
                   </p>
                 )}
@@ -488,31 +497,34 @@ export default function EnquiryForm({
             );
           })}
         </div>
+      </div>
 
-        {/* Section 3: Submit Button & Privacy Note */}
-        <div className="pt-1 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2.5 sm:gap-4">
-          <p className="text-[11px] text-slate-500 leading-tight order-2 sm:order-1 sm:max-w-xs md:max-w-md">
-            By submitting, you agree to receive guidance from Vidyapaths regarding your enquiry. Unbiased & 100% free.
-          </p>
+      {/* Sticky Compact Submit Footer (shrink-0) */}
+      <div className={isModal 
+        ? "shrink-0 border-t border-slate-200/80 bg-slate-50 px-4 sm:px-5 py-2.5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2.5 box-border" 
+        : "pt-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3"
+      }>
+        <p className="text-[11px] text-slate-500 leading-tight order-2 sm:order-1 sm:max-w-md">
+          By submitting, you agree to receive guidance from Vidyapaths. Unbiased & 100% free.
+        </p>
 
-          <button
-            type="submit"
-            disabled={isSubmitting}
-            className="order-1 sm:order-2 w-full sm:w-auto min-w-[200px] sm:min-w-[220px] inline-flex items-center justify-center gap-2 px-6 py-2.5 sm:py-3 rounded-xl font-bold text-white bg-orange-500 hover:bg-orange-600 transition-all shadow-md hover:shadow-orange-500/20 active:scale-[0.99] cursor-pointer disabled:opacity-70 min-h-[42px] shrink-0 text-xs sm:text-sm"
-          >
-            {isSubmitting ? (
-              <span className="flex items-center gap-2">
-                <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
-                <span>Submitting Enquiry...</span>
-              </span>
-            ) : (
-              <>
-                <span>Get Free Guidance</span>
-                <Send className="w-4 h-4" />
-              </>
-            )}
-          </button>
-        </div>
+        <button
+          type="submit"
+          disabled={isSubmitting}
+          className="order-1 sm:order-2 w-full sm:w-auto min-w-[200px] inline-flex items-center justify-center gap-2 px-5 py-2 rounded-xl font-bold text-white bg-orange-500 hover:bg-orange-600 transition-all shadow-md hover:shadow-orange-500/20 active:scale-[0.99] cursor-pointer disabled:opacity-70 h-[36px] shrink-0 text-xs sm:text-sm"
+        >
+          {isSubmitting ? (
+            <span className="flex items-center gap-2">
+              <span className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+              <span>Submitting...</span>
+            </span>
+          ) : (
+            <>
+              <span>Get Free Guidance</span>
+              <Send className="w-3.5 h-3.5" />
+            </>
+          )}
+        </button>
       </div>
     </form>
   );
