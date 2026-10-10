@@ -7,6 +7,7 @@ import {
   SERVICE_OPTIONS, 
   getServiceConfig 
 } from '../data/serviceFormConfigs';
+import ServiceSelector from './ServiceSelector';
 
 export default function EnquiryForm({ 
   defaultService = '', 
@@ -351,26 +352,19 @@ export default function EnquiryForm({
       {/* Form Scrollable Body (Refined 20-24px horizontal and 14-16px vertical padding) */}
       <div className={isModal ? "flex-1 overflow-y-auto px-5 sm:px-7 lg:px-8 py-3 sm:py-3.5 space-y-2 box-border" : "space-y-3"}>
         
-        {/* Selected Service Row (Refined single-row control, 8-10px padding, subtle separation) */}
-        <div className="flex items-center justify-between gap-3 py-1.5 px-1 border-b border-slate-100 text-xs text-slate-600 mb-1.5 sm:mb-2">
-          <span className="font-medium text-slate-700 truncate">
-            Selected Service: <span className="text-orange-600 font-semibold">{activeConfig.displayName}</span>
-          </span>
-          <div className="flex items-center gap-2 shrink-0">
-            <span className="text-slate-400 text-xs hidden sm:inline">Change:</span>
-            <select
-              id={`${formUid}-serviceCategory`}
-              value={currentServiceId}
-              onChange={(e) => handleServiceSelect(e.target.value)}
-              className="h-[28px] px-2.5 py-0 text-xs font-medium text-navy-950 bg-slate-100 hover:bg-slate-200/70 border border-slate-200 rounded-lg focus:outline-none focus:border-orange-500 cursor-pointer"
-            >
-              {SERVICE_OPTIONS.map((opt) => (
-                <option key={opt.id} value={opt.id}>
-                  {opt.displayName}
-                </option>
-              ))}
-            </select>
-          </div>
+        {/* Premium Service Selector */}
+        <div className="mb-2">
+          <ServiceSelector
+            selectedServiceId={currentServiceId}
+            onSelectService={handleServiceSelect}
+            formUid={formUid}
+          />
+          <input 
+            type="hidden" 
+            id={`${formUid}-serviceCategory`} 
+            name="serviceCategory" 
+            value={currentServiceId} 
+          />
         </div>
 
         {submitError && (
