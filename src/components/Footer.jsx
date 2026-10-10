@@ -1,10 +1,17 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { Compass, Phone, Mail, MapPin, Clock, ArrowUpRight, MessageCircle } from 'lucide-react';
 import { siteConfig } from '../data/siteData';
 
 export default function Footer({ onOpenEnquiry }) {
+  const location = useLocation();
   const currentYear = new Date().getFullYear();
+
+  const handleNavClick = (targetPath) => {
+    if (location.pathname === targetPath) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
 
   const services = [
     { name: "College Admission & Guidance", path: "/colleges" },
@@ -39,7 +46,7 @@ export default function Footer({ onOpenEnquiry }) {
           
           {/* Brand Col */}
           <div className="lg:col-span-2 space-y-4">
-            <Link to="/" className="flex items-center gap-3">
+            <Link to="/" onClick={() => handleNavClick('/')} className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center text-white">
                 <Compass className="w-6 h-6 text-orange-500" />
               </div>
@@ -81,22 +88,22 @@ export default function Footer({ onOpenEnquiry }) {
             <h4 className="text-sm font-semibold text-white tracking-wider uppercase">Navigation</h4>
             <ul className="space-y-2.5 text-sm">
               <li>
-                <Link to="/" className="text-slate-400 hover:text-white transition-colors">Home</Link>
+                <Link to="/" onClick={() => handleNavClick('/')} className="text-slate-400 hover:text-white transition-colors">Home</Link>
               </li>
               <li>
-                <Link to="/about" className="text-slate-400 hover:text-white transition-colors">About Vidyapaths</Link>
+                <Link to="/about" onClick={() => handleNavClick('/about')} className="text-slate-400 hover:text-white transition-colors">About Vidyapaths</Link>
               </li>
               <li>
-                <Link to="/services" className="text-slate-400 hover:text-white transition-colors">All Services</Link>
+                <Link to="/services" onClick={() => handleNavClick('/services')} className="text-slate-400 hover:text-white transition-colors">All Services</Link>
               </li>
               <li>
-                <Link to="/colleges" className="text-slate-400 hover:text-white transition-colors">Colleges & Courses</Link>
+                <Link to="/colleges" onClick={() => handleNavClick('/colleges')} className="text-slate-400 hover:text-white transition-colors">Colleges & Courses</Link>
               </li>
               <li>
-                <Link to="/study-abroad" className="text-slate-400 hover:text-white transition-colors">Study Abroad</Link>
+                <Link to="/study-abroad" onClick={() => handleNavClick('/study-abroad')} className="text-slate-400 hover:text-white transition-colors">Study Abroad</Link>
               </li>
               <li>
-                <Link to="/internships" className="text-slate-400 hover:text-white transition-colors">Internships</Link>
+                <Link to="/internships" onClick={() => handleNavClick('/internships')} className="text-slate-400 hover:text-white transition-colors">Internships</Link>
               </li>
               <li>
                 <Link to="/contact#enquiry-form" className="text-slate-400 hover:text-white transition-colors">Contact & Enquire</Link>

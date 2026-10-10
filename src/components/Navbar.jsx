@@ -51,6 +51,12 @@ export default function Navbar({ onOpenEnquiry }) {
     return location.pathname.startsWith(path);
   };
 
+  const handleNavClick = (path) => {
+    if (path === '/' && location.pathname === '/') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+
   return (
     <header 
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-in-out w-full ${
@@ -65,6 +71,7 @@ export default function Navbar({ onOpenEnquiry }) {
           {/* Logo & Tagline */}
           <Link 
             to="/" 
+            onClick={() => handleNavClick('/')}
             className="flex items-center gap-2 sm:gap-2.5 group focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 rounded-xl min-h-[44px] shrink-0"
             aria-label="Vidyapaths Home"
           >
@@ -93,6 +100,7 @@ export default function Navbar({ onOpenEnquiry }) {
                 <Link
                   key={link.path}
                   to={link.path}
+                  onClick={() => handleNavClick(link.path)}
                   className={`px-2 xl:px-2.5 py-1.5 xl:py-2 rounded-lg text-xs xl:text-sm font-medium transition-all whitespace-nowrap relative ${
                     active
                       ? 'text-orange-600 bg-orange-50/80 font-semibold shadow-xs'
@@ -179,7 +187,10 @@ export default function Navbar({ onOpenEnquiry }) {
                 <Link
                   key={link.path}
                   to={link.path}
-                  onClick={() => setIsOpen(false)}
+                  onClick={() => {
+                    setIsOpen(false);
+                    handleNavClick(link.path);
+                  }}
                   className={`px-3.5 py-3 rounded-xl text-sm font-medium min-h-[44px] flex items-center justify-between transition-colors ${
                     active
                       ? 'text-orange-600 bg-orange-50/80 font-semibold'
