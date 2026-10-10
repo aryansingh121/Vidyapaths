@@ -91,7 +91,7 @@ export default function Services({ onOpenEnquiry }) {
                       onClick={() => onOpenEnquiry(service.title)}
                       className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-sm text-white bg-orange-500 hover:bg-orange-600 shadow-md transition-all active:scale-95 cursor-pointer"
                     >
-                      <span>Book Free Guidance</span>
+                      <span>Quick Enquire</span>
                       <ArrowRight className="w-4 h-4" />
                     </button>
                   </div>

@@ -1,56 +1,104 @@
 import React, { useState, useEffect, useId } from 'react';
-import { Send, CheckCircle, AlertCircle, MessageSquare, Sparkles } from 'lucide-react';
+import { Send, CheckCircle, AlertCircle, MessageSquare, Sparkles, ChevronDown } from 'lucide-react';
 import { siteConfig } from '../data/siteData';
+import { 
+  SHARED_FIELDS, 
+  SERVICE_FORM_CONFIGS, 
+  SERVICE_OPTIONS, 
+  getServiceConfig 
+} from '../data/serviceFormConfigs';
 
-export default function EnquiryForm({ defaultService = '', source = 'Lead Form', isModal = false }) {
+export default function EnquiryForm({ 
+  defaultService = '', 
+  activeServiceId: propActiveServiceId,
+  onServiceChange,
+  source = 'Lead Form', 
+  isModal = false 
+}) {
   const formUid = useId();
 
-  const [formData, setFormData] = useState({
-    fullName: '',
-    mobileNumber: '',
-    whatsappNumber: '',
-    email: '',
-    currentCity: '',
-    education: '',
-    serviceRequired: defaultService || '',
-    interestedCourse: '',
-    preferredCountry: '',
-    preferredCollege: '',
-    preferredIntake: '',
-    message: ''
+  // Active Service State
+  const [currentServiceId, setCurrentServiceId] = useState(() => {
+    if (propActiveServiceId && SERVICE_FORM_CONFIGS[propActiveServiceId]) {
+      return propActiveServiceId;
+    }
+    return getServiceConfig(defaultService).id;
   });
 
+  // Sync when propActiveServiceId or defaultService changes
+  useEffect(() => {
+    if (propActiveServiceId && SERVICE_FORM_CONFIGS[propActiveServiceId]) {
+      setCurrentServiceId(propActiveServiceId);
+    } else if (defaultService) {
+      const resolved = getServiceConfig(defaultService);
+      setCurrentServiceId(resolved.id);
+    }
+  }, [propActiveServiceId, defaultService]);
+
+  const activeConfig = SERVICE_FORM_CONFIGS[currentServiceId] || SERVICE_FORM_CONFIGS['college-admissions'];
+
+  // Shared contact fields across all forms
+  const [sharedData, setSharedData] = useState({
+    fullName: '',
+    mobileNumber: '',
+    email: '',
+    currentCity: ''
+  });
+
+  // Service-specific field states (isolated by service ID to prevent stale cross-service submission)
+  const [serviceFields, setServiceFields] = useState({
+    'college-admissions': {},
+    'career-counselling': {},
+    'internship-assistance': {},
+    'study-abroad': {},
+    'resume-interview': {},
+    'scholarships-loans': {}
+  });
+
+  // Prefill specific prompts (e.g. from college page or country cards)
   useEffect(() => {
     if (defaultService) {
-      setFormData(prev => {
-        let matchedService = prev.serviceRequired;
-        let prefCollege = prev.preferredCollege;
-        let defaultMsg = prev.message;
-
-        if (defaultService.includes('Admission') || defaultService.includes('College')) {
-          matchedService = 'College Admission';
-        }
-
-        if (defaultService.startsWith('Admission Guidance - ')) {
-          const collegeName = defaultService.replace('Admission Guidance - ', '').trim();
-          prefCollege = collegeName;
-          if (!defaultMsg) {
-            defaultMsg = `Seeking admission guidance for ${collegeName}.`;
-          }
-        } else if (defaultService.startsWith('Admission Guidance: ')) {
-          const details = defaultService.replace('Admission Guidance: ', '').trim();
-          if (!defaultMsg) {
-            defaultMsg = `Seeking admission guidance for ${details}.`;
-          }
-        }
-
-        return {
+      if (defaultService.startsWith('Admission Guidance - ')) {
+        const collegeName = defaultService.replace('Admission Guidance - ', '').trim();
+        setServiceFields(prev => ({
           ...prev,
-          serviceRequired: matchedService || prev.serviceRequired,
-          preferredCollege: prefCollege || prev.preferredCollege,
-          message: defaultMsg || prev.message
-        };
-      });
+          'college-admissions': {
+            ...prev['college-admissions'],
+            preferredCollege: collegeName,
+            message: prev['college-admissions'].message || `Seeking admission guidance for ${collegeName}.`
+          }
+        }));
+      } else if (defaultService.startsWith('Admission Guidance: ')) {
+        const details = defaultService.replace('Admission Guidance: ', '').trim();
+        setServiceFields(prev => ({
+          ...prev,
+          'college-admissions': {
+            ...prev['college-admissions'],
+            message: prev['college-admissions'].message || `Seeking guidance for ${details}.`
+          }
+        }));
+      } else if (defaultService.startsWith('Study Abroad - ') || defaultService.startsWith('Study Abroad Counselling for ')) {
+        const countryName = defaultService
+          .replace('Study Abroad - ', '')
+          .replace('Study Abroad Counselling for ', '')
+          .trim();
+        setServiceFields(prev => ({
+          ...prev,
+          'study-abroad': {
+            ...prev['study-abroad'],
+            intendedCountries: countryName
+          }
+        }));
+      } else if (defaultService.startsWith('Internship in ')) {
+        const domain = defaultService.replace('Internship in ', '').trim();
+        setServiceFields(prev => ({
+          ...prev,
+          'internship-assistance': {
+            ...prev['internship-assistance'],
+            preferredDomain: domain
+          }
+        }));
+      }
     }
   }, [defaultService]);
 
@@ -59,42 +107,89 @@ export default function EnquiryForm({ defaultService = '', source = 'Lead Form',
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState('');
 
+  // Handle switching service category
+  const handleServiceSelect = (newServiceId) => {
+    setCurrentServiceId(newServiceId);
+    if (onServiceChange) {
+      onServiceChange(newServiceId);
+    }
+    // Clear errors when switching service
+    setErrors({});
+    if (submitError) setSubmitError('');
+  };
+
+  // Shared fields change handler
+  const handleSharedChange = (e) => {
+    const { name, value } = e.target;
+    setSharedData(prev => ({ ...prev, [name]: value }));
+    if (errors[name]) {
+      setErrors(prev => ({ ...prev, [name]: '' }));
+    }
+    if (submitError) setSubmitError('');
+  };
+
+  // Service-specific field change handler
+  const handleServiceFieldChange = (name, value) => {
+    setServiceFields(prev => ({
+      ...prev,
+      [currentServiceId]: {
+        ...prev[currentServiceId],
+        [name]: value
+      }
+    }));
+    if (errors[name]) {
+      setErrors(prev => ({ ...prev, [name]: '' }));
+    }
+    if (submitError) setSubmitError('');
+  };
+
+  // Field validation
   const validate = () => {
     const newErrors = {};
-    if (!formData.fullName.trim()) newErrors.fullName = 'Full Name is required';
-    
-    if (!formData.mobileNumber.trim()) {
+
+    // 1. Shared fields validation
+    if (!sharedData.fullName.trim()) {
+      newErrors.fullName = 'Full Name is required';
+    }
+
+    if (!sharedData.mobileNumber.trim()) {
       newErrors.mobileNumber = 'Mobile number is required';
-    } else if (!/^[0-9+\s\-()]{10,15}$/.test(formData.mobileNumber.trim())) {
+    } else if (!/^[0-9+\s\-()]{10,15}$/.test(sharedData.mobileNumber.trim())) {
       newErrors.mobileNumber = 'Enter a valid 10-digit mobile number';
     }
 
-    if (!formData.email.trim()) {
+    if (!sharedData.email.trim()) {
       newErrors.email = 'Email address is required';
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim())) {
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(sharedData.email.trim())) {
       newErrors.email = 'Enter a valid email address';
     }
 
-    if (!formData.currentCity.trim()) newErrors.currentCity = 'City is required';
-    if (!formData.education) newErrors.education = 'Please select your current qualification';
-    if (!formData.serviceRequired) newErrors.serviceRequired = 'Please choose a service';
-    if (!formData.interestedCourse.trim()) newErrors.interestedCourse = 'Please mention interested course';
-    if (!formData.preferredCountry.trim()) newErrors.preferredCountry = 'Please mention preferred country / region';
-    if (!formData.message.trim()) newErrors.message = 'Please share your query or goal';
+    if (!sharedData.currentCity.trim()) {
+      newErrors.currentCity = 'Current City is required';
+    }
+
+    // 2. Active service fields validation
+    const currentValues = serviceFields[currentServiceId] || {};
+    activeConfig.fields.forEach(field => {
+      const val = currentValues[field.name];
+
+      if (field.required) {
+        if (!val || (typeof val === 'string' && !val.trim())) {
+          newErrors[field.name] = field.errorMessage || `${field.label} is required`;
+        }
+      }
+
+      // URL validation when non-empty
+      if (field.type === 'url' && val && val.trim()) {
+        const trimmed = val.trim();
+        if (!/^https?:\/\/.+/i.test(trimmed)) {
+          newErrors[field.name] = field.errorMessage || 'Please enter a valid URL starting with http:// or https://';
+        }
+      }
+    });
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
-  };
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-    if (errors[name]) {
-      setErrors((prev) => ({ ...prev, [name]: '' }));
-    }
-    if (submitError) {
-      setSubmitError('');
-    }
   };
 
   const handleSubmit = async (e) => {
@@ -106,9 +201,18 @@ export default function EnquiryForm({ defaultService = '', source = 'Lead Form',
     setIsSubmitting(true);
     setSubmitError('');
 
+    const currentValues = serviceFields[currentServiceId] || {};
+
+    // Assemble comprehensive lead payload (isolating only active service's fields)
     const leadRecord = {
-      ...formData,
+      serviceId: currentServiceId,
+      serviceName: activeConfig.displayName,
       source,
+      fullName: sharedData.fullName,
+      mobileNumber: sharedData.mobileNumber,
+      email: sharedData.email,
+      currentCity: sharedData.currentCity,
+      ...currentValues,
       timestamp: new Date().toISOString()
     };
 
@@ -121,7 +225,16 @@ export default function EnquiryForm({ defaultService = '', source = 'Lead Form',
       // LocalStorage access handling
     }
 
-    // Attempt FormSubmit AJAX dispatch if configured, with graceful fallback
+    // Build human-readable details summary for email delivery
+    const formattedDetails = activeConfig.fields
+      .map(f => {
+        const val = currentValues[f.name];
+        return val ? `${f.label}: ${val}` : null;
+      })
+      .filter(Boolean)
+      .join('\n');
+
+    // Attempt FormSubmit AJAX dispatch if configured
     try {
       if (siteConfig.formSubmitEmail && siteConfig.formSubmitEmail !== 'admissions@vidyapaths.com') {
         const response = await fetch(`https://formsubmit.co/ajax/${siteConfig.formSubmitEmail}`, {
@@ -132,12 +245,18 @@ export default function EnquiryForm({ defaultService = '', source = 'Lead Form',
           },
           body: JSON.stringify({
             ...leadRecord,
-            _subject: `New Vidyapaths Enquiry: ${formData.fullName} (${formData.serviceRequired})`
+            _subject: `New Vidyapaths Enquiry [${activeConfig.displayName}]: ${sharedData.fullName} (${sharedData.mobileNumber})`,
+            'Selected Service': activeConfig.displayName,
+            'Candidate Name': sharedData.fullName,
+            'Mobile': sharedData.mobileNumber,
+            'Email': sharedData.email,
+            'City': sharedData.currentCity,
+            'Service Details': formattedDetails
           })
         });
 
         if (!response.ok) {
-          // If remote fails, local submission still guarantees lead capture
+          // Fallback handled gracefully
         }
       }
     } catch {
@@ -149,37 +268,38 @@ export default function EnquiryForm({ defaultService = '', source = 'Lead Form',
   };
 
   const openWhatsAppWithData = () => {
-    const text = `Hi Vidyapaths! I submitted an enquiry for ${formData.serviceRequired || 'Counselling'}.\nName: ${formData.fullName}\nCourse: ${formData.interestedCourse}\nCity: ${formData.currentCity}`;
+    const text = `Hi Vidyapaths! I submitted an enquiry for ${activeConfig.displayName}.\nName: ${sharedData.fullName}\nCity: ${sharedData.currentCity}\nContact: ${sharedData.mobileNumber}`;
     window.open(`https://wa.me/${siteConfig.phoneRaw.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(text)}`, '_blank');
   };
 
+  // Confirmation view
   if (submitted) {
     return (
-      <div className={`text-center animate-in fade-in duration-300 ${isModal ? 'py-4' : 'bg-white rounded-2xl p-6 sm:p-8 border border-slate-200/80 shadow-sm'}`}>
+      <div className={`text-center animate-in fade-in duration-300 ${isModal ? 'py-3' : 'bg-white rounded-2xl p-6 sm:p-8 border border-slate-200/80 shadow-sm'}`}>
         <div className="w-14 h-14 bg-emerald-50 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-3">
           <CheckCircle className="w-8 h-8" />
         </div>
         <h3 className="text-xl sm:text-2xl font-bold text-navy-900 mb-1.5">Thank you!</h3>
         <p className="text-slate-600 max-w-md mx-auto mb-4 text-xs sm:text-sm leading-relaxed">
-          Your enquiry has been received. Our team will get in touch with you shortly.
+          Your enquiry for <span className="font-semibold text-navy-900">{activeConfig.displayName}</span> has been received. Our dedicated mentors will get in touch shortly.
         </p>
 
         <div className="bg-slate-50 rounded-xl p-3.5 mb-4 border border-slate-100 text-left text-xs sm:text-sm max-w-md mx-auto space-y-1.5">
           <div className="flex justify-between">
-            <span className="text-slate-500">Candidate:</span>
-            <span className="font-semibold text-navy-900">{formData.fullName}</span>
-          </div>
-          <div className="flex justify-between">
             <span className="text-slate-500">Service:</span>
-            <span className="font-semibold text-navy-900">{formData.serviceRequired}</span>
+            <span className="font-semibold text-orange-600">{activeConfig.displayName}</span>
           </div>
           <div className="flex justify-between">
-            <span className="text-slate-500">Interested Course:</span>
-            <span className="font-semibold text-navy-900">{formData.interestedCourse}</span>
+            <span className="text-slate-500">Candidate:</span>
+            <span className="font-semibold text-navy-900">{sharedData.fullName}</span>
           </div>
           <div className="flex justify-between">
             <span className="text-slate-500">Mobile:</span>
-            <span className="font-semibold text-navy-900">{formData.mobileNumber}</span>
+            <span className="font-semibold text-navy-900">{sharedData.mobileNumber}</span>
+          </div>
+          <div className="flex justify-between">
+            <span className="text-slate-500">City:</span>
+            <span className="font-semibold text-navy-900">{sharedData.currentCity}</span>
           </div>
         </div>
 
@@ -194,20 +314,10 @@ export default function EnquiryForm({ defaultService = '', source = 'Lead Form',
           <button
             onClick={() => {
               setSubmitted(false);
-              setFormData({
-                fullName: '',
-                mobileNumber: '',
-                whatsappNumber: '',
-                email: '',
-                currentCity: '',
-                education: '',
-                serviceRequired: '',
-                interestedCourse: '',
-                preferredCountry: '',
-                preferredCollege: '',
-                preferredIntake: '',
-                message: ''
-              });
+              setServiceFields(prev => ({
+                ...prev,
+                [currentServiceId]: {}
+              }));
             }}
             className="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-medium text-slate-700 bg-slate-100 hover:bg-slate-200 transition-colors min-h-[42px] cursor-pointer"
           >
@@ -217,6 +327,8 @@ export default function EnquiryForm({ defaultService = '', source = 'Lead Form',
       </div>
     );
   }
+
+  const currentValues = serviceFields[currentServiceId] || {};
 
   return (
     <form 
@@ -230,8 +342,8 @@ export default function EnquiryForm({ defaultService = '', source = 'Lead Form',
             <Sparkles className="w-4 h-4" />
           </span>
           <div>
-            <h3 className="text-lg sm:text-xl font-bold text-navy-900">Request Free Counselling</h3>
-            <p className="text-xs text-slate-500">100% unbiased student guidance. No consultation fees.</p>
+            <h3 className="text-lg sm:text-xl font-bold text-navy-900">{activeConfig.modalHeading}</h3>
+            <p className="text-xs text-slate-500">{activeConfig.shortDescription}</p>
           </div>
         </div>
       )}
@@ -243,265 +355,144 @@ export default function EnquiryForm({ defaultService = '', source = 'Lead Form',
         </div>
       )}
 
-      <div className="space-y-2.5 sm:space-y-3">
-        {/* Row 1: Full Name | Mobile Number */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3">
-          <div>
-            <label htmlFor={`${formUid}-fullName`} className="block text-xs font-semibold text-slate-700 mb-1">
-              Full Name <span className="text-red-500">*</span>
-            </label>
-            <input
-              id={`${formUid}-fullName`}
-              type="text"
-              name="fullName"
-              placeholder="e.g. Aryan Sharma"
-              value={formData.fullName}
-              onChange={handleChange}
-              aria-invalid={!!errors.fullName}
-              aria-describedby={errors.fullName ? `${formUid}-fullName-err` : undefined}
-              className={`w-full px-3 py-2 text-xs sm:text-sm rounded-lg border h-10 sm:h-[42px] transition-colors ${
-                errors.fullName ? 'border-red-400 bg-red-50/30' : 'border-slate-300 focus:border-orange-500'
-              } focus:outline-none focus:ring-1 focus:ring-orange-500`}
-            />
-            {errors.fullName && <p id={`${formUid}-fullName-err`} className="text-xs text-red-500 mt-0.5">{errors.fullName}</p>}
-          </div>
-
-          <div>
-            <label htmlFor={`${formUid}-mobileNumber`} className="block text-xs font-semibold text-slate-700 mb-1">
-              Mobile Number <span className="text-red-500">*</span>
-            </label>
-            <input
-              id={`${formUid}-mobileNumber`}
-              type="tel"
-              name="mobileNumber"
-              placeholder="e.g. 9876543210"
-              value={formData.mobileNumber}
-              onChange={handleChange}
-              aria-invalid={!!errors.mobileNumber}
-              aria-describedby={errors.mobileNumber ? `${formUid}-mobileNumber-err` : undefined}
-              className={`w-full px-3 py-2 text-xs sm:text-sm rounded-lg border h-10 sm:h-[42px] transition-colors ${
-                errors.mobileNumber ? 'border-red-400 bg-red-50/30' : 'border-slate-300 focus:border-orange-500'
-              } focus:outline-none focus:ring-1 focus:ring-orange-500`}
-            />
-            {errors.mobileNumber && <p id={`${formUid}-mobileNumber-err`} className="text-xs text-red-500 mt-0.5">{errors.mobileNumber}</p>}
-          </div>
-        </div>
-
-        {/* Row 2: Email Address | Current City */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3">
-          <div>
-            <label htmlFor={`${formUid}-email`} className="block text-xs font-semibold text-slate-700 mb-1">
-              Email Address <span className="text-red-500">*</span>
-            </label>
-            <input
-              id={`${formUid}-email`}
-              type="email"
-              name="email"
-              placeholder="e.g. aryan@example.com"
-              value={formData.email}
-              onChange={handleChange}
-              aria-invalid={!!errors.email}
-              aria-describedby={errors.email ? `${formUid}-email-err` : undefined}
-              className={`w-full px-3 py-2 text-xs sm:text-sm rounded-lg border h-10 sm:h-[42px] transition-colors ${
-                errors.email ? 'border-red-400 bg-red-50/30' : 'border-slate-300 focus:border-orange-500'
-              } focus:outline-none focus:ring-1 focus:ring-orange-500`}
-            />
-            {errors.email && <p id={`${formUid}-email-err`} className="text-xs text-red-500 mt-0.5">{errors.email}</p>}
-          </div>
-
-          <div>
-            <label htmlFor={`${formUid}-currentCity`} className="block text-xs font-semibold text-slate-700 mb-1">
-              Current City <span className="text-red-500">*</span>
-            </label>
-            <input
-              id={`${formUid}-currentCity`}
-              type="text"
-              name="currentCity"
-              placeholder="e.g. Delhi, Lucknow, Patna"
-              value={formData.currentCity}
-              onChange={handleChange}
-              aria-invalid={!!errors.currentCity}
-              aria-describedby={errors.currentCity ? `${formUid}-currentCity-err` : undefined}
-              className={`w-full px-3 py-2 text-xs sm:text-sm rounded-lg border h-10 sm:h-[42px] transition-colors ${
-                errors.currentCity ? 'border-red-400 bg-red-50/30' : 'border-slate-300 focus:border-orange-500'
-              } focus:outline-none focus:ring-1 focus:ring-orange-500`}
-            />
-            {errors.currentCity && <p id={`${formUid}-currentCity-err`} className="text-xs text-red-500 mt-0.5">{errors.currentCity}</p>}
-          </div>
-        </div>
-
-        {/* Row 3: Current Qualification | Service Required */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3">
-          <div>
-            <label htmlFor={`${formUid}-education`} className="block text-xs font-semibold text-slate-700 mb-1">
-              Current Qualification <span className="text-red-500">*</span>
-            </label>
-            <select
-              id={`${formUid}-education`}
-              name="education"
-              value={formData.education}
-              onChange={handleChange}
-              aria-invalid={!!errors.education}
-              aria-describedby={errors.education ? `${formUid}-education-err` : undefined}
-              className={`w-full px-3 py-2 text-xs sm:text-sm rounded-lg border h-10 sm:h-[42px] transition-colors bg-white ${
-                errors.education ? 'border-red-400 bg-red-50/30' : 'border-slate-300 focus:border-orange-500'
-              } focus:outline-none focus:ring-1 focus:ring-orange-500`}
-            >
-              <option value="">Select qualification</option>
-              <option value="Class 10th / 11th">Class 10th / 11th</option>
-              <option value="Class 12th Appearing/Passed">Class 12th (Appearing / Passed)</option>
-              <option value="Undergraduate (UG Student)">Undergraduate Student</option>
-              <option value="Graduate / Degree Holder">Graduate / Degree Holder</option>
-              <option value="Postgraduate (PG Student)">Postgraduate Student</option>
-              <option value="Working Professional">Working Professional</option>
-            </select>
-            {errors.education && <p id={`${formUid}-education-err`} className="text-xs text-red-500 mt-0.5">{errors.education}</p>}
-          </div>
-
-          <div>
-            <label htmlFor={`${formUid}-serviceRequired`} className="block text-xs font-semibold text-slate-700 mb-1">
-              Service Required <span className="text-red-500">*</span>
-            </label>
-            <select
-              id={`${formUid}-serviceRequired`}
-              name="serviceRequired"
-              value={formData.serviceRequired}
-              onChange={handleChange}
-              aria-invalid={!!errors.serviceRequired}
-              aria-describedby={errors.serviceRequired ? `${formUid}-serviceRequired-err` : undefined}
-              className={`w-full px-3 py-2 text-xs sm:text-sm rounded-lg border h-10 sm:h-[42px] transition-colors bg-white ${
-                errors.serviceRequired ? 'border-red-400 bg-red-50/30' : 'border-slate-300 focus:border-orange-500'
-              } focus:outline-none focus:ring-1 focus:ring-orange-500`}
-            >
-              <option value="">Choose service</option>
-              <option value="College Admission">College Admission</option>
-              <option value="Career Counselling">Career Counselling</option>
-              <option value="Internship Assistance">Internship Assistance</option>
-              <option value="Study Abroad">Study Abroad</option>
-              <option value="Scholarship Guidance">Scholarship & Loan Guidance</option>
-              <option value="Resume & Interview">Resume & Interview Support</option>
-              <option value="Other">Other</option>
-            </select>
-            {errors.serviceRequired && <p id={`${formUid}-serviceRequired-err`} className="text-xs text-red-500 mt-0.5">{errors.serviceRequired}</p>}
-          </div>
-        </div>
-
-        {/* Row 4: Interested Course | Preferred Country / Region */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3">
-          <div>
-            <label htmlFor={`${formUid}-interestedCourse`} className="block text-xs font-semibold text-slate-700 mb-1">
-              Interested Course <span className="text-red-500">*</span>
-            </label>
-            <input
-              id={`${formUid}-interestedCourse`}
-              type="text"
-              name="interestedCourse"
-              placeholder="e.g. B.Tech CS, MBA, BCA, BBA, MS"
-              value={formData.interestedCourse}
-              onChange={handleChange}
-              aria-invalid={!!errors.interestedCourse}
-              aria-describedby={errors.interestedCourse ? `${formUid}-interestedCourse-err` : undefined}
-              className={`w-full px-3 py-2 text-xs sm:text-sm rounded-lg border h-10 sm:h-[42px] transition-colors ${
-                errors.interestedCourse ? 'border-red-400 bg-red-50/30' : 'border-slate-300 focus:border-orange-500'
-              } focus:outline-none focus:ring-1 focus:ring-orange-500`}
-            />
-            {errors.interestedCourse && <p id={`${formUid}-interestedCourse-err`} className="text-xs text-red-500 mt-0.5">{errors.interestedCourse}</p>}
-          </div>
-
-          <div>
-            <label htmlFor={`${formUid}-preferredCountry`} className="block text-xs font-semibold text-slate-700 mb-1">
-              Preferred Country / Region <span className="text-red-500">*</span>
-            </label>
-            <input
-              id={`${formUid}-preferredCountry`}
-              type="text"
-              name="preferredCountry"
-              placeholder="e.g. India (Delhi/NCR) or UK, USA, Canada"
-              value={formData.preferredCountry}
-              onChange={handleChange}
-              aria-invalid={!!errors.preferredCountry}
-              aria-describedby={errors.preferredCountry ? `${formUid}-preferredCountry-err` : undefined}
-              className={`w-full px-3 py-2 text-xs sm:text-sm rounded-lg border h-10 sm:h-[42px] transition-colors ${
-                errors.preferredCountry ? 'border-red-400 bg-red-50/30' : 'border-slate-300 focus:border-orange-500'
-              } focus:outline-none focus:ring-1 focus:ring-orange-500`}
-            />
-            {errors.preferredCountry && <p id={`${formUid}-preferredCountry-err`} className="text-xs text-red-500 mt-0.5">{errors.preferredCountry}</p>}
-          </div>
-        </div>
-
-        {/* Row 5: Optional Fields (WhatsApp Number, Target College, Target Intake) */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 sm:gap-3 pt-0.5">
-          <div>
-            <label htmlFor={`${formUid}-whatsappNumber`} className="block text-[11px] sm:text-xs font-medium text-slate-500 mb-1">
-              WhatsApp Number (Optional)
-            </label>
-            <input
-              id={`${formUid}-whatsappNumber`}
-              type="tel"
-              name="whatsappNumber"
-              placeholder="If different from mobile"
-              value={formData.whatsappNumber}
-              onChange={handleChange}
-              className="w-full px-3 py-1.5 text-xs sm:text-sm rounded-lg border border-slate-200 focus:border-orange-500 focus:outline-none h-9 sm:h-10 transition-colors"
-            />
-          </div>
-
-          <div>
-            <label htmlFor={`${formUid}-preferredCollege`} className="block text-[11px] sm:text-xs font-medium text-slate-500 mb-1">
-              Target College (Optional)
-            </label>
-            <input
-              id={`${formUid}-preferredCollege`}
-              type="text"
-              name="preferredCollege"
-              placeholder="e.g. Top Tier / Specific Campus"
-              value={formData.preferredCollege}
-              onChange={handleChange}
-              className="w-full px-3 py-1.5 text-xs sm:text-sm rounded-lg border border-slate-200 focus:border-orange-500 focus:outline-none h-9 sm:h-10 transition-colors"
-            />
-          </div>
-
-          <div>
-            <label htmlFor={`${formUid}-preferredIntake`} className="block text-[11px] sm:text-xs font-medium text-slate-500 mb-1">
-              Target Intake / Year (Optional)
-            </label>
-            <input
-              id={`${formUid}-preferredIntake`}
-              type="text"
-              name="preferredIntake"
-              placeholder="e.g. 2026 or 2027"
-              value={formData.preferredIntake}
-              onChange={handleChange}
-              className="w-full px-3 py-1.5 text-xs sm:text-sm rounded-lg border border-slate-200 focus:border-orange-500 focus:outline-none h-9 sm:h-10 transition-colors"
-            />
-          </div>
-        </div>
-
-        {/* Row 6: Query / Message */}
-        <div>
-          <label htmlFor={`${formUid}-message`} className="block text-xs font-semibold text-slate-700 mb-1">
-            Your Query / What guidance do you need? <span className="text-red-500">*</span>
+      <div className="space-y-3">
+        {/* Service Selector Dropdown */}
+        <div className="bg-slate-50 p-2.5 sm:p-3 rounded-xl border border-slate-200/80">
+          <label htmlFor={`${formUid}-serviceCategory`} className="block text-xs font-semibold text-navy-900 mb-1">
+            Service Required <span className="text-red-500">*</span>
           </label>
-          <textarea
-            id={`${formUid}-message`}
-            name="message"
-            rows="2"
-            placeholder="Tell us about your background, score, or specific confusion so our counsellor can prepare the best advice."
-            value={formData.message}
-            onChange={handleChange}
-            aria-invalid={!!errors.message}
-            aria-describedby={errors.message ? `${formUid}-message-err` : undefined}
-            className={`w-full px-3 py-2 text-xs sm:text-sm rounded-lg border h-[64px] sm:h-[68px] resize-none transition-colors ${
-              errors.message ? 'border-red-400 bg-red-50/30' : 'border-slate-300 focus:border-orange-500'
-            } focus:outline-none focus:ring-1 focus:ring-orange-500`}
-          ></textarea>
-          {errors.message && <p id={`${formUid}-message-err`} className="text-xs text-red-500 mt-0.5">{errors.message}</p>}
+          <div className="relative">
+            <select
+              id={`${formUid}-serviceCategory`}
+              value={currentServiceId}
+              onChange={(e) => handleServiceSelect(e.target.value)}
+              className="w-full px-3 py-2 text-xs sm:text-sm rounded-lg border border-slate-300 font-semibold text-navy-900 bg-white hover:border-orange-500 focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500 h-10 sm:h-[42px] transition-colors appearance-none pr-8 cursor-pointer"
+            >
+              {SERVICE_OPTIONS.map((opt) => (
+                <option key={opt.id} value={opt.id}>
+                  {opt.displayName}
+                </option>
+              ))}
+            </select>
+            <ChevronDown className="w-4 h-4 text-slate-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+          </div>
         </div>
 
-        {/* Row 7: Submit Button & Privacy Note */}
+        {/* Section 1: Shared Contact Details */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3">
+          {SHARED_FIELDS.map((field) => (
+            <div key={field.name}>
+              <label htmlFor={`${formUid}-${field.name}`} className="block text-xs font-semibold text-slate-700 mb-1">
+                {field.label} {field.required && <span className="text-red-500">*</span>}
+              </label>
+              <input
+                id={`${formUid}-${field.name}`}
+                type={field.type}
+                name={field.name}
+                placeholder={field.placeholder}
+                value={sharedData[field.name]}
+                onChange={handleSharedChange}
+                aria-invalid={!!errors[field.name]}
+                aria-describedby={errors[field.name] ? `${formUid}-${field.name}-err` : undefined}
+                className={`w-full px-3 py-2 text-xs sm:text-sm rounded-lg border h-10 sm:h-[42px] transition-colors ${
+                  errors[field.name] ? 'border-red-400 bg-red-50/30' : 'border-slate-300 focus:border-orange-500'
+                } focus:outline-none focus:ring-1 focus:ring-orange-500`}
+              />
+              {errors[field.name] && (
+                <p id={`${formUid}-${field.name}-err`} className="text-xs text-red-500 mt-0.5">
+                  {errors[field.name]}
+                </p>
+              )}
+            </div>
+          ))}
+        </div>
+
+        {/* Section 2: Service-Specific Fields */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3">
+          {activeConfig.fields.map((field) => {
+            const isFullWidth = field.colSpan === 2 || field.type === 'textarea';
+            const value = currentValues[field.name] || '';
+            const fieldError = errors[field.name];
+
+            return (
+              <div 
+                key={field.name} 
+                className={isFullWidth ? "sm:col-span-2" : "col-span-1"}
+              >
+                <label 
+                  htmlFor={`${formUid}-${field.name}`} 
+                  className={`block mb-1 ${
+                    field.required 
+                      ? 'text-xs font-semibold text-slate-700' 
+                      : 'text-[11px] sm:text-xs font-medium text-slate-500'
+                  }`}
+                >
+                  {field.label} {field.required ? <span className="text-red-500">*</span> : <span className="text-slate-400">(Optional)</span>}
+                </label>
+
+                {field.type === 'select' ? (
+                  <div className="relative">
+                    <select
+                      id={`${formUid}-${field.name}`}
+                      value={value}
+                      onChange={(e) => handleServiceFieldChange(field.name, e.target.value)}
+                      aria-invalid={!!fieldError}
+                      aria-describedby={fieldError ? `${formUid}-${field.name}-err` : undefined}
+                      className={`w-full px-3 py-2 text-xs sm:text-sm rounded-lg border h-10 sm:h-[42px] transition-colors bg-white appearance-none pr-8 cursor-pointer ${
+                        fieldError ? 'border-red-400 bg-red-50/30' : 'border-slate-300 focus:border-orange-500'
+                      } focus:outline-none focus:ring-1 focus:ring-orange-500`}
+                    >
+                      <option value="">Select {field.label.toLowerCase()}</option>
+                      {field.options.map((opt) => (
+                        <option key={opt} value={opt}>
+                          {opt}
+                        </option>
+                      ))}
+                    </select>
+                    <ChevronDown className="w-4 h-4 text-slate-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+                  </div>
+                ) : field.type === 'textarea' ? (
+                  <textarea
+                    id={`${formUid}-${field.name}`}
+                    rows={field.rows || 2}
+                    placeholder={field.placeholder}
+                    value={value}
+                    onChange={(e) => handleServiceFieldChange(field.name, e.target.value)}
+                    aria-invalid={!!fieldError}
+                    aria-describedby={fieldError ? `${formUid}-${field.name}-err` : undefined}
+                    className={`w-full px-3 py-2 text-xs sm:text-sm rounded-lg border h-[64px] sm:h-[68px] resize-none transition-colors ${
+                      fieldError ? 'border-red-400 bg-red-50/30' : 'border-slate-300 focus:border-orange-500'
+                    } focus:outline-none focus:ring-1 focus:ring-orange-500`}
+                  />
+                ) : (
+                  <input
+                    id={`${formUid}-${field.name}`}
+                    type={field.type}
+                    placeholder={field.placeholder}
+                    value={value}
+                    onChange={(e) => handleServiceFieldChange(field.name, e.target.value)}
+                    aria-invalid={!!fieldError}
+                    aria-describedby={fieldError ? `${formUid}-${field.name}-err` : undefined}
+                    className={`w-full px-3 py-2 text-xs sm:text-sm rounded-lg border h-10 sm:h-[42px] transition-colors ${
+                      fieldError ? 'border-red-400 bg-red-50/30' : 'border-slate-300 focus:border-orange-500'
+                    } focus:outline-none focus:ring-1 focus:ring-orange-500`}
+                  />
+                )}
+
+                {fieldError && (
+                  <p id={`${formUid}-${field.name}-err`} className="text-xs text-red-500 mt-0.5">
+                    {fieldError}
+                  </p>
+                )}
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Section 3: Submit Button & Privacy Note */}
         <div className="pt-1 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2.5 sm:gap-4">
           <p className="text-[11px] text-slate-500 leading-tight order-2 sm:order-1 sm:max-w-xs md:max-w-md">
-            By submitting this form, you agree to be contacted by Vidyapaths regarding your enquiry.
+            By submitting, you agree to receive guidance from Vidyapaths regarding your enquiry. Unbiased & 100% free.
           </p>
 
           <button
@@ -516,7 +507,7 @@ export default function EnquiryForm({ defaultService = '', source = 'Lead Form',
               </span>
             ) : (
               <>
-                <span>Get Free Counselling</span>
+                <span>Get Free Guidance</span>
                 <Send className="w-4 h-4" />
               </>
             )}
