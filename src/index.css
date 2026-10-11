@@ -23,6 +23,8 @@
     max-width: 100vw;
     scroll-behavior: smooth;
     font-family: var(--font-sans);
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -114,6 +116,28 @@ select,
 textarea {
   color: #0B1F3A;
   font-weight: 400;
+}
+
+/* ========================================================
+   MOBILE SAFARI AUTO-ZOOM PREVENTION
+   iOS Safari automatically zooms into editable form inputs when
+   their computed font-size is below 16px. Enforcing a minimum
+   font-size of 16px on mobile viewports (max-width: 767px)
+   guarantees that focusing an input will NOT trigger unwanted page zoom,
+   while preserving desktop typography, spacing, and layouts untouched.
+   ======================================================== */
+@media screen and (max-width: 767px) {
+  input,
+  textarea,
+  select,
+  input[type="text"],
+  input[type="email"],
+  input[type="tel"],
+  input[type="number"],
+  input[type="url"],
+  input[type="search"] {
+    font-size: 16px !important;
+  }
 }
 
 /* Select dropdown placeholder prompt handling */

@@ -31,6 +31,17 @@ const specializationIcons = {
 export default function CollegeAdmissionSection({ onOpenEnquiry }) {
   const [activeTab, setActiveTab] = useState('ug'); // 'ug', 'pg', 'domains'
 
+  const handleTabClick = (tabKey, e) => {
+    setActiveTab(tabKey);
+    if (e?.currentTarget) {
+      e.currentTarget.scrollIntoView({
+        behavior: 'smooth',
+        block: 'nearest',
+        inline: 'center'
+      });
+    }
+  };
+
   return (
     <section className="py-20 md:py-28 bg-slate-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -42,38 +53,50 @@ export default function CollegeAdmissionSection({ onOpenEnquiry }) {
         />
 
         {/* Tab Switcher */}
-        <div className="flex justify-center mb-10 overflow-x-auto max-w-full pb-2">
-          <div className="inline-flex p-1.5 rounded-xl bg-slate-200/80 border border-slate-300/50 shrink-0">
-            <button
-              onClick={() => setActiveTab('ug')}
-              className={`px-5 py-2.5 rounded-lg text-sm font-semibold transition-all cursor-pointer ${
-                activeTab === 'ug'
-                  ? 'bg-white text-navy-900 shadow-sm'
-                  : 'text-slate-600 hover:text-navy-900'
-              }`}
-            >
-              Undergraduate (UG)
-            </button>
-            <button
-              onClick={() => setActiveTab('pg')}
-              className={`px-5 py-2.5 rounded-lg text-sm font-semibold transition-all cursor-pointer ${
-                activeTab === 'pg'
-                  ? 'bg-white text-navy-900 shadow-sm'
-                  : 'text-slate-600 hover:text-navy-900'
-              }`}
-            >
-              Postgraduate (PG)
-            </button>
-            <button
-              onClick={() => setActiveTab('domains')}
-              className={`px-5 py-2.5 rounded-lg text-sm font-semibold transition-all cursor-pointer ${
-                activeTab === 'domains'
-                  ? 'bg-white text-navy-900 shadow-sm'
-                  : 'text-slate-600 hover:text-navy-900'
-              }`}
-            >
-              Industry Specializations
-            </button>
+        <div className="w-full max-w-full mb-10 box-border">
+          <div 
+            className="flex items-center justify-start md:justify-center overflow-x-auto pb-2.5 pt-1 px-4 sm:px-0 -mx-4 sm:mx-0 scroll-smooth touch-pan-x overscroll-x-contain"
+            role="tablist"
+            aria-label="Course Categories"
+          >
+            <div className="inline-flex p-1.5 rounded-xl bg-slate-200/80 border border-slate-300/50 shrink-0 gap-1 sm:gap-1.5">
+              <button
+                role="tab"
+                aria-selected={activeTab === 'ug'}
+                onClick={(e) => handleTabClick('ug', e)}
+                className={`px-4 sm:px-5 py-2 sm:py-2.5 rounded-lg text-xs sm:text-sm font-semibold transition-all cursor-pointer shrink-0 whitespace-nowrap ${
+                  activeTab === 'ug'
+                    ? 'bg-white text-navy-900 shadow-sm'
+                    : 'text-slate-600 hover:text-navy-900'
+                }`}
+              >
+                Undergraduate (UG)
+              </button>
+              <button
+                role="tab"
+                aria-selected={activeTab === 'pg'}
+                onClick={(e) => handleTabClick('pg', e)}
+                className={`px-4 sm:px-5 py-2 sm:py-2.5 rounded-lg text-xs sm:text-sm font-semibold transition-all cursor-pointer shrink-0 whitespace-nowrap ${
+                  activeTab === 'pg'
+                    ? 'bg-white text-navy-900 shadow-sm'
+                    : 'text-slate-600 hover:text-navy-900'
+                }`}
+              >
+                Postgraduate (PG)
+              </button>
+              <button
+                role="tab"
+                aria-selected={activeTab === 'domains'}
+                onClick={(e) => handleTabClick('domains', e)}
+                className={`px-4 sm:px-5 py-2 sm:py-2.5 rounded-lg text-xs sm:text-sm font-semibold transition-all cursor-pointer shrink-0 whitespace-nowrap ${
+                  activeTab === 'domains'
+                    ? 'bg-white text-navy-900 shadow-sm'
+                    : 'text-slate-600 hover:text-navy-900'
+                }`}
+              >
+                Industry Specializations
+              </button>
+            </div>
           </div>
         </div>
 

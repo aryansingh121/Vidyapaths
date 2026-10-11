@@ -4,7 +4,6 @@ import { siteConfig } from '../data/siteData';
 import { 
   SHARED_FIELDS, 
   SERVICE_FORM_CONFIGS, 
-  SERVICE_OPTIONS, 
   getServiceConfig 
 } from '../data/serviceFormConfigs';
 import ServiceSelector from './ServiceSelector';
@@ -395,89 +394,68 @@ export default function EnquiryForm({
       // LocalStorage access handling
     }
 
-    // Build human-readable details summary for email delivery
-    const formattedDetails = activeConfig.fields
-      .map(f => {
-        const val = currentValues[f.name];
-        if (!val) return null;
-        if (Array.isArray(val)) {
-          return val.length > 0 ? `${f.label}: ${val.join(', ')}` : null;
-        }
-        return `${f.label}: ${val}`;
-      })
-      .filter(Boolean)
-      .join('\n');
-
-    const emailSubject = isCareerRoadmap
-      ? 'New Career Roadmap Consultation — Vidyapaths'
-      : isCollegeComparison
-      ? 'New College Comparison Request — Vidyapaths'
-      : (activeConfig.emailSubject || `New Vidyapaths Enquiry [${activeConfig.displayName}]: ${sharedData.fullName.trim()} (${sharedData.mobileNumber.trim()})`);
-
-    const emailBody = {
-      ...leadRecord,
-      _subject: emailSubject,
-      'Selected Service': activeConfig.displayName,
-      'Candidate Name': sharedData.fullName.trim(),
-      'Mobile': sharedData.mobileNumber.trim(),
-      'Email': sharedData.email.trim(),
-      'City': sharedData.currentCity.trim(),
-      'Source': effectiveSource
+    const SERVICE_SUBJECT_MAP = {
+      'college-admissions': 'New College Admission Enquiry — Vidyapaths',
+      'career-counselling': 'New Career Counselling Enquiry — Vidyapaths',
+      'career-roadmap': 'New Career Roadmap Consultation — Vidyapaths',
+      'internship-assistance': 'New Internship Enquiry — Vidyapaths',
+      'study-abroad': 'New Study Abroad Enquiry — Vidyapaths',
+      'college-comparison': 'New College Comparison Request — Vidyapaths',
+      'resume-interview': 'New Resume & Interview Support Enquiry — Vidyapaths',
+      'scholarships-loans': 'New Scholarship & Education Loan Enquiry — Vidyapaths'
     };
 
-    if (isCareerRoadmap) {
-      emailBody['Academic Background'] = `${currentValues.currentEducation || ''} | Stream: ${currentValues.currentStream || ''} | Stage: ${currentValues.careerStage || ''}`;
-      emailBody['Selected Guidance Concerns'] = Array.isArray(currentValues.guidanceNeeds) ? currentValues.guidanceNeeds.join(', ') : (currentValues.guidanceNeeds || 'None');
-      emailBody['Preferred Career Fields'] = currentValues.preferredCareerFields || 'Not specified';
-      emailBody['Main Question or Concern'] = currentValues.mainQuestion || 'None';
-      emailBody['Preferred Consultation Mode'] = currentValues.consultationMode || 'Not specified';
-      emailBody['Preferred Time'] = currentValues.preferredTime || 'Flexible';
-    } else if (isCollegeComparison) {
-      emailBody['Academic Profile'] = `${currentValues.currentQualification || ''} (Passing: ${currentValues.passingYear || ''}) | Course: ${currentValues.preferredCourse || ''} | Score: ${currentValues.academicPercentage || ''} | Year: ${currentValues.admissionYear || ''}`;
-      if (currentValues.entranceExam || currentValues.entranceScore) {
-        emailBody['Entrance Exam'] = `${currentValues.entranceExam || 'None'} (${currentValues.entranceScore || 'N/A'})`;
-      }
-      emailBody['Location Preference'] = currentValues.preferredStudyLocation || 'Not specified';
-      const targetColleges = [currentValues.preferredCollege1, currentValues.preferredCollege2, currentValues.preferredCollege3].filter(Boolean);
-      emailBody['Target Colleges'] = targetColleges.length > 0 ? targetColleges.join(', ') : 'Requested counselor recommendations';
-      emailBody['Comparison Factors'] = Array.isArray(currentValues.comparisonPriorities) ? currentValues.comparisonPriorities.join(', ') : (currentValues.comparisonPriorities || 'Not specified');
-      emailBody['Additional Note'] = currentValues.message || 'None';
-      emailBody['Service Details'] = formattedDetails;
-      emailBody['Disclaimer'] = 'Student requested comparative evaluation sheet. Will be provided after counselor cutoff and eligibility review.';
-    } else {
-      emailBody['Service Details'] = formattedDetails;
-    }
+    const emailSubject = SERVICE_SUBJECT_MAP[currentServiceId] || 
+      (activeConfig.emailSubject || `New ${activeConfig.displayName} Enquiry — Vidyapaths`);
 
-    if (currentServiceId === 'internship-assistance') {
-      emailBody['Preferred Domain'] = currentValues.preferredDomain || 'Not specified';
-    }
+    // Clean, formatted email payload containing strictly relevant fields
+    const emailBody = {
+      _subject: emailSubject,
+      _template: 'table',
+      _captcha: 'false',
+      _replyto: sharedData.email.trim(),
+      'Enquiry Type': activeConfig.displayName,
+      'Service ID': currentServiceId,
+      'Student Name': sharedData.fullName.trim(),
+      'Mobile Number': sharedData.mobileNumber.trim(),
+      'Email Address': sharedData.email.trim(),
+      'Current City': sharedData.currentCity.trim(),
+      'Source Page / Trigger': effectiveSource,
+      'Submission Date': new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })
+    };
 
-    if (currentServiceId === 'college-admissions') {
-      if (currentValues.preferredCollege) {
-        emailBody['Preferred College / University'] = currentValues.preferredCollege;
+    // Add strictly the fields defined for the selected service
+    activeConfig.fields.forEach(field => {
+      const rawVal = currentValues[field.name];
+      if (rawVal !== undefined && rawVal !== null && rawVal !== '') {
+        const formattedVal = Array.isArray(rawVal) ? rawVal.join(', ') : String(rawVal).trim();
+        if (formattedVal) {
+          emailBody[field.label] = formattedVal;
+        }
       }
-      if (currentValues.preferredCourse) {
-        emailBody['Preferred Course'] = currentValues.preferredCourse;
-      }
-    }
+    });
 
     try {
-      if (siteConfig.formSubmitEmail && siteConfig.formSubmitEmail !== 'admissions@vidyapaths.com') {
-        const response = await fetch(`https://formsubmit.co/ajax/${siteConfig.formSubmitEmail}`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-          },
-          body: JSON.stringify(emailBody)
-        });
+      const recipientEmail = (siteConfig.formSubmitEmail || siteConfig.email || 'Vidyapaths@gmail.com').trim();
+      const response = await fetch(`https://formsubmit.co/ajax/${recipientEmail}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify(emailBody)
+      });
 
-        if (!response.ok) {
-          throw new Error('Unable to send consultation request right now. Please try again or reach out on WhatsApp.');
-        }
-      } else {
-        // Simulated latency for local test / placeholder environment
-        await new Promise(r => setTimeout(r, 600));
+      let resData = null;
+      try {
+        resData = await response.json();
+      } catch {
+        // Non-JSON response handling
+      }
+
+      if (!response.ok) {
+        const errMessage = resData?.message || 'Unable to send consultation request right now. Please try again or reach out on WhatsApp.';
+        throw new Error(errMessage);
       }
     } catch (err) {
       setIsSubmitting(false);
@@ -498,7 +476,8 @@ export default function EnquiryForm({
       const cv = serviceFields['college-comparison'] || {};
       text = `Hi Vidyapaths! I requested a Free College Comparison Sheet.\nName: ${sharedData.fullName}\nCity: ${sharedData.currentCity}\nCourse: ${cv.preferredCourse || ''}\nLocation: ${cv.preferredStudyLocation || ''}`;
     }
-    window.open(`https://wa.me/${siteConfig.phoneRaw.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(text)}`, '_blank');
+    const cleanNumber = (siteConfig.whatsappNumber || siteConfig.phoneRaw).replace(/[^0-9]/g, '');
+    window.open(`https://wa.me/${cleanNumber}?text=${encodeURIComponent(text)}`, '_blank');
   };
 
   // Confirmation view
@@ -510,15 +489,7 @@ export default function EnquiryForm({
         </div>
         <h3 className="text-xl sm:text-2xl font-bold text-navy-900 mb-1.5">Thank you!</h3>
         <p className="text-slate-600 max-w-md mx-auto mb-4 text-xs sm:text-[14px] leading-relaxed">
-          {currentServiceId === 'college-comparison' ? (
-            <span>
-              Your College Comparison Request has been received. Our academic counselors will review your profile, evaluate cutoff trends and eligibility, and prepare an unbiased comparison sheet for you shortly.
-            </span>
-          ) : (
-            <span>
-              Your enquiry for <span className="font-semibold text-navy-900">{activeConfig.displayName}</span> has been received. Our dedicated mentors will get in touch shortly.
-            </span>
-          )}
+          Thank you! Your enquiry has been submitted successfully. Our team will get in touch with you shortly.
         </p>
 
         <div className="bg-slate-50 rounded-xl p-3.5 mb-4 border border-slate-100 text-left text-xs sm:text-[13px] max-w-md mx-auto space-y-1.5">
@@ -645,7 +616,7 @@ export default function EnquiryForm({
                 onChange={handleSharedChange}
                 aria-invalid={!!errors[field.name]}
                 aria-describedby={errors[field.name] ? `${formUid}-${field.name}-err` : undefined}
-                className={`w-full px-3 text-[13.5px] rounded-xl border h-[38px] sm:h-[40px] transition-colors bg-white text-navy-900 placeholder:text-slate-400 placeholder:font-normal placeholder:opacity-100 ${
+                className={`w-full px-3 text-base sm:text-[13.5px] rounded-xl border h-[40px] sm:h-[40px] transition-colors bg-white text-navy-900 placeholder:text-slate-400 placeholder:font-normal placeholder:opacity-100 ${
                   errors[field.name] ? 'border-red-400 bg-red-50/30' : 'border-slate-300 focus:border-orange-500'
                 } focus:outline-none focus:ring-1 focus:ring-orange-500`}
               />
@@ -730,7 +701,7 @@ export default function EnquiryForm({
                       style={{ color: !value ? '#94A3B8' : '#0B1F3A' }}
                       aria-invalid={!!fieldError}
                       aria-describedby={fieldError ? `${formUid}-${field.name}-err` : undefined}
-                      className={`w-full px-3 text-[13.5px] rounded-xl border h-[38px] sm:h-[40px] transition-colors bg-white appearance-none pr-8 cursor-pointer ${
+                      className={`w-full px-3 text-base sm:text-[13.5px] rounded-xl border h-[40px] sm:h-[40px] transition-colors bg-white appearance-none pr-8 cursor-pointer ${
                         !value ? 'text-[#94A3B8]' : 'text-[#0B1F3A] font-normal'
                       } ${
                         fieldError ? 'border-red-400 bg-red-50/30' : 'border-slate-300 focus:border-orange-500'
@@ -762,7 +733,7 @@ export default function EnquiryForm({
                     onChange={(e) => handleServiceFieldChange(field.name, e.target.value)}
                     aria-invalid={!!fieldError}
                     aria-describedby={fieldError ? `${formUid}-${field.name}-err` : undefined}
-                    className={`w-full px-3 py-1.5 text-[13.5px] rounded-xl border h-[48px] sm:h-[50px] resize-none transition-colors leading-snug bg-white text-navy-900 placeholder:text-slate-400 placeholder:font-normal placeholder:opacity-100 ${
+                    className={`w-full px-3 py-1.5 text-base sm:text-[13.5px] rounded-xl border min-h-[48px] sm:h-[50px] resize-none transition-colors leading-snug bg-white text-navy-900 placeholder:text-slate-400 placeholder:font-normal placeholder:opacity-100 ${
                       fieldError ? 'border-red-400 bg-red-50/30' : 'border-slate-300 focus:border-orange-500'
                     } focus:outline-none focus:ring-1 focus:ring-orange-500`}
                   />
@@ -776,7 +747,7 @@ export default function EnquiryForm({
                     onChange={(e) => handleServiceFieldChange(field.name, e.target.value)}
                     aria-invalid={!!fieldError}
                     aria-describedby={fieldError ? `${formUid}-${field.name}-err` : undefined}
-                    className={`w-full px-3 text-[13.5px] rounded-xl border h-[38px] sm:h-[40px] transition-colors bg-white text-navy-900 placeholder:text-slate-400 placeholder:font-normal placeholder:opacity-100 ${
+                    className={`w-full px-3 text-base sm:text-[13.5px] rounded-xl border h-[40px] sm:h-[40px] transition-colors bg-white text-navy-900 placeholder:text-slate-400 placeholder:font-normal placeholder:opacity-100 ${
                       fieldError ? 'border-red-400 bg-red-50/30' : 'border-slate-300 focus:border-orange-500'
                     } focus:outline-none focus:ring-1 focus:ring-orange-500`}
                   />

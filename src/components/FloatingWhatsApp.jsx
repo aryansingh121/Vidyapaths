@@ -5,7 +5,7 @@ import { siteConfig } from '../data/siteData';
 export default function FloatingWhatsApp() {
   const [showTooltip, setShowTooltip] = useState(true);
 
-  const cleanNumber = siteConfig.phoneRaw.replace(/[^0-9]/g, '');
+  const cleanNumber = (siteConfig.whatsappNumber || siteConfig.phoneRaw).replace(/[^0-9]/g, '');
   const encodedMsg = encodeURIComponent(siteConfig.whatsappMessage);
   const whatsappUrl = `https://wa.me/${cleanNumber}?text=${encodedMsg}`;
 

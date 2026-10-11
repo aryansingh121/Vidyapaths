@@ -15,7 +15,7 @@ import { InstagramIcon, LinkedinIcon, FacebookIcon, YoutubeIcon } from '../compo
 import { siteConfig } from '../data/siteData';
 
 export default function Contact() {
-  const cleanNumber = siteConfig.phoneRaw.replace(/[^0-9]/g, '');
+  const cleanNumber = (siteConfig.whatsappNumber || siteConfig.phoneRaw).replace(/[^0-9]/g, '');
   const encodedMsg = encodeURIComponent(siteConfig.whatsappMessage);
   const whatsappUrl = `https://wa.me/${cleanNumber}?text=${encodedMsg}`;
 

@@ -7,13 +7,13 @@ export const siteConfig = {
   tagline: "Right Guidance. Brighter Future.",
   shortDescription: "Student-focused Career & Education Consultancy helping you make confident decisions about colleges, careers, internships, and global education.",
   
-  // Client contact tokens (client to confirm exact production values)
-  phone: "+91 98765 43210",
-  phoneRaw: "+919876543210",
-  whatsappNumber: "+919876543210",
-  whatsappMessage: "Hi Vidyapaths, I would like to get free counselling guidance for my education & career.",
-  email: "admissions@vidyapaths.com",
-  formSubmitEmail: "admissions@vidyapaths.com",
+  // Official Client contact details
+  phone: "+91 8252332061",
+  phoneRaw: "+918252332061",
+  whatsappNumber: "918252332061",
+  whatsappMessage: "Hello Vidyapaths, I would like guidance regarding admissions and career opportunities.",
+  email: "Vidyapaths@gmail.com",
+  formSubmitEmail: "Vidyapaths@gmail.com",
   address: "Knowledge Park, Sector 62, Noida, Uttar Pradesh 201309, India",
   hours: "Mon - Sat: 9:30 AM - 6:30 PM",
 

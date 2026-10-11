@@ -1,5 +1,4 @@
 import React, { useState, useMemo } from 'react';
-import SectionHeading from '../components/SectionHeading';
 import FinalCTA from '../sections/FinalCTA';
 import { 
   collegesData, 
@@ -260,7 +259,7 @@ export default function Colleges({ onOpenEnquiry }) {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search by college name, university, or program (e.g. SRCC, BTech, Economics, AIIMS, Nursing)..."
-                className="w-full pl-11 pr-10 py-3.5 rounded-xl border border-slate-300 focus:border-orange-500 focus:ring-1 focus:ring-orange-500 text-sm bg-white text-navy-900 placeholder:text-slate-400 placeholder:font-normal placeholder:opacity-100 transition-all shadow-xs min-h-[48px]"
+                className="w-full pl-11 pr-10 py-3.5 rounded-xl border border-slate-300 focus:border-orange-500 focus:ring-1 focus:ring-orange-500 text-base md:text-sm bg-white text-navy-900 placeholder:text-slate-400 placeholder:font-normal placeholder:opacity-100 transition-all shadow-xs min-h-[48px]"
                 aria-label="Search college directory"
               />
               {searchQuery && (

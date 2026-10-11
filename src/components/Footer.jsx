@@ -34,7 +34,7 @@ export default function Footer({ onOpenEnquiry }) {
     { name: "Singapore", id: "singapore" }
   ];
 
-  const cleanWhatsappNumber = siteConfig.phoneRaw.replace(/[^0-9]/g, '');
+  const cleanWhatsappNumber = (siteConfig.whatsappNumber || siteConfig.phoneRaw).replace(/[^0-9]/g, '');
   const encodedWhatsappMsg = encodeURIComponent(siteConfig.whatsappMessage);
 
   return (
