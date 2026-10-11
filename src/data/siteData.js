@@ -1,19 +1,22 @@
 /**
- * Vidyapaths Website Configuration
- * Single source of contact tokens. Replace placeholder values with client-verified credentials upon handover.
+ * siteData.js
+ * Centralized site metadata and contact configuration.
+ * Powered by validated environment configs with safe defaults.
  */
+import { env } from '../config/env';
+
 export const siteConfig = {
   name: "Vidyapaths",
   tagline: "Right Guidance. Brighter Future.",
   shortDescription: "Student-focused Career & Education Consultancy helping you make confident decisions about colleges, careers, internships, and global education.",
   
-  // Official Client contact details
-  phone: "+91 8252332061",
-  phoneRaw: "+918252332061",
-  whatsappNumber: "918252332061",
+  // Official Client contact details linked to environment
+  phone: env.CONTACT_PHONE,
+  phoneRaw: env.CONTACT_PHONE_RAW,
+  whatsappNumber: env.WHATSAPP_NUMBER,
   whatsappMessage: "Hello Vidyapaths, I would like guidance regarding admissions and career opportunities.",
-  email: "Vidyapaths@gmail.com",
-  formSubmitEmail: "Vidyapaths@gmail.com",
+  email: env.CONTACT_EMAIL,
+  formSubmitEmail: env.FORM_SUBMIT_EMAIL,
   address: "Knowledge Park, Sector 62, Noida, Uttar Pradesh 201309, India",
   hours: "Mon - Sat: 9:30 AM - 6:30 PM",
 
@@ -24,3 +27,5 @@ export const siteConfig = {
     youtube: "https://youtube.com/@vidyapaths"
   }
 };
+
+export default siteConfig;

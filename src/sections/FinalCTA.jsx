@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowRight, MessageCircle, PhoneCall, Sparkles } from 'lucide-react';
+import { ArrowRight, MessageCircle, Sparkles } from 'lucide-react';
 import { siteConfig } from '../data/siteData';
 
 export default function FinalCTA({ onOpenEnquiry }) {

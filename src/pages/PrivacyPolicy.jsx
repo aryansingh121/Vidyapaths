@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Shield, ArrowLeft, Mail, Phone, Lock, CheckCircle2 } from 'lucide-react';
+import { Shield, ArrowLeft, Lock } from 'lucide-react';
 import { siteConfig } from '../data/siteData';
 
 export default function PrivacyPolicy() {

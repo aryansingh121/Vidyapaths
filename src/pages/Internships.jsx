@@ -2,17 +2,7 @@ import React from 'react';
 import SectionHeading from '../components/SectionHeading';
 import FinalCTA from '../sections/FinalCTA';
 import InternshipSection from '../sections/InternshipSection';
-import { 
-  Briefcase, 
-  FileCheck, 
-  Users, 
-  Target, 
-  Compass, 
-  ArrowRight,
-  ShieldCheck,
-  CheckCircle2,
-  Sparkles
-} from 'lucide-react';
+import { ArrowRight, ShieldCheck, CheckCircle2 } from 'lucide-react';
 
 export default function Internships({ onOpenEnquiry }) {
   const roadmapSteps = [

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import SectionHeading from '../components/SectionHeading';
 import CountryFlag from '../components/CountryFlag';
 import { countriesData } from '../data/countriesData';
-import { Globe, Plane, Award, ArrowRight, ShieldCheck, CheckCircle2 } from 'lucide-react';
+import { Plane, Award, ArrowRight, ShieldCheck } from 'lucide-react';
 
 export default function StudyAbroadSection({ onOpenEnquiry }) {
   return (

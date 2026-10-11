@@ -1,15 +1,11 @@
 import React from 'react';
-import SectionHeading from '../components/SectionHeading';
 import EnquiryForm from '../components/EnquiryForm';
 import { 
   Phone, 
   Mail, 
   MapPin, 
   Clock, 
-  MessageCircle, 
-  ShieldCheck,
-  CheckCircle2,
-  Sparkles
+  MessageCircle 
 } from 'lucide-react';
 import { InstagramIcon, LinkedinIcon, FacebookIcon, YoutubeIcon } from '../components/SocialIcons';
 import { siteConfig } from '../data/siteData';

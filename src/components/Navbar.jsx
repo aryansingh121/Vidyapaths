@@ -30,10 +30,13 @@ export default function Navbar({ onOpenEnquiry }) {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  const [prevPathname, setPrevPathname] = useState(location.pathname);
+
   // Ensure mobile menu closes on route change
-  useEffect(() => {
+  if (location.pathname !== prevPathname) {
+    setPrevPathname(location.pathname);
     setIsOpen(false);
-  }, [location.pathname]);
+  }
 
   const navLinks = [
     { name: 'Home', path: '/', icon: Home },

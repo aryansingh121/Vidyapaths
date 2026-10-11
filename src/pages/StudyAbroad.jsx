@@ -1,22 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
 import SectionHeading from '../components/SectionHeading';
 import FinalCTA from '../sections/FinalCTA';
 import CountryFlag from '../components/CountryFlag';
 import { countriesData } from '../data/countriesData';
-import { 
-  Globe, 
-  Plane, 
-  FileCheck, 
-  GraduationCap, 
-  ShieldCheck, 
-  ArrowRight, 
-  Calendar, 
-  Briefcase, 
-  CheckCircle2 
-} from 'lucide-react';
+import { ArrowRight, Calendar } from 'lucide-react';
 
 export default function StudyAbroad({ onOpenEnquiry }) {
-  const [selectedCountry, setSelectedCountry] = useState(countriesData[0]);
 
   const processSteps = [
     {

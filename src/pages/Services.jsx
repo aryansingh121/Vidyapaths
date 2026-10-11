@@ -1,5 +1,4 @@
 import React from 'react';
-import SectionHeading from '../components/SectionHeading';
 import FinalCTA from '../sections/FinalCTA';
 import { servicesData } from '../data/servicesData';
 import { 

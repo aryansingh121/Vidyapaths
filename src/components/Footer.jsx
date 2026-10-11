@@ -3,9 +3,11 @@ import { Link, useLocation } from 'react-router-dom';
 import { Compass, Phone, Mail, MapPin, Clock, ArrowUpRight, MessageCircle } from 'lucide-react';
 import { siteConfig } from '../data/siteData';
 
+const CURRENT_YEAR = new Date().getFullYear();
+
 export default function Footer({ onOpenEnquiry }) {
   const location = useLocation();
-  const currentYear = new Date().getFullYear();
+  const currentYear = CURRENT_YEAR;
 
   const handleNavClick = (targetPath) => {
     if (location.pathname === targetPath) {

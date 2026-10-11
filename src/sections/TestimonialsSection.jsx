@@ -1,8 +1,8 @@
 import React from 'react';
 import SectionHeading from '../components/SectionHeading';
-import { Quote, Star, CheckCircle2, ShieldCheck, HeartHandshake } from 'lucide-react';
+import { Quote, Star, CheckCircle2, ShieldCheck } from 'lucide-react';
 
-export default function TestimonialsSection({ onOpenEnquiry }) {
+export default function TestimonialsSection() {
   // Student Guidance Highlights (Advisory outcomes based on client counseling records)
   const guidanceStories = [
     {

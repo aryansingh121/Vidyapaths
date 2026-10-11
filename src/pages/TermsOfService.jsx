@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { FileText, ArrowLeft, ShieldAlert, CheckCircle2 } from 'lucide-react';
+import { FileText, ArrowLeft, ShieldAlert } from 'lucide-react';
 import { siteConfig } from '../data/siteData';
 
 export default function TermsOfService() {

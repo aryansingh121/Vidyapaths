@@ -1,9 +1,8 @@
 import React from 'react';
-import { Target, Eye, Sparkles, HeartHandshake, ShieldCheck, ArrowRight, Compass } from 'lucide-react';
+import { Target, Eye } from 'lucide-react';
 import SectionHeading from '../components/SectionHeading';
 import WhyVidyapaths from '../sections/WhyVidyapaths';
 import FinalCTA from '../sections/FinalCTA';
-import { siteConfig } from '../data/siteData';
 
 export default function About({ onOpenEnquiry }) {
   return (

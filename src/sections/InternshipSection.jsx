@@ -1,6 +1,5 @@
 import React from 'react';
-import SectionHeading from '../components/SectionHeading';
-import { Briefcase, FileCheck, Users, Target, ArrowRight, CheckCircle2, Award } from 'lucide-react';
+import { FileCheck, Users, Target, ArrowRight, CheckCircle2, Award } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 export default function InternshipSection({ onOpenEnquiry }) {

@@ -54,33 +54,83 @@ flowchart TD
 
 ---
 
-## 3. Component Hierarchy & Application Shell
+## 3. Layered Architectural Model
 
-The application root (`src/App.jsx`) wraps the application shell in `BrowserRouter`:
+```mermaid
+flowchart TD
+    subgraph UI Layer [UI & Presentation Layer]
+        ErrorBoundary[React ErrorBoundary] --> Router[React Router DOM v7]
+        Router --> Layout[Global App Shell]
+        Layout --> Nav[Sticky Navbar]
+        Layout --> Routes[Route Views]
+        Layout --> Footer[Global Footer]
+        Layout --> Floating[Floating WhatsApp]
+        Layout --> Modal[EnquiryModal]
+    end
+
+    subgraph State Layer [State Management Layer]
+        EnquiryProvider[EnquiryProvider Context]
+        useEnquiry[useEnquiry Hook]
+        useEnquiryForm[useEnquiryForm Hook]
+    end
+
+    subgraph Business Layer [Business Logic & Mapping]
+        ServiceMapper[serviceMapper.js]
+        Validation[validation.js]
+        Formatting[formatting.js]
+    end
+
+    subgraph Service Layer [Services & Scalable API Layer]
+        ApiClient[apiClient.js (Fetch + Abort Timeout)]
+        EnquiryService[enquiryService.js]
+        StorageService[storageService.js (SafeStorage + Quota Fallback)]
+    end
+
+    subgraph Config Layer [Configuration Layer]
+        EnvConfig[env.js (Validated Environment)]
+        SiteConfig[siteData.js]
+    end
+
+    Routes --> useEnquiry
+    Modal --> useEnquiry
+    Modal --> useEnquiryForm
+    useEnquiryForm --> ServiceMapper
+    useEnquiryForm --> Validation
+    useEnquiryForm --> EnquiryService
+    EnquiryService --> ApiClient
+    EnquiryService --> StorageService
+    ApiClient --> EnvConfig
+    SiteConfig --> EnvConfig
+```
+
+---
+
+## 4. Component Hierarchy & Application Shell
+
+The application root (`src/App.jsx`) wraps the application shell in `ErrorBoundary`, `Router`, and `EnquiryProvider`:
 
 ```
 App
-├── ScrollToTop (Route & Hash change watcher, 90px sticky header offset)
-├── Navbar (Sticky navigation, mobile drawer state, global CTA)
-├── Main Content Container (<Routes>)
-│   ├── Route: / (Home)
-│   ├── Route: /about (About)
-│   ├── Route: /services (Services)
-│   ├── Route: /colleges (Colleges)
-│   ├── Route: /study-abroad (StudyAbroad)
-│   ├── Route: /internships (Internships)
-│   ├── Route: /internships-admissions (Alias -> Internships)
-│   ├── Route: /contact (Contact)
-│   ├── Route: /privacy-policy (PrivacyPolicy)
-│   ├── Route: /privacy (Alias -> PrivacyPolicy)
-│   ├── Route: /terms-of-service (TermsOfService)
-│   ├── Route: /terms (Alias -> TermsOfService)
-│   └── Route: * (Catch-all Fallback -> Home)
-├── Footer (Brand links, service menu, contact coordinates, copyright)
-├── WhatsAppButton (Floating persistent quick-chat trigger)
-└── Global Modal Layer
-    ├── EnquiryModal (Controlled by App/Page state, renders EnquiryForm)
-    └── CollegeComparisonModal (Controlled by Colleges page, renders ComparisonRequestForm)
+├── ErrorBoundary (Catches uncaught render crashes with user recovery action)
+├── Router (React Router DOM v7)
+│   └── EnquiryProvider (Global state for lead modal lifecycle & active service selection)
+│       └── AppContent
+│           ├── ScrollToTop (Route & Hash change watcher, 90px sticky header offset)
+│           ├── Navbar (Sticky navigation, mobile drawer state, global CTA)
+│           ├── Main Content Container (<Routes>)
+│           │   ├── Route: / (Home)
+│           │   ├── Route: /about (About)
+│           │   ├── Route: /services (Services)
+│           │   ├── Route: /colleges (Colleges)
+│           │   ├── Route: /study-abroad (StudyAbroad)
+│           │   ├── Route: /internships (Internships)
+│           │   ├── Route: /contact (Contact)
+│           │   ├── Route: /privacy-policy (PrivacyPolicy)
+│           │   ├── Route: /terms-of-service (TermsOfService)
+│           │   └── Route: * (Catch-all Fallback -> Home)
+│           ├── Footer (Brand links, service menu, contact coordinates, copyright)
+│           ├── FloatingWhatsApp (Floating persistent quick-chat trigger)
+│           └── EnquiryModal (Connected to EnquiryContext, renders modular EnquiryForm)
 ```
 
 ---

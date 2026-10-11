@@ -2,9 +2,7 @@ import React, { useState } from 'react';
 import SectionHeading from '../components/SectionHeading';
 import { coursesData } from '../data/coursesData';
 import { 
-  GraduationCap, 
   ArrowRight, 
-  Check, 
   Clock, 
   TrendingUp, 
   Cpu, 

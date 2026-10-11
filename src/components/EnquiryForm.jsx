@@ -1,11 +1,17 @@
-import React, { useState, useEffect, useId } from 'react';
+/**
+ * EnquiryForm.jsx
+ * Modular, accessible multi-track enquiry form.
+ * Decoupled from direct HTTP fetch and validation logic via useEnquiryForm hook and enquiryService.
+ */
+import React, { useState, useId } from 'react';
 import { Send, CheckCircle, AlertCircle, MessageSquare, Sparkles, ChevronDown } from 'lucide-react';
 import { siteConfig } from '../data/siteData';
 import { 
   SHARED_FIELDS, 
-  SERVICE_FORM_CONFIGS, 
-  getServiceConfig 
+  SERVICE_FORM_CONFIGS 
 } from '../data/serviceFormConfigs';
+import { resolveServiceAndPrefill } from '../utils/serviceMapper';
+import { useEnquiryForm } from '../hooks/useEnquiryForm';
 import ServiceSelector from './ServiceSelector';
 
 export default function EnquiryForm({ 
@@ -18,470 +24,62 @@ export default function EnquiryForm({
 }) {
   const formUid = useId();
 
-  // Active Service State
-  const [currentServiceId, setCurrentServiceId] = useState(() => {
-    if (propActiveServiceId && SERVICE_FORM_CONFIGS[propActiveServiceId]) {
-      return propActiveServiceId;
-    }
-    return getServiceConfig(defaultService).id;
-  });
+  // Resolve initial service configuration safely
+  const initialResolved = resolveServiceAndPrefill(propActiveServiceId || defaultService, { initialValues });
+  const [internalServiceId, setInternalServiceId] = useState(initialResolved.serviceId);
 
-  // Sync when propActiveServiceId or defaultService changes
-  useEffect(() => {
-    if (propActiveServiceId) {
-      const resolved = getServiceConfig(propActiveServiceId);
-      setCurrentServiceId(resolved.id);
-      setErrors({});
-      setSubmitError('');
-    } else if (defaultService) {
-      const resolved = getServiceConfig(defaultService);
-      setCurrentServiceId(resolved.id);
-      setErrors({});
-      setSubmitError('');
-    }
-  }, [propActiveServiceId, defaultService]);
+  const currentServiceId = propActiveServiceId && SERVICE_FORM_CONFIGS[propActiveServiceId]
+    ? propActiveServiceId
+    : internalServiceId;
 
   const activeConfig = SERVICE_FORM_CONFIGS[currentServiceId] || SERVICE_FORM_CONFIGS['college-admissions'];
 
-  // Shared contact fields across all forms
-  const [sharedData, setSharedData] = useState({
-    fullName: '',
-    mobileNumber: '',
-    email: '',
-    currentCity: ''
+  // Merged prefill values
+  const mergedInitialValues = {
+    ...initialResolved.initialValues,
+    ...initialValues
+  };
+
+  // Business logic hook
+  const {
+    sharedData,
+    serviceFields,
+    errors,
+    isSubmitting,
+    submitSuccess,
+    submitError,
+    handleSharedChange,
+    handleFieldChange,
+    handleCheckboxToggle,
+    handleSubmit,
+    resetForm
+  } = useEnquiryForm({
+    activeServiceId: currentServiceId,
+    activeConfig,
+    initialValues: mergedInitialValues,
+    source
   });
 
-  // Service-specific field states (isolated by service ID to prevent stale cross-service submission)
-  const [serviceFields, setServiceFields] = useState(() => {
-    const base = {
-      'college-admissions': {},
-      'career-counselling': {},
-      'internship-assistance': {},
-      'study-abroad': {},
-      'resume-interview': {},
-      'scholarships-loans': {},
-      'career-roadmap': {
-        guidanceNeeds: []
-      },
-      'college-comparison': {
-        comparisonPriorities: []
-      }
-    };
-    if (initialValues && Object.keys(initialValues).length > 0) {
-      base['college-admissions'] = {
-        preferredCourse: initialValues.preferredCourse || '',
-        preferredCollege: initialValues.preferredCollege || initialValues.college || '',
-        ...initialValues
-      };
-      base['college-comparison'] = {
-        ...base['college-comparison'],
-        ...initialValues
-      };
-      if (initialValues.intendedCountries || initialValues.country) {
-        base['study-abroad'] = {
-          ...base['study-abroad'],
-          intendedCountries: initialValues.intendedCountries || initialValues.country,
-          ...initialValues
-        };
-      }
-      if (initialValues.preferredDomain || initialValues.domain) {
-        base['internship-assistance'] = {
-          ...base['internship-assistance'],
-          preferredDomain: initialValues.preferredDomain || initialValues.domain,
-          ...initialValues
-        };
-      }
-    }
-    return base;
-  });
-
-  // Sync when initialValues prop updates
-  useEffect(() => {
-    if (initialValues && Object.keys(initialValues).length > 0) {
-      setServiceFields(prev => ({
-        ...prev,
-        'college-admissions': {
-          ...prev['college-admissions'],
-          preferredCourse: initialValues.preferredCourse !== undefined 
-            ? initialValues.preferredCourse 
-            : (initialValues.preferredCollege || initialValues.college ? '' : (prev['college-admissions']?.preferredCourse || '')),
-          preferredCollege: initialValues.preferredCollege !== undefined 
-            ? initialValues.preferredCollege 
-            : (initialValues.college !== undefined 
-                ? initialValues.college 
-                : (prev['college-admissions']?.preferredCollege || '')),
-          ...initialValues
-        },
-        'college-comparison': {
-          ...prev['college-comparison'],
-          ...initialValues
-        },
-        'study-abroad': {
-          ...prev['study-abroad'],
-          ...(initialValues.intendedCountries || initialValues.country
-            ? { intendedCountries: initialValues.intendedCountries || initialValues.country }
-            : {}),
-          ...initialValues
-        },
-        'internship-assistance': {
-          ...prev['internship-assistance'],
-          ...(initialValues.preferredDomain || initialValues.domain
-            ? { preferredDomain: initialValues.preferredDomain || initialValues.domain }
-            : {}),
-          ...initialValues
-        }
-      }));
-      if (initialValues.preferredDomain || initialValues.domain) {
-        setErrors(prev => {
-          if (prev.preferredDomain) {
-            const next = { ...prev };
-            delete next.preferredDomain;
-            return next;
-          }
-          return prev;
-        });
-      }
-      if (initialValues.preferredCourse) {
-        setErrors(prev => {
-          if (prev.preferredCourse) {
-            const next = { ...prev };
-            delete next.preferredCourse;
-            return next;
-          }
-          return prev;
-        });
-      }
-    }
-  }, [initialValues]);
-
-  // Prefill specific prompts
-  useEffect(() => {
-    if (defaultService) {
-      if (defaultService.startsWith('Admission Guidance for ')) {
-        const courseName = defaultService.replace('Admission Guidance for ', '').trim();
-        setServiceFields(prev => ({
-          ...prev,
-          'college-admissions': {
-            ...prev['college-admissions'],
-            preferredCourse: courseName
-          }
-        }));
-      } else if (defaultService.startsWith('Colleges in ')) {
-        const domainName = defaultService.replace('Colleges in ', '').trim();
-        setServiceFields(prev => ({
-          ...prev,
-          'college-admissions': {
-            ...prev['college-admissions'],
-            preferredCourse: domainName
-          }
-        }));
-      } else if (defaultService.startsWith('Admission Guidance - ')) {
-        const collegeName = defaultService.replace('Admission Guidance - ', '').trim();
-        setServiceFields(prev => ({
-          ...prev,
-          'college-admissions': {
-            ...prev['college-admissions'],
-            preferredCollege: collegeName,
-            preferredCourse: '',
-            message: prev['college-admissions'].message || `Seeking admission guidance for ${collegeName}.`
-          },
-          'college-comparison': {
-            ...prev['college-comparison'],
-            preferredCollege1: collegeName
-          }
-        }));
-      } else if (defaultService.startsWith('College Comparison Request - ')) {
-        const item = defaultService.replace('College Comparison Request - ', '').trim();
-        setServiceFields(prev => ({
-          ...prev,
-          'college-comparison': {
-            ...prev['college-comparison'],
-            preferredCollege1: item
-          }
-        }));
-      } else if (defaultService.startsWith('Admission Guidance: ')) {
-        const details = defaultService.replace('Admission Guidance: ', '').trim();
-        let courseName = '';
-        let collegeName = '';
-        if (details.includes(' at ')) {
-          const parts = details.split(' at ');
-          courseName = parts[0].trim();
-          collegeName = parts[1].trim();
-        }
-        setServiceFields(prev => ({
-          ...prev,
-          'college-admissions': {
-            ...prev['college-admissions'],
-            ...(courseName ? { preferredCourse: courseName } : {}),
-            ...(collegeName ? { preferredCollege: collegeName } : {}),
-            message: prev['college-admissions'].message || `Seeking guidance for ${details}.`
-          }
-        }));
-        if (courseName) {
-          setErrors(prev => {
-            if (prev.preferredCourse) {
-              const next = { ...prev };
-              delete next.preferredCourse;
-              return next;
-            }
-            return prev;
-          });
-        }
-      } else if (defaultService.startsWith('Study Abroad - ') || defaultService.startsWith('Study Abroad Counselling for ')) {
-        const countryName = defaultService
-          .replace('Study Abroad - ', '')
-          .replace('Study Abroad Counselling for ', '')
-          .trim();
-        setServiceFields(prev => ({
-          ...prev,
-          'study-abroad': {
-            ...prev['study-abroad'],
-            intendedCountries: countryName
-          }
-        }));
-      } else if (defaultService.startsWith('Internship in ')) {
-        const domain = defaultService.replace('Internship in ', '').trim();
-        setServiceFields(prev => ({
-          ...prev,
-          'internship-assistance': {
-            ...prev['internship-assistance'],
-            preferredDomain: domain
-          }
-        }));
-        setErrors(prev => {
-          if (prev.preferredDomain) {
-            const next = { ...prev };
-            delete next.preferredDomain;
-            return next;
-          }
-          return prev;
-        });
-      }
-    }
-  }, [defaultService]);
-
-  const [errors, setErrors] = useState({});
-  const [submitted, setSubmitted] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitError, setSubmitError] = useState('');
-
-  // Handle switching service category
-  const handleServiceSelect = (newServiceId) => {
-    setCurrentServiceId(newServiceId);
+  const handleServiceSelect = (newId) => {
+    setInternalServiceId(newId);
     if (onServiceChange) {
-      onServiceChange(newServiceId);
+      onServiceChange(newId);
     }
-    setErrors({});
-    if (submitError) setSubmitError('');
-  };
-
-  // Shared fields change handler
-  const handleSharedChange = (e) => {
-    const { name, value } = e.target;
-    setSharedData(prev => ({ ...prev, [name]: value }));
-    if (errors[name]) {
-      setErrors(prev => ({ ...prev, [name]: '' }));
-    }
-    if (submitError) setSubmitError('');
-  };
-
-  // Service-specific field change handler
-  const handleServiceFieldChange = (name, value) => {
-    setServiceFields(prev => ({
-      ...prev,
-      [currentServiceId]: {
-        ...prev[currentServiceId],
-        [name]: value
-      }
-    }));
-    if (errors[name]) {
-      setErrors(prev => ({ ...prev, [name]: '' }));
-    }
-    if (submitError) setSubmitError('');
-  };
-
-  // Field validation
-  const validate = () => {
-    const newErrors = {};
-
-    // 1. Shared fields validation
-    if (!sharedData.fullName.trim()) {
-      newErrors.fullName = 'Full Name is required';
-    }
-
-    if (!sharedData.mobileNumber.trim()) {
-      newErrors.mobileNumber = 'Mobile number is required';
-    } else if (!/^[0-9+\s\-()]{10,15}$/.test(sharedData.mobileNumber.trim())) {
-      newErrors.mobileNumber = 'Enter a valid 10-digit mobile number';
-    }
-
-    if (!sharedData.email.trim()) {
-      newErrors.email = 'Email address is required';
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(sharedData.email.trim())) {
-      newErrors.email = 'Enter a valid email address';
-    }
-
-    if (!sharedData.currentCity.trim()) {
-      newErrors.currentCity = 'Current City is required';
-    }
-
-    // 2. Active service fields validation
-    const currentValues = serviceFields[currentServiceId] || {};
-    activeConfig.fields.forEach(field => {
-      const val = currentValues[field.name];
-
-      if (field.required) {
-        if (field.type === 'checkbox-group') {
-          if (!val || !Array.isArray(val) || val.length === 0) {
-            newErrors[field.name] = field.errorMessage || 'Please select at least one option';
-          }
-        } else if (!val || (typeof val === 'string' && !val.trim())) {
-          newErrors[field.name] = field.errorMessage || `${field.label} is required`;
-        }
-      }
-
-      // URL validation when non-empty
-      if (field.type === 'url' && val && val.trim()) {
-        const trimmed = val.trim();
-        if (!/^https?:\/\/.+/i.test(trimmed)) {
-          newErrors[field.name] = field.errorMessage || 'Please enter a valid URL (http:// or https://)';
-        }
-      }
-    });
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!validate()) {
-      return;
-    }
-
-    setIsSubmitting(true);
-    setSubmitError('');
-
-    const currentValues = serviceFields[currentServiceId] || {};
-    const isCareerRoadmap = currentServiceId === 'career-roadmap';
-    const isCollegeComparison = currentServiceId === 'college-comparison';
-
-    let effectiveSource = source;
-    if (isCareerRoadmap) {
-      effectiveSource = 'Career Roadmap Consultation CTA';
-    } else if (isCollegeComparison) {
-      effectiveSource = 'College Comparison Request CTA';
-    }
-
-    const leadRecord = {
-      serviceId: currentServiceId,
-      serviceName: activeConfig.displayName,
-      source: effectiveSource,
-      fullName: sharedData.fullName.trim(),
-      mobileNumber: sharedData.mobileNumber.trim(),
-      email: sharedData.email.trim(),
-      currentCity: sharedData.currentCity.trim(),
-      ...currentValues,
-      timestamp: new Date().toISOString()
-    };
-
-    // Save lead to local storage backup
-    try {
-      const storedLeads = JSON.parse(localStorage.getItem('vidyapaths_leads') || '[]');
-      storedLeads.push(leadRecord);
-      localStorage.setItem('vidyapaths_leads', JSON.stringify(storedLeads));
-    } catch {
-      // LocalStorage access handling
-    }
-
-    const SERVICE_SUBJECT_MAP = {
-      'college-admissions': 'New College Admission Enquiry — Vidyapaths',
-      'career-counselling': 'New Career Counselling Enquiry — Vidyapaths',
-      'career-roadmap': 'New Career Roadmap Consultation — Vidyapaths',
-      'internship-assistance': 'New Internship Enquiry — Vidyapaths',
-      'study-abroad': 'New Study Abroad Enquiry — Vidyapaths',
-      'college-comparison': 'New College Comparison Request — Vidyapaths',
-      'resume-interview': 'New Resume & Interview Support Enquiry — Vidyapaths',
-      'scholarships-loans': 'New Scholarship & Education Loan Enquiry — Vidyapaths'
-    };
-
-    const emailSubject = SERVICE_SUBJECT_MAP[currentServiceId] || 
-      (activeConfig.emailSubject || `New ${activeConfig.displayName} Enquiry — Vidyapaths`);
-
-    // Clean, formatted email payload containing strictly relevant fields
-    const emailBody = {
-      _subject: emailSubject,
-      _template: 'table',
-      _captcha: 'false',
-      _replyto: sharedData.email.trim(),
-      'Enquiry Type': activeConfig.displayName,
-      'Service ID': currentServiceId,
-      'Student Name': sharedData.fullName.trim(),
-      'Mobile Number': sharedData.mobileNumber.trim(),
-      'Email Address': sharedData.email.trim(),
-      'Current City': sharedData.currentCity.trim(),
-      'Source Page / Trigger': effectiveSource,
-      'Submission Date': new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })
-    };
-
-    // Add strictly the fields defined for the selected service
-    activeConfig.fields.forEach(field => {
-      const rawVal = currentValues[field.name];
-      if (rawVal !== undefined && rawVal !== null && rawVal !== '') {
-        const formattedVal = Array.isArray(rawVal) ? rawVal.join(', ') : String(rawVal).trim();
-        if (formattedVal) {
-          emailBody[field.label] = formattedVal;
-        }
-      }
-    });
-
-    try {
-      const recipientEmail = (siteConfig.formSubmitEmail || siteConfig.email || 'Vidyapaths@gmail.com').trim();
-      const response = await fetch(`https://formsubmit.co/ajax/${recipientEmail}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        },
-        body: JSON.stringify(emailBody)
-      });
-
-      let resData = null;
-      try {
-        resData = await response.json();
-      } catch {
-        // Non-JSON response handling
-      }
-
-      if (!response.ok) {
-        const errMessage = resData?.message || 'Unable to send consultation request right now. Please try again or reach out on WhatsApp.';
-        throw new Error(errMessage);
-      }
-    } catch (err) {
-      setIsSubmitting(false);
-      setSubmitError(err.message || 'Submission failed. Please try again.');
-      return;
-    }
-
-    setIsSubmitting(false);
-    setSubmitted(true);
   };
 
   const openWhatsAppWithData = () => {
     let text = `Hi Vidyapaths! I submitted an enquiry for ${activeConfig.displayName}.\nName: ${sharedData.fullName}\nCity: ${sharedData.currentCity}\nContact: ${sharedData.mobileNumber}`;
     if (currentServiceId === 'career-roadmap') {
-      const cv = serviceFields['career-roadmap'] || {};
-      text = `Hi Vidyapaths! I requested a Free 15-Minute Career Roadmap Consultation.\nName: ${sharedData.fullName}\nCity: ${sharedData.currentCity}\nEducation: ${cv.currentEducation || ''} (${cv.currentStream || ''})\nMode: ${cv.consultationMode || ''}`;
+      text = `Hi Vidyapaths! I requested a Free 15-Minute Career Roadmap Consultation.\nName: ${sharedData.fullName}\nCity: ${sharedData.currentCity}\nEducation: ${serviceFields.currentEducation || ''} (${serviceFields.currentStream || ''})\nMode: ${serviceFields.consultationMode || ''}`;
     } else if (currentServiceId === 'college-comparison') {
-      const cv = serviceFields['college-comparison'] || {};
-      text = `Hi Vidyapaths! I requested a Free College Comparison Sheet.\nName: ${sharedData.fullName}\nCity: ${sharedData.currentCity}\nCourse: ${cv.preferredCourse || ''}\nLocation: ${cv.preferredStudyLocation || ''}`;
+      text = `Hi Vidyapaths! I requested a Free College Comparison Sheet.\nName: ${sharedData.fullName}\nCity: ${sharedData.currentCity}\nCourse: ${serviceFields.preferredCourse || ''}\nLocation: ${serviceFields.preferredStudyLocation || ''}`;
     }
     const cleanNumber = (siteConfig.whatsappNumber || siteConfig.phoneRaw).replace(/[^0-9]/g, '');
     window.open(`https://wa.me/${cleanNumber}?text=${encodeURIComponent(text)}`, '_blank');
   };
 
   // Confirmation view
-  if (submitted) {
+  if (submitSuccess) {
     return (
       <div className={`text-center animate-in fade-in duration-300 ${isModal ? 'py-6 px-6 sm:px-8 my-auto' : 'bg-white rounded-2xl p-6 sm:p-8 border border-slate-200/80 shadow-sm'}`}>
         <div className="w-14 h-14 bg-emerald-50 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-3">
@@ -520,13 +118,7 @@ export default function EnquiryForm({
             <span>Chat on WhatsApp Now</span>
           </button>
           <button
-            onClick={() => {
-              setSubmitted(false);
-              setServiceFields(prev => ({
-                ...prev,
-                [currentServiceId]: {}
-              }));
-            }}
+            onClick={resetForm}
             className="px-5 py-2.5 rounded-xl text-xs sm:text-sm font-medium text-slate-700 bg-slate-100 hover:bg-slate-200 transition-colors h-[42px] cursor-pointer"
           >
             Submit Another Query
@@ -535,8 +127,6 @@ export default function EnquiryForm({
       </div>
     );
   }
-
-  const currentValues = serviceFields[currentServiceId] || {};
 
   return (
     <form 
@@ -559,10 +149,10 @@ export default function EnquiryForm({
         </div>
       )}
 
-      {/* Form Scrollable Body (Refined 20-24px horizontal and 14-16px vertical padding) */}
+      {/* Form Scrollable Body */}
       <div className={isModal ? "flex-1 overflow-y-auto px-5 sm:px-7 lg:px-8 py-3 sm:py-3.5 space-y-2 box-border" : "space-y-3"}>
         
-        {/* Premium Service Selector or Dedicated Consultation Header */}
+        {/* Service Selector or Banner */}
         {activeConfig.hideServiceSelector ? (
           <div className="flex items-center justify-between bg-orange-50/80 border border-orange-200/80 rounded-xl px-3.5 py-2 mb-2">
             <div className="flex items-center gap-2">
@@ -595,7 +185,7 @@ export default function EnquiryForm({
           </div>
         )}
 
-        {/* Unified Two-Column Grid (Row Gap: 10px, Col Gap: 16px) */}
+        {/* Two-Column Grid for Input Controls */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2 sm:gap-y-2.5">
           
           {/* Row 1 & 2: Shared Contact Fields */}
@@ -612,8 +202,8 @@ export default function EnquiryForm({
                 type={field.type}
                 name={field.name}
                 placeholder={field.placeholder}
-                value={sharedData[field.name]}
-                onChange={handleSharedChange}
+                value={sharedData[field.name] || ''}
+                onChange={(e) => handleSharedChange(field.name, e.target.value)}
                 aria-invalid={!!errors[field.name]}
                 aria-describedby={errors[field.name] ? `${formUid}-${field.name}-err` : undefined}
                 className={`w-full px-3 text-base sm:text-[13.5px] rounded-xl border h-[40px] sm:h-[40px] transition-colors bg-white text-navy-900 placeholder:text-slate-400 placeholder:font-normal placeholder:opacity-100 ${
@@ -628,10 +218,10 @@ export default function EnquiryForm({
             </div>
           ))}
 
-          {/* Row 3 onwards: Service-Specific Fields */}
+          {/* Row 3 onwards: Dynamic Service-Specific Fields */}
           {activeConfig.fields.map((field) => {
             const isFullWidth = field.colSpan === 2 || field.type === 'textarea' || field.type === 'checkbox-group';
-            const value = currentValues[field.name] || '';
+            const value = serviceFields[field.name] || '';
             const fieldError = errors[field.name];
 
             return (
@@ -676,13 +266,7 @@ export default function EnquiryForm({
                               name={field.name}
                               value={opt}
                               checked={isChecked}
-                              onChange={(e) => {
-                                const currentArr = Array.isArray(value) ? [...value] : [];
-                                const updated = e.target.checked
-                                  ? [...currentArr, opt]
-                                  : currentArr.filter(item => item !== opt);
-                                handleServiceFieldChange(field.name, updated);
-                              }}
+                              onChange={() => handleCheckboxToggle(field.name, opt)}
                               className="w-4 h-4 mt-0.5 rounded text-orange-600 focus:ring-orange-500 border-slate-300 cursor-pointer accent-orange-600 shrink-0"
                             />
                             <span className="leading-snug">{opt}</span>
@@ -697,7 +281,7 @@ export default function EnquiryForm({
                       id={`${formUid}-${field.name}`}
                       name={field.name}
                       value={value}
-                      onChange={(e) => handleServiceFieldChange(field.name, e.target.value)}
+                      onChange={(e) => handleFieldChange(field.name, e.target.value)}
                       style={{ color: !value ? '#94A3B8' : '#0B1F3A' }}
                       aria-invalid={!!fieldError}
                       aria-describedby={fieldError ? `${formUid}-${field.name}-err` : undefined}
@@ -730,7 +314,7 @@ export default function EnquiryForm({
                     rows={field.rows || 2}
                     placeholder={field.placeholder}
                     value={value}
-                    onChange={(e) => handleServiceFieldChange(field.name, e.target.value)}
+                    onChange={(e) => handleFieldChange(field.name, e.target.value)}
                     aria-invalid={!!fieldError}
                     aria-describedby={fieldError ? `${formUid}-${field.name}-err` : undefined}
                     className={`w-full px-3 py-1.5 text-base sm:text-[13.5px] rounded-xl border min-h-[48px] sm:h-[50px] resize-none transition-colors leading-snug bg-white text-navy-900 placeholder:text-slate-400 placeholder:font-normal placeholder:opacity-100 ${
@@ -744,7 +328,7 @@ export default function EnquiryForm({
                     type={field.type}
                     placeholder={field.placeholder}
                     value={value}
-                    onChange={(e) => handleServiceFieldChange(field.name, e.target.value)}
+                    onChange={(e) => handleFieldChange(field.name, e.target.value)}
                     aria-invalid={!!fieldError}
                     aria-describedby={fieldError ? `${formUid}-${field.name}-err` : undefined}
                     className={`w-full px-3 text-base sm:text-[13.5px] rounded-xl border h-[40px] sm:h-[40px] transition-colors bg-white text-navy-900 placeholder:text-slate-400 placeholder:font-normal placeholder:opacity-100 ${
@@ -764,7 +348,7 @@ export default function EnquiryForm({
         </div>
       </div>
 
-      {/* Refined Submit Footer (12-14px vertical padding, 42-44px button, 13px privacy note) */}
+      {/* Submit Footer */}
       <div className={isModal 
         ? "shrink-0 border-t border-slate-200/80 bg-slate-50 px-5 sm:px-7 lg:px-8 py-2.5 sm:py-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 box-border" 
         : "pt-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3"
