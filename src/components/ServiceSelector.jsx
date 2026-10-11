@@ -34,16 +34,13 @@ export default function ServiceSelector({
   const activeIndex = SERVICE_OPTIONS.findIndex(opt => opt.id === selectedServiceId);
   const [focusedIndex, setFocusedIndex] = useState(activeIndex >= 0 ? activeIndex : 0);
 
-  const [prevSelectedId, setPrevSelectedId] = useState(selectedServiceId);
-
-  // Sync focused index during render when selected service changes
-  if (selectedServiceId !== prevSelectedId) {
-    setPrevSelectedId(selectedServiceId);
+  // Sync focused index when selected service changes
+  useEffect(() => {
     const idx = SERVICE_OPTIONS.findIndex(opt => opt.id === selectedServiceId);
     if (idx >= 0) {
       setFocusedIndex(idx);
     }
-  }
+  }, [selectedServiceId]);
 
   // Click outside listener
   useEffect(() => {

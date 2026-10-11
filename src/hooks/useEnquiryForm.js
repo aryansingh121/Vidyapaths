@@ -5,7 +5,7 @@
  * - Input change handlers & validation error tracking
  * - Asynchronous submission lifecycle via enquiryService
  */
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { validateEnquiryForm } from '../utils/validation';
 import { submitEnquiry } from '../services/enquiryService';
 
@@ -23,24 +23,22 @@ export function useEnquiryForm({
   source = 'Lead Form'
 }) {
   const [sharedData, setSharedData] = useState(INITIAL_SHARED_STATE);
-  const [serviceFields, setServiceFields] = useState({});
+  const [serviceFields, setServiceFields] = useState(() => ({ ...initialValues }));
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [submitError, setSubmitError] = useState('');
 
-  const [prevInitialValues, setPrevInitialValues] = useState(initialValues);
-
-  // Hydrate or merge initial values when changed
-  if (initialValues !== prevInitialValues) {
-    setPrevInitialValues(initialValues);
+  // Safely hydrate initial values when they change without render loops
+  const initialValuesKey = JSON.stringify(initialValues || {});
+  useEffect(() => {
     if (initialValues && Object.keys(initialValues).length > 0) {
       setServiceFields(prev => ({
         ...prev,
         ...initialValues
       }));
     }
-  }
+  }, [initialValuesKey]);
 
   // Handle shared input updates
   const handleSharedChange = useCallback((field, value) => {

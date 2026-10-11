@@ -3,7 +3,7 @@
  * Modular, accessible multi-track enquiry form.
  * Decoupled from direct HTTP fetch and validation logic via useEnquiryForm hook and enquiryService.
  */
-import React, { useState, useId } from 'react';
+import React, { useState, useId, useMemo } from 'react';
 import { Send, CheckCircle, AlertCircle, MessageSquare, Sparkles, ChevronDown } from 'lucide-react';
 import { siteConfig } from '../data/siteData';
 import { 
@@ -35,10 +35,10 @@ export default function EnquiryForm({
   const activeConfig = SERVICE_FORM_CONFIGS[currentServiceId] || SERVICE_FORM_CONFIGS['college-admissions'];
 
   // Merged prefill values
-  const mergedInitialValues = {
-    ...initialResolved.initialValues,
-    ...initialValues
-  };
+  const mergedInitialValues = useMemo(() => ({
+    ...(initialResolved.initialValues || {}),
+    ...(initialValues || {})
+  }), [initialResolved.initialValues, initialValues]);
 
   // Business logic hook
   const {

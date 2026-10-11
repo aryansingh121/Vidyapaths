@@ -3,7 +3,7 @@
  * High-conversion lead capture modal with service tab navigation.
  * Integrates with global EnquiryContext or functions as a standalone controlled modal.
  */
-import React, { useState } from 'react';
+import React from 'react';
 import { useEnquiry } from '../hooks/useEnquiry';
 import { SERVICE_FORM_CONFIGS, getServiceConfig } from '../data/serviceFormConfigs';
 import Modal from './common/Modal';
@@ -20,21 +20,25 @@ export default function EnquiryModal({
   // Support both context state and controlled props
   const isOpen = propIsOpen !== undefined ? propIsOpen : context?.isModalOpen;
   const onClose = propOnClose || context?.closeEnquiry;
-  const defaultService = propDefaultService !== undefined ? propDefaultService : (context?.activeServiceId || '');
-  const initialValues = propInitialValues !== undefined ? propInitialValues : (context?.initialValues || {});
+  
+  const activeServiceId = propDefaultService 
+    ? getServiceConfig(propDefaultService).id 
+    : (context?.activeServiceId || 'college-admissions');
 
-  const [activeServiceId, setActiveServiceId] = useState(() => getServiceConfig(defaultService).id);
-  const [prevDefaultService, setPrevDefaultService] = useState(defaultService);
+  const initialValues = propInitialValues !== undefined 
+    ? propInitialValues 
+    : (context?.initialValues || {});
 
-  // Synchronize active service during render when defaultService changes
-  if (defaultService !== prevDefaultService) {
-    setPrevDefaultService(defaultService);
-    setActiveServiceId(getServiceConfig(defaultService).id);
-  }
+  const handleServiceChange = (newServiceId) => {
+    if (context?.changeService) {
+      context.changeService(newServiceId);
+    }
+  };
 
   if (!isOpen) return null;
 
-  const currentConfig = SERVICE_FORM_CONFIGS[activeServiceId] || getServiceConfig(defaultService);
+  const currentConfig = SERVICE_FORM_CONFIGS[activeServiceId] || getServiceConfig(activeServiceId);
+  const initialValuesKey = JSON.stringify(initialValues);
 
   return (
     <Modal
@@ -45,11 +49,12 @@ export default function EnquiryModal({
       badge={currentConfig.badgeText !== null ? (currentConfig.badgeText || "100% Free") : null}
     >
       <EnquiryForm 
-        defaultService={defaultService} 
+        key={`${activeServiceId}-${initialValuesKey}`}
+        defaultService={activeServiceId} 
         activeServiceId={activeServiceId}
-        onServiceChange={setActiveServiceId}
+        onServiceChange={handleServiceChange}
         initialValues={initialValues}
-        source="Popup Modal" 
+        source={context?.source || "Popup Modal"} 
         isModal={true} 
       />
     </Modal>
