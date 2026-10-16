@@ -2,10 +2,18 @@ import React from 'react';
 import { ArrowRight, MessageCircle, Sparkles } from 'lucide-react';
 import { siteConfig } from '../data/siteData';
 
-export default function FinalCTA({ onOpenEnquiry }) {
+export default function FinalCTA({ onOpenEnquiry, onOpenCounselling }) {
   const cleanNumber = (siteConfig.whatsappNumber || siteConfig.phoneRaw).replace(/[^0-9]/g, '');
   const encodedMsg = encodeURIComponent(siteConfig.whatsappMessage);
   const whatsappUrl = `https://wa.me/${cleanNumber}?text=${encodedMsg}`;
+
+  const handleCounselling = () => {
+    if (onOpenCounselling) {
+      onOpenCounselling('Final CTA Banner');
+    } else if (onOpenEnquiry) {
+      onOpenEnquiry('Final CTA Banner');
+    }
+  };
 
   return (
     <section className="py-20 bg-gradient-to-br from-navy-900 via-navy-950 to-navy-900 text-white relative overflow-hidden">
@@ -30,7 +38,7 @@ export default function FinalCTA({ onOpenEnquiry }) {
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
           <button
-            onClick={() => onOpenEnquiry('Final CTA Section')}
+            onClick={handleCounselling}
             className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-xl text-base font-bold text-white bg-orange-500 hover:bg-orange-600 shadow-xl shadow-orange-500/25 transition-all transform hover:-translate-y-0.5 active:translate-y-0 cursor-pointer min-h-[48px]"
           >
             <span>Get Free Counselling</span>

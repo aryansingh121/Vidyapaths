@@ -75,27 +75,33 @@ flowchart TD
 
 ---
 
-### Feature 3: Interactive Colleges Directory
-- **Component:** `src/pages/Colleges.jsx`
-- **Data Source:** `src/data/colleges.js` (80+ institutions curated across Delhi NCR & India)
-- **Search Capabilities:** Live text query search matching college name, acronym, location, or course names.
-- **Stream Category Filter:**
-  - All Streams
-  - Engineering & Technology (B.Tech, M.Tech)
-  - Management & Commerce (BBA, MBA, B.Com)
-  - IT & Computer Applications (BCA, MCA)
-  - Science & Medical (B.Sc, MBBS, BDS, Pharmacy)
-  - Humanities & Social Sciences (BA, MA, BJMC)
-  - Law (BA LLB, BBA LLB, LLM)
-  - Design & Media (B.Des, Animation)
-- **Institution Type Filter:** Central University, State University, Private University, Deemed-to-be-University, Autonomous Institute.
+### Feature 3: Location-Based Colleges & Universities Discovery Engine
+- **Components:** `src/pages/Colleges.jsx`, `src/components/CollegeLocationFilter.jsx`
+- **Data Source:** `src/data/colleges.js` (318 canonical institutions curated across 27 Indian States & UTs, Delhi NCR, and premier educational hubs)
+- **Primary Search Controls:**
+  - **State / UT Selection:** Indian States & UTs dropdown including regional preset `Delhi NCR (All NCR Hubs)`.
+  - **Dependent City Selection:** Populates cities belonging to the selected State. Selecting a city directly automatically determines the parent state. Includes "All Cities" state-wide search.
+  - **Course / Stream Keyword Filter:** Real-time filtering matching program areas, individual degrees (e.g. B.Tech, MBA, MBBS, Law, Design), and institution descriptions.
+  - **Program Level Filter:** All Levels, Undergraduate (UG), and Postgraduate (PG).
+  - **Popular Educational Hub Presets:** Quick one-click chips for high-demand hubs (Delhi NCR, Bengaluru, Mumbai, Pune, Chennai, Hyderabad, Kolkata, Jaipur, Dehradun).
+- **Institution Categories:**
+  - All Institutions
+  - University of Delhi Colleges (`du`)
+  - Major Universities & Institutes (`university`)
+  - Medical & Healthcare (`medical`)
+  - Engineering & Technology (`engineering`)
+  - Management & Professional (`management`)
+  - Law, Design & Media (`law-media`)
 - **Rich Institution Cards:**
-  - Verified NAAC grade badges (e.g., NAAC A++, NAAC A+).
-  - Institution type and campus location.
-  - Featured programs list with duration.
-  - Typical cutoff scores and entrance exam criteria (CUET, JEE, CAT, CLAT).
-  - External link button opening the institution's official admissions portal (`target="_blank" rel="noopener noreferrer"`).
-  - "Get Admission Guidance" button opening the pre-filled enquiry modal.
+  - Affiliation and location badges (e.g., "Noida, Uttar Pradesh (Delhi NCR)").
+  - Key Offerings and Program Areas summary.
+  - Expandable associated programs accordion with degree track, level, duration, and individual program "Enquire" buttons.
+  - "Get Admission Guidance" contextual trigger prefilling college name and service into the modal.
+  - Official university portal link (`target="_blank" rel="noopener noreferrer"`).
+- **Dynamic Result Counter & Pagination:**
+  - Contextual counter calculating live counts and locations (e.g. `Showing 15 of 323 Institutions in Bengaluru, Karnataka`).
+  - Integrated 15-item pagination with smart windowing and smooth scroll restoration.
+  - Polished empty state with "Reset All Filters" trigger.
 
 ---
 

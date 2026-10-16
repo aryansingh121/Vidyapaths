@@ -10,19 +10,25 @@ import WhyVidyapaths from '../sections/WhyVidyapaths';
 import TestimonialsSection from '../sections/TestimonialsSection';
 import FinalCTA from '../sections/FinalCTA';
 
-export default function Home({ onOpenEnquiry }) {
+export default function Home({ onOpenEnquiry, onOpenCounselling }) {
   return (
     <div>
-      <Hero onOpenEnquiry={() => onOpenEnquiry('Hero')} />
+      <Hero 
+        onOpenEnquiry={() => onOpenEnquiry?.('Hero')} 
+        onOpenCounselling={onOpenCounselling}
+      />
       <Benefits onOpenEnquiry={onOpenEnquiry} />
       <ServicesPreview onOpenEnquiry={onOpenEnquiry} />
-      <HowItWorks onOpenEnquiry={() => onOpenEnquiry('How It Works Section')} />
+      <HowItWorks onOpenEnquiry={() => onOpenEnquiry?.('How It Works Section')} />
       <CollegeAdmissionSection onOpenEnquiry={onOpenEnquiry} />
       <StudyAbroadSection onOpenEnquiry={onOpenEnquiry} />
       <InternshipSection onOpenEnquiry={onOpenEnquiry} />
       <WhyVidyapaths />
-      <TestimonialsSection onOpenEnquiry={() => onOpenEnquiry('Testimonials Section')} />
-      <FinalCTA onOpenEnquiry={() => onOpenEnquiry('Final CTA Section')} />
+      <TestimonialsSection onOpenEnquiry={() => onOpenEnquiry?.('Testimonials Section')} />
+      <FinalCTA 
+        onOpenEnquiry={() => onOpenEnquiry?.('Final CTA Section')} 
+        onOpenCounselling={onOpenCounselling}
+      />
     </div>
   );
 }

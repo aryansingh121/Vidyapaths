@@ -5,7 +5,7 @@ import CountryFlag from '../components/CountryFlag';
 import { countriesData } from '../data/countriesData';
 import { ArrowRight, Calendar } from 'lucide-react';
 
-export default function StudyAbroad({ onOpenEnquiry }) {
+export default function StudyAbroad({ onOpenEnquiry, onOpenCounselling }) {
 
   const processSteps = [
     {
@@ -178,7 +178,10 @@ export default function StudyAbroad({ onOpenEnquiry }) {
       </section>
 
       {/* CTA */}
-      <FinalCTA onOpenEnquiry={() => onOpenEnquiry('Study Abroad Page CTA')} />
+      <FinalCTA 
+        onOpenEnquiry={() => onOpenEnquiry?.('Study Abroad Page CTA')} 
+        onOpenCounselling={onOpenCounselling}
+      />
     </div>
   );
 }

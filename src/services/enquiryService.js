@@ -133,9 +133,156 @@ export async function submitEnquiry({
   };
 }
 
+/**
+ * Permitted qualifications for the 4-field Free Counselling form.
+ */
+export const COUNSELLING_QUALIFICATIONS = Object.freeze([
+  'Class 10',
+  'Class 12 / Higher Secondary',
+  'Diploma',
+  'Undergraduate — Pursuing',
+  'Undergraduate — Completed',
+  'Postgraduate — Pursuing',
+  'Postgraduate — Completed',
+  'Other'
+]);
+
+/**
+ * Validates Indian mobile numbers (10 digits starting with 6, 7, 8, or 9).
+ * Handles inputs with +91, 91, leading 0, spaces, and hyphens.
+ */
+export function validateIndianPhone(phone) {
+  if (!phone || typeof phone !== 'string') return false;
+  let cleaned = phone.replace(/[\s\-()+]/g, '');
+  if (cleaned.startsWith('91') && cleaned.length === 12) {
+    cleaned = cleaned.slice(2);
+  } else if (cleaned.startsWith('0') && cleaned.length === 11) {
+    cleaned = cleaned.slice(1);
+  }
+  return /^[6-9]\d{9}$/.test(cleaned);
+}
+
+/**
+ * Normalizes Indian phone numbers to 10-digit standard format.
+ */
+export function normalizeIndianPhone(phone) {
+  if (!phone || typeof phone !== 'string') return '';
+  let cleaned = phone.replace(/[\s\-()+]/g, '');
+  if (cleaned.startsWith('91') && cleaned.length === 12) {
+    cleaned = cleaned.slice(2);
+  } else if (cleaned.startsWith('0') && cleaned.length === 11) {
+    cleaned = cleaned.slice(1);
+  }
+  return cleaned;
+}
+
+/**
+ * Validates email format using standard pattern.
+ */
+export function validateEmail(email) {
+  if (!email || typeof email !== 'string') return false;
+  return /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email.trim());
+}
+
+/**
+ * Validates student name (at least 2 letters, alphabetic characters).
+ */
+export function validateName(name) {
+  if (!name || typeof name !== 'string') return false;
+  const trimmed = name.trim();
+  if (trimmed.length < 2 || trimmed.length > 80) return false;
+  return /^[a-zA-Z\s.'-]+$/.test(trimmed) && (trimmed.match(/[a-zA-Z]/g) || []).length >= 2;
+}
+
+/**
+ * Validates qualification choice against permitted options.
+ */
+export function validateQualification(qualification) {
+  return COUNSELLING_QUALIFICATIONS.includes(qualification);
+}
+
+/**
+ * Submits the 4-field Free Counselling enquiry.
+ * Reuses existing FormSubmit endpoint and local storage backup.
+ * 
+ * @param {Object} params
+ * @param {string} params.name - Student Name
+ * @param {string} params.phone - Indian Phone Number
+ * @param {string} params.email - Email Address
+ * @param {string} params.qualification - Selected Current Qualification
+ * @param {string} [params.source='Get Free Counselling Button'] - Trigger button / location
+ * @returns {Promise<{ success: boolean, message?: string, error?: string }>}
+ */
+export async function submitFreeCounselling({
+  name,
+  phone,
+  email,
+  qualification,
+  source = 'Get Free Counselling Button'
+}) {
+  const timestamp = new Date().toISOString();
+  const indianDate = new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' });
+  const normalizedPhone = normalizeIndianPhone(phone);
+
+  // 1. Create offline lead record
+  const leadRecord = {
+    id: `lead_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`,
+    serviceId: 'free-counselling',
+    serviceName: 'Free Counselling Consultation',
+    fullName: name.trim(),
+    mobileNumber: normalizedPhone || phone.trim(),
+    email: email.trim(),
+    qualification: qualification.trim(),
+    source,
+    createdAt: timestamp
+  };
+
+  backupLeadLocally(leadRecord);
+
+  // 2. Assemble FormSubmit payload with exactly the 4 student details
+  const emailBody = {
+    _subject: `New Free Counselling Enquiry — ${name.trim()} (Vidyapaths)`,
+    _template: 'table',
+    _captcha: 'false',
+    _replyto: email.trim(),
+    'Enquiry Type': 'Free Counselling Consultation',
+    'Student Name': name.trim(),
+    'Phone Number': normalizedPhone || phone.trim(),
+    'Email Address': email.trim(),
+    'Current Qualification': qualification.trim(),
+    'Trigger Source': source,
+    'Submission Date': indianDate
+  };
+
+  const recipientEmail = (siteConfig.formSubmitEmail || siteConfig.email || 'Vidyapaths@gmail.com').trim();
+  const endpoint = `https://formsubmit.co/ajax/${recipientEmail}`;
+
+  const result = await apiClient.post(endpoint, emailBody);
+
+  if (result.success) {
+    return {
+      success: true,
+      message: 'Thank you! Your counselling request has been received. Our senior counselling mentor will contact you shortly.'
+    };
+  }
+
+  return {
+    success: false,
+    error: result.error || 'Submission failed. Please check your internet connection or reach out on WhatsApp.'
+  };
+}
+
 export default {
   SERVICE_SUBJECT_MAP,
+  COUNSELLING_QUALIFICATIONS,
+  validateIndianPhone,
+  normalizeIndianPhone,
+  validateEmail,
+  validateName,
+  validateQualification,
   submitEnquiry,
+  submitFreeCounselling,
   backupLeadLocally,
   getStoredLeads
 };
+

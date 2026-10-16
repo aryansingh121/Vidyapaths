@@ -22,7 +22,7 @@ const iconMap = {
   Coins
 };
 
-export default function Services({ onOpenEnquiry }) {
+export default function Services({ onOpenEnquiry, onOpenCounselling }) {
   return (
     <div className="pt-24 md:pt-28">
       {/* Header */}
@@ -118,7 +118,10 @@ export default function Services({ onOpenEnquiry }) {
       </section>
 
       {/* CTA */}
-      <FinalCTA onOpenEnquiry={() => onOpenEnquiry('Services Page CTA')} />
+      <FinalCTA 
+        onOpenEnquiry={() => onOpenEnquiry?.('Services Page CTA')} 
+        onOpenCounselling={onOpenCounselling}
+      />
     </div>
   );
 }

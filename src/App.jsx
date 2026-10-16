@@ -9,6 +9,7 @@ import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import FloatingWhatsApp from './components/FloatingWhatsApp';
 import EnquiryModal from './components/EnquiryModal';
+import CounsellingModal from './components/CounsellingModal';
 import ScrollToTop from './components/ScrollToTop';
 import ErrorBoundary from './components/common/ErrorBoundary';
 import { EnquiryProvider } from './context/EnquiryContext';
@@ -28,7 +29,13 @@ import TermsOfService from './pages/TermsOfService';
 
 function AppContent() {
   usePageMeta();
-  const { openEnquiry } = useEnquiry();
+  const { 
+    openEnquiry, 
+    openCounselling, 
+    isCounsellingOpen, 
+    closeCounselling, 
+    counsellingSource 
+  } = useEnquiry();
 
   return (
     <div className="min-h-screen flex flex-col bg-white text-slate-800 selection:bg-orange-500 selection:text-white font-sans">
@@ -36,18 +43,69 @@ function AppContent() {
       <ScrollToTop />
 
       {/* Top Navbar */}
-      <Navbar onOpenEnquiry={() => openEnquiry('General Counselling')} />
+      <Navbar 
+        onOpenEnquiry={openEnquiry} 
+        onOpenCounselling={openCounselling} 
+      />
 
       {/* Main Content Area */}
       <main className="flex-grow">
         <ErrorBoundary>
           <Routes>
-            <Route path="/" element={<Home onOpenEnquiry={openEnquiry} />} />
-            <Route path="/about" element={<About onOpenEnquiry={openEnquiry} />} />
-            <Route path="/services" element={<Services onOpenEnquiry={openEnquiry} />} />
-            <Route path="/colleges" element={<Colleges onOpenEnquiry={openEnquiry} />} />
-            <Route path="/study-abroad" element={<StudyAbroad onOpenEnquiry={openEnquiry} />} />
-            <Route path="/internships" element={<Internships onOpenEnquiry={openEnquiry} />} />
+            <Route 
+              path="/" 
+              element={
+                <Home 
+                  onOpenEnquiry={openEnquiry} 
+                  onOpenCounselling={openCounselling} 
+                />
+              } 
+            />
+            <Route 
+              path="/about" 
+              element={
+                <About 
+                  onOpenEnquiry={openEnquiry} 
+                  onOpenCounselling={openCounselling} 
+                />
+              } 
+            />
+            <Route 
+              path="/services" 
+              element={
+                <Services 
+                  onOpenEnquiry={openEnquiry} 
+                  onOpenCounselling={openCounselling} 
+                />
+              } 
+            />
+            <Route 
+              path="/colleges" 
+              element={
+                <Colleges 
+                  onOpenEnquiry={openEnquiry} 
+                  onOpenCounselling={openCounselling} 
+                />
+              } 
+            />
+            <Route 
+              path="/study-abroad" 
+              element={
+                <StudyAbroad 
+                  onOpenEnquiry={openEnquiry} 
+                  onOpenCounselling={openCounselling} 
+                />
+              } 
+            />
+            <Route 
+              path="/internships" 
+              element={
+                <Internships 
+                  onOpenEnquiry={openEnquiry} 
+                  onOpenCounselling={openCounselling} 
+                />
+              } 
+            />
             {/* Clean legacy route redirects */}
             <Route path="/internships-admissions" element={<Navigate to="/internships" replace />} />
             <Route path="/contact" element={<Contact />} />
@@ -56,18 +114,36 @@ function AppContent() {
             <Route path="/terms-of-service" element={<TermsOfService />} />
             <Route path="/terms" element={<Navigate to="/terms-of-service" replace />} />
             {/* Fallback to Home */}
-            <Route path="*" element={<Home onOpenEnquiry={openEnquiry} />} />
+            <Route 
+              path="*" 
+              element={
+                <Home 
+                  onOpenEnquiry={openEnquiry} 
+                  onOpenCounselling={openCounselling} 
+                />
+              } 
+            />
           </Routes>
         </ErrorBoundary>
       </main>
 
       {/* Global Footer */}
-      <Footer onOpenEnquiry={() => openEnquiry('Footer Quick CTA')} />
+      <Footer 
+        onOpenEnquiry={openEnquiry} 
+        onOpenCounselling={openCounselling} 
+      />
 
       {/* Floating WhatsApp CTA */}
       <FloatingWhatsApp />
 
-      {/* Global Lead / Free Counselling Enquiry Modal */}
+      {/* Reusable 4-Field Free Counselling Modal */}
+      <CounsellingModal 
+        isOpen={isCounsellingOpen} 
+        onClose={closeCounselling} 
+        source={counsellingSource} 
+      />
+
+      {/* Global Service-Specific Enquiry Modal */}
       <EnquiryModal />
     </div>
   );

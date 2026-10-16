@@ -5,7 +5,7 @@ import { siteConfig } from '../data/siteData';
 
 const CURRENT_YEAR = new Date().getFullYear();
 
-export default function Footer({ onOpenEnquiry }) {
+export default function Footer({ onOpenEnquiry, onOpenCounselling }) {
   const location = useLocation();
   const currentYear = CURRENT_YEAR;
 
@@ -67,10 +67,10 @@ export default function Footer({ onOpenEnquiry }) {
 
             <div className="pt-2 flex items-center gap-3">
               <button
-                onClick={() => onOpenEnquiry('Footer Quick CTA')}
+                onClick={() => (onOpenCounselling ? onOpenCounselling('Footer CTA') : onOpenEnquiry?.('Footer CTA'))}
                 className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold text-white bg-orange-500 hover:bg-orange-600 transition-colors shadow-sm cursor-pointer min-h-[38px]"
               >
-                <span>Free Counselling</span>
+                <span>Get Free Counselling</span>
                 <ArrowUpRight className="w-3.5 h-3.5" />
               </button>
               <a

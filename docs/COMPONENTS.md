@@ -10,14 +10,18 @@
 src/components/
 ├── Button.jsx                 # Versatile button primitive with stylistic variants
 ├── Card.jsx                   # Container primitive with elevation and border tokens
+├── CollegeCard.jsx            # Standardized institution card with 3 actions and programs accordion
 ├── CollegeComparisonModal.jsx # Dedicated dialog for free college comparison requests
+├── CollegeLocationFilter.jsx  # Location-based discovery & dependent State-City filter
 ├── ComparisonRequestForm.jsx  # Structured comparison intake form
 ├── EnquiryForm.jsx            # Dynamic multi-service lead capture form engine
 ├── EnquiryModal.jsx           # Global modal dialog container for lead capture
 ├── Footer.jsx                 # Site-wide responsive multi-column footer
 ├── Navbar.jsx                 # Sticky desktop header and mobile drawer navigation
 ├── ScrollToTop.jsx            # Route restoration and anchor scroll offset watcher
-└── WhatsAppButton.jsx         # Persistent floating quick-chat action trigger
+├── WhatsAppButton.jsx         # Persistent floating quick-chat action trigger
+└── common/
+    └── CustomSelect.jsx       # Accessible, searchable brand-styled dropdown with keyboard support
 ```
 
 ---
@@ -204,3 +208,30 @@ src/components/
   - Factors to Compare (Multi-select checkboxes)
   - Additional Questions (Optional textarea)
 - **Special Layout Refinement:** Contains no tuition budget field, with balanced vertical spacing across remaining controls.
+
+---
+
+## 5. Directory & College Components
+
+### 5.1 `CollegeCard.jsx`
+- **Path:** `src/components/CollegeCard.jsx`
+- **Purpose:** Standardized institution card component utilized across the national college directory (`/colleges`). Guarantees uniform layout, badges, responsive alignment, and the three canonical actions on every card:
+  1. **Show Programs / Hide Programs:** Accordion toggle displaying pathway count (e.g., `Show Programs (4)`) when structured courses exist, and clean `Show Programs` toggle when pending.
+  2. **Get Admission Guidance:** Direct primary CTA pre-filling the user's selected institution in the enquiry flow.
+  3. **Official Portal:** Secure external link (`target="_blank" rel="noopener noreferrer"`) for verified portals, or restrained `Portal Unavailable` disabled button for unverified entries.
+- **Props:**
+  | Prop Name | Type | Required | Default | Description |
+  | :--- | :--- | :--- | :--- | :--- |
+  | `college` | `Object` | Yes | — | Complete institution object containing name, university, location, programs array, caveat, and portal URL. |
+  | `isExpanded` | `boolean` | No | `false` | Whether the college's programs accordion section is expanded. |
+  | `onToggleExpand` | `Function` | No | `undefined` | Callback invoked with `college.id` to toggle expansion state. |
+  | `onOpenEnquiry` | `Function` | No | `undefined` | Callback invoked with `{ service, college, course }` payload to launch modal. |
+- **Example Usage:**
+  ```jsx
+  <CollegeCard
+    college={college}
+    isExpanded={Boolean(expandedMap[college.id])}
+    onToggleExpand={(id) => toggleExpand(id)}
+    onOpenEnquiry={(data) => handleOpenEnquiry(data)}
+  />
+  ```

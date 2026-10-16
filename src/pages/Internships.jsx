@@ -4,7 +4,7 @@ import FinalCTA from '../sections/FinalCTA';
 import InternshipSection from '../sections/InternshipSection';
 import { ArrowRight, ShieldCheck, CheckCircle2 } from 'lucide-react';
 
-export default function Internships({ onOpenEnquiry }) {
+export default function Internships({ onOpenEnquiry, onOpenCounselling }) {
   const roadmapSteps = [
     {
       num: "01",
@@ -119,7 +119,10 @@ export default function Internships({ onOpenEnquiry }) {
       </div>
 
       {/* Final CTA */}
-      <FinalCTA onOpenEnquiry={() => onOpenEnquiry('Internships Page CTA')} />
+      <FinalCTA 
+        onOpenEnquiry={() => onOpenEnquiry?.('Internships Page CTA')} 
+        onOpenCounselling={onOpenCounselling}
+      />
     </div>
   );
 }

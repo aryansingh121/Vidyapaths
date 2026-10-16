@@ -4,7 +4,7 @@ import SectionHeading from '../components/SectionHeading';
 import WhyVidyapaths from '../sections/WhyVidyapaths';
 import FinalCTA from '../sections/FinalCTA';
 
-export default function About({ onOpenEnquiry }) {
+export default function About({ onOpenEnquiry, onOpenCounselling }) {
   return (
     <div className="pt-24 md:pt-28">
       {/* About Hero Header */}
@@ -132,7 +132,10 @@ export default function About({ onOpenEnquiry }) {
       <WhyVidyapaths />
 
       {/* CTA */}
-      <FinalCTA onOpenEnquiry={() => onOpenEnquiry('About Page CTA')} />
+      <FinalCTA 
+        onOpenEnquiry={() => onOpenEnquiry?.('About Page CTA')} 
+        onOpenCounselling={onOpenCounselling}
+      />
     </div>
   );
 }

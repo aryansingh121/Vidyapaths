@@ -17,10 +17,18 @@ import {
 } from 'lucide-react';
 import { siteConfig } from '../data/siteData';
 
-export default function Navbar({ onOpenEnquiry }) {
+export default function Navbar({ onOpenEnquiry, onOpenCounselling }) {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
+
+  const handleCounsellingClick = (triggerSource) => {
+    if (onOpenCounselling) {
+      onOpenCounselling(triggerSource);
+    } else if (onOpenEnquiry) {
+      onOpenEnquiry(triggerSource);
+    }
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -133,7 +141,7 @@ export default function Navbar({ onOpenEnquiry }) {
 
             {/* Primary Orange CTA */}
             <button
-              onClick={() => onOpenEnquiry('Header Main CTA')}
+              onClick={() => handleCounsellingClick('Navbar Desktop CTA')}
               className="inline-flex items-center justify-center gap-1.5 px-3.5 xl:px-4 py-2 xl:py-2.5 rounded-xl text-xs xl:text-sm font-semibold text-white bg-orange-500 hover:bg-orange-600 shadow-sm hover:shadow-md hover:shadow-orange-500/20 active:scale-[0.98] transition-all cursor-pointer whitespace-nowrap min-h-[40px] xl:min-h-[42px] group"
             >
               <span>Get Free Counselling</span>
@@ -145,7 +153,7 @@ export default function Navbar({ onOpenEnquiry }) {
           <div className="flex items-center gap-1.5 sm:gap-2 lg:hidden shrink-0">
             {/* Compact Header CTA Button (available on 350px+) */}
             <button
-              onClick={() => onOpenEnquiry('Mobile Header Button')}
+              onClick={() => handleCounsellingClick('Navbar Mobile Header')}
               className="hidden min-[350px]:inline-flex text-[11px] sm:text-xs px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-lg font-semibold text-white bg-orange-500 hover:bg-orange-600 shadow-xs active:scale-95 transition-all min-h-[38px] sm:min-h-[40px] items-center justify-center cursor-pointer whitespace-nowrap"
             >
               Enquire
@@ -223,7 +231,7 @@ export default function Navbar({ onOpenEnquiry }) {
               <button
                 onClick={() => {
                   setIsOpen(false);
-                  onOpenEnquiry('Mobile Menu Big CTA');
+                  handleCounsellingClick('Navbar Mobile Drawer CTA');
                 }}
                 className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl text-sm font-semibold text-white bg-orange-500 hover:bg-orange-600 shadow-md shadow-orange-500/20 min-h-[44px] active:scale-[0.99] transition-all cursor-pointer"
               >

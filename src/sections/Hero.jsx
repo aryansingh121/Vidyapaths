@@ -2,7 +2,15 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, CheckCircle2, ShieldCheck, Award, Users, BookOpen, GraduationCap, Sparkles } from 'lucide-react';
 
-export default function Hero({ onOpenEnquiry }) {
+export default function Hero({ onOpenEnquiry, onOpenCounselling }) {
+  const handleCounselling = (source = 'Hero') => {
+    if (onOpenCounselling) {
+      onOpenCounselling(source);
+    } else if (onOpenEnquiry) {
+      onOpenEnquiry(source);
+    }
+  };
+
   return (
     <section className="relative pt-28 pb-16 md:pt-36 md:pb-24 overflow-hidden bg-gradient-to-b from-slate-50 via-white to-white">
       {/* Background Decorative Accents */}
@@ -32,7 +40,7 @@ export default function Hero({ onOpenEnquiry }) {
             {/* CTAs */}
             <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-2">
               <button
-                onClick={onOpenEnquiry}
+                onClick={() => handleCounselling('Hero Primary CTA')}
                 className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-7 py-4 rounded-xl text-base font-bold text-white bg-orange-500 hover:bg-orange-600 shadow-lg shadow-orange-500/25 hover:shadow-orange-500/35 transition-all transform hover:-translate-y-0.5 active:translate-y-0 cursor-pointer min-h-[48px]"
               >
                 <span>Get Free Counselling</span>
@@ -123,7 +131,7 @@ export default function Hero({ onOpenEnquiry }) {
 
                 <div className="pt-2">
                   <button
-                    onClick={onOpenEnquiry}
+                    onClick={() => handleCounselling('Hero Consultation Card')}
                     className="w-full py-3 rounded-xl bg-navy-900 hover:bg-navy-800 text-white font-semibold text-sm transition-colors flex items-center justify-center gap-2 cursor-pointer"
                   >
                     <span>Start Free Consultation</span>
