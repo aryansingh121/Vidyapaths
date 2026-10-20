@@ -5,7 +5,6 @@ import {
   X, 
   Phone, 
   ArrowRight, 
-  Compass, 
   Home, 
   Users, 
   Sparkles, 
@@ -80,19 +79,23 @@ export default function Navbar({ onOpenEnquiry, onOpenCounselling }) {
           <Link 
             to="/" 
             onClick={() => handleNavClick('/')}
-            className="flex items-center gap-2 sm:gap-2.5 group focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 rounded-xl min-h-[44px] shrink-0"
+            className="flex items-center gap-2.5 sm:gap-3 group focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 rounded-xl min-h-[44px] shrink-0"
             aria-label="Vidyapaths Home"
           >
-            <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-gradient-to-br from-navy-950 via-navy-900 to-navy-800 flex items-center justify-center text-white shadow-md shadow-navy-900/10 ring-1 ring-white/10 group-hover:scale-[1.03] transition-transform duration-200 shrink-0">
-              <Compass className="w-4.5 h-4.5 sm:w-5 sm:h-5 text-orange-500 transform group-hover:rotate-45 transition-transform duration-300" />
+            <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-orange-50/90 border border-orange-200/80 p-1 flex items-center justify-center shadow-xs group-hover:scale-105 group-hover:border-orange-300 transition-all duration-200 shrink-0">
+              <img 
+                src="/logo-icon.png" 
+                alt="Vidyapaths Logo" 
+                className="w-full h-full object-contain" 
+              />
             </div>
             
             <div className="flex flex-col text-left">
-              <span className="text-base min-[360px]:text-lg sm:text-xl font-bold tracking-tight text-navy-950 leading-none whitespace-nowrap">
+              <span className="text-base min-[360px]:text-lg sm:text-xl font-extrabold tracking-tight text-navy-950 leading-none whitespace-nowrap">
                 Vidya<span className="text-orange-500">paths</span>
               </span>
-              <span className="hidden min-[380px]:block text-[8px] sm:text-[9px] uppercase tracking-[0.14em] sm:tracking-[0.16em] font-semibold text-slate-400 mt-1 leading-none whitespace-nowrap">
-                Right Guidance • Brighter Future
+              <span className="hidden min-[380px]:block text-[8px] sm:text-[9px] uppercase tracking-[0.16em] font-bold text-slate-500 mt-1 leading-none whitespace-nowrap">
+                Career Consultants
               </span>
             </div>
           </Link>

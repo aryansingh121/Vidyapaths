@@ -198,19 +198,24 @@ export default function CounsellingModal({
       >
         {/* Navy Header */}
         <div className="px-5 sm:px-7 py-4 sm:py-5 bg-navy-900 text-white flex items-start justify-between border-b border-navy-800 shrink-0">
-          <div className="pr-3">
-            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-orange-500 text-white uppercase tracking-wider mb-1.5">
-              <span>100% Free Consultation</span>
+          <div className="flex items-start gap-3.5 pr-3">
+            <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-white p-1 flex items-center justify-center shrink-0 shadow-md">
+              <img src="/logo-icon.png" alt="Vidyapaths" className="w-full h-full object-contain" />
             </div>
-            <h2
-              id="counselling-modal-heading"
-              className="text-xl sm:text-2xl font-extrabold text-white tracking-tight leading-tight"
-            >
-              Get Free Counselling
-            </h2>
-            <p className="text-xs sm:text-sm text-slate-300 mt-1 leading-normal">
-              Share your details and our counselling team will get in touch with you.
-            </p>
+            <div>
+              <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-orange-500 text-white uppercase tracking-wider mb-1.5">
+                <span>100% Free Consultation</span>
+              </div>
+              <h2
+                id="counselling-modal-heading"
+                className="text-xl sm:text-2xl font-extrabold text-white tracking-tight leading-tight"
+              >
+                Get Free Counselling
+              </h2>
+              <p className="text-xs sm:text-sm text-slate-300 mt-1 leading-normal">
+                Share your details and our counselling team will get in touch with you.
+              </p>
+            </div>
           </div>
 
           <button

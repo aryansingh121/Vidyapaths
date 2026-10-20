@@ -10,6 +10,15 @@ export default function About({ onOpenEnquiry, onOpenCounselling }) {
       {/* About Hero Header */}
       <section className="bg-slate-50 py-16 md:py-24 border-b border-slate-100">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-4">
+          <div className="flex justify-center mb-2">
+            <div className="p-3 bg-white rounded-2xl shadow-sm border border-slate-200/80 inline-flex items-center justify-center">
+              <img 
+                src="/logo.png" 
+                alt="Vidyapaths Logo" 
+                className="h-20 sm:h-24 w-auto object-contain" 
+              />
+            </div>
+          </div>
           <span className="inline-block px-3.5 py-1 text-xs font-semibold rounded-full uppercase tracking-wider bg-orange-50 text-orange-600 border border-orange-200">
             About Vidyapaths
           </span>

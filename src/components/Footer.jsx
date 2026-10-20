@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Compass, Phone, Mail, MapPin, Clock, ArrowUpRight, MessageCircle } from 'lucide-react';
+import { Phone, Mail, MapPin, Clock, ArrowUpRight, MessageCircle } from 'lucide-react';
 import { siteConfig } from '../data/siteData';
 
 const CURRENT_YEAR = new Date().getFullYear();
@@ -48,13 +48,22 @@ export default function Footer({ onOpenEnquiry, onOpenCounselling }) {
           
           {/* Brand Col */}
           <div className="lg:col-span-2 space-y-4">
-            <Link to="/" onClick={() => handleNavClick('/')} className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center text-white">
-                <Compass className="w-6 h-6 text-orange-500" />
+            <Link to="/" onClick={() => handleNavClick('/')} className="flex items-center gap-3 group">
+              <div className="w-11 h-11 rounded-xl bg-white p-1.5 flex items-center justify-center shadow-md shrink-0 group-hover:scale-105 transition-transform duration-200">
+                <img 
+                  src="/logo-icon.png" 
+                  alt="Vidyapaths Logo" 
+                  className="w-full h-full object-contain" 
+                />
               </div>
-              <span className="text-2xl font-bold tracking-tight text-white">
-                Vidya<span className="text-orange-500">paths</span>
-              </span>
+              <div className="flex flex-col text-left">
+                <span className="text-2xl font-extrabold tracking-tight text-white leading-none">
+                  Vidya<span className="text-orange-500">paths</span>
+                </span>
+                <span className="text-[10px] uppercase tracking-[0.18em] font-bold text-orange-400 mt-1 leading-none">
+                  Career Consultants
+                </span>
+              </div>
             </Link>
             
             <p className="text-orange-400 font-medium text-sm">
