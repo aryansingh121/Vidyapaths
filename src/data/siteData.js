@@ -20,7 +20,7 @@ export const siteConfig = {
   whatsappMessage: "Hello Vidyapaths, I would like guidance regarding admissions and career opportunities.",
   email: env.CONTACT_EMAIL,
   formSubmitEmail: env.FORM_SUBMIT_EMAIL,
-  address: "Knowledge Park, Sector 62, Noida, Uttar Pradesh 201309, India",
+  address: "",
   hours: "Mon - Sat: 9:30 AM - 6:30 PM",
 
   socials: {

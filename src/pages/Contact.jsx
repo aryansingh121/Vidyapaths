@@ -5,7 +5,9 @@ import {
   Mail, 
   MapPin, 
   Clock, 
-  MessageCircle 
+  MessageCircle,
+  Globe,
+  Sparkles
 } from 'lucide-react';
 import { InstagramIcon, LinkedinIcon, FacebookIcon, YoutubeIcon } from '../components/SocialIcons';
 import { siteConfig } from '../data/siteData';
@@ -150,19 +152,32 @@ export default function Contact() {
 
               </div>
 
-              {/* Office Location Box */}
-              <div className="bg-white rounded-3xl p-6 border border-slate-200/80 shadow-xs space-y-3">
-                <div className="flex items-center gap-2 text-navy-900 font-bold text-sm">
-                  <MapPin className="w-4 h-4 text-orange-500" />
-                  <span>Main Consulting Office</span>
+              {/* Consultation Format Box */}
+              {siteConfig.address ? (
+                <div className="bg-white rounded-3xl p-6 border border-slate-200/80 shadow-xs space-y-3">
+                  <div className="flex items-center gap-2 text-navy-900 font-bold text-sm">
+                    <MapPin className="w-4 h-4 text-orange-500" />
+                    <span>Main Consulting Office</span>
+                  </div>
+                  <p className="text-xs text-slate-600 leading-relaxed">
+                    {siteConfig.address}
+                  </p>
                 </div>
-                <p className="text-xs text-slate-600 leading-relaxed">
-                  {siteConfig.address}
-                </p>
-                <div className="h-32 bg-slate-100 rounded-xl border border-slate-200 flex items-center justify-center text-xs text-slate-500 font-medium">
-                  <span>📍 Map Pin: Knowledge Park, Sector 62, Noida</span>
+              ) : (
+                <div className="bg-white rounded-3xl p-6 border border-slate-200/80 shadow-xs space-y-3">
+                  <div className="flex items-center gap-2 text-navy-900 font-bold text-sm">
+                    <Globe className="w-4 h-4 text-orange-500" />
+                    <span>Pan-India Virtual Consultation</span>
+                  </div>
+                  <p className="text-xs text-slate-600 leading-relaxed">
+                    Personalized 1-on-1 career, college admission, and study abroad counselling sessions available online via video call, phone, and WhatsApp across India.
+                  </p>
+                  <div className="p-3.5 bg-orange-50/70 rounded-xl border border-orange-100 flex items-center gap-2.5 text-xs text-orange-800 font-medium">
+                    <Sparkles className="w-4 h-4 text-orange-600 shrink-0" />
+                    <span>Expert guidance from anywhere, at your convenience</span>
+                  </div>
                 </div>
-              </div>
+              )}
 
             </div>
 

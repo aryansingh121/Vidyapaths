@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Phone, Mail, MapPin, Clock, ArrowUpRight, MessageCircle } from 'lucide-react';
+import { Phone, Mail, Clock, ArrowUpRight, MessageCircle } from 'lucide-react';
 import { siteConfig } from '../data/siteData';
 
 const CURRENT_YEAR = new Date().getFullYear();
@@ -140,18 +140,6 @@ export default function Footer({ onOpenEnquiry, onOpenCounselling }) {
           <div className="space-y-4">
             <h4 className="text-sm font-semibold text-white tracking-wider uppercase">Contact Details</h4>
             <ul className="space-y-3 text-sm text-slate-400">
-              <li className="flex items-start gap-3">
-                <MapPin className="w-4 h-4 text-orange-400 shrink-0 mt-1" />
-                <a 
-                  href={`https://maps.google.com/?q=${encodeURIComponent(siteConfig.address)}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:text-white transition-colors"
-                  title="View on Google Maps"
-                >
-                  {siteConfig.address}
-                </a>
-              </li>
               <li className="flex items-center gap-3">
                 <Phone className="w-4 h-4 text-orange-400 shrink-0" />
                 <a href={`tel:${siteConfig.phoneRaw}`} className="hover:text-white transition-colors">

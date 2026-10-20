@@ -44,7 +44,7 @@ export const siteConfig = {
   whatsappMessage: "Hi Vidyapaths...",  // Default message loaded in WhatsApp
   email: "admissions@vidyapaths.com",    // Displayed in contact section
   formSubmitEmail: "admissions@vidyapaths.com", // Recipient address for lead emails
-  address: "Knowledge Park, Sector 62, Noida, Uttar Pradesh 201309, India",
+  address: "",
   hours: "Mon - Sat: 9:30 AM - 6:30 PM",
 
   socials: {

@@ -88,7 +88,7 @@ export default function TermsOfService() {
             </p>
             <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 text-xs sm:text-sm space-y-1.5">
               <p className="font-bold text-navy-950">Vidyapaths Career & Education Consultancy</p>
-              <p className="text-slate-600">Address: {siteConfig.address}</p>
+              {siteConfig.address && <p className="text-slate-600">Address: {siteConfig.address}</p>}
               <p className="text-slate-600">Email: <a href={`mailto:${siteConfig.email}`} className="text-orange-600 underline">{siteConfig.email}</a></p>
               <p className="text-slate-600">Phone: <a href={`tel:${siteConfig.phoneRaw}`} className="text-orange-600 underline">{siteConfig.phone}</a></p>
             </div>

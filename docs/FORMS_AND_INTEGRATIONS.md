@@ -175,7 +175,7 @@ export const siteConfig = {
   whatsappMessage: "Hi Vidyapaths, ...",
   email: "admissions@vidyapaths.com",     // Visible contact email
   formSubmitEmail: "admissions@vidyapaths.com", // FormSubmit recipient target
-  address: "Knowledge Park, Sector 62, Noida, Uttar Pradesh 201309, India",
+  address: "",
   hours: "Mon - Sat: 9:30 AM - 6:30 PM",
   socials: { ... }
 };
