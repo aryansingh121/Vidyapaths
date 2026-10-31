@@ -35,7 +35,7 @@ All contact coordinates are consolidated in `src/data/siteData.js`:
 // File: src/data/siteData.js
 export const siteConfig = {
   name: "Vidyapaths",
-  tagline: "Right Guidance. Brighter Future.",
+  tagline: "Beginning Your Path",
   
   // Production contact tokens
   phone: "+91 98765 43210",              // Visual representation on Navbar & Footer

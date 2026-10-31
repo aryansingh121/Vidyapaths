@@ -41,7 +41,7 @@ export default function CollegeAdmissionSection({ onOpenEnquiry }) {
   };
 
   return (
-    <section className="py-20 md:py-28 bg-slate-50">
+    <section className="py-20 md:py-28 bg-slate-50 dark:bg-[#0B1220] transition-colors duration-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         <SectionHeading
@@ -57,15 +57,15 @@ export default function CollegeAdmissionSection({ onOpenEnquiry }) {
             role="tablist"
             aria-label="Course Categories"
           >
-            <div className="inline-flex p-1.5 rounded-xl bg-slate-200/80 border border-slate-300/50 shrink-0 gap-1 sm:gap-1.5">
+            <div className="inline-flex p-1.5 rounded-xl bg-slate-200/80 dark:bg-[#17243A] border border-slate-300/50 dark:border-[#29384F] shrink-0 gap-1 sm:gap-1.5">
               <button
                 role="tab"
                 aria-selected={activeTab === 'ug'}
                 onClick={(e) => handleTabClick('ug', e)}
                 className={`px-4 sm:px-5 py-2 sm:py-2.5 rounded-lg text-xs sm:text-sm font-semibold transition-all cursor-pointer shrink-0 whitespace-nowrap ${
                   activeTab === 'ug'
-                    ? 'bg-white text-navy-900 shadow-sm'
-                    : 'text-slate-600 hover:text-navy-900'
+                    ? 'bg-white dark:bg-[#111C2E] text-navy-900 dark:text-white shadow-sm'
+                    : 'text-slate-600 dark:text-slate-400 hover:text-navy-900 dark:hover:text-white'
                 }`}
               >
                 Undergraduate (UG)
@@ -76,8 +76,8 @@ export default function CollegeAdmissionSection({ onOpenEnquiry }) {
                 onClick={(e) => handleTabClick('pg', e)}
                 className={`px-4 sm:px-5 py-2 sm:py-2.5 rounded-lg text-xs sm:text-sm font-semibold transition-all cursor-pointer shrink-0 whitespace-nowrap ${
                   activeTab === 'pg'
-                    ? 'bg-white text-navy-900 shadow-sm'
-                    : 'text-slate-600 hover:text-navy-900'
+                    ? 'bg-white dark:bg-[#111C2E] text-navy-900 dark:text-white shadow-sm'
+                    : 'text-slate-600 dark:text-slate-400 hover:text-navy-900 dark:hover:text-white'
                 }`}
               >
                 Postgraduate (PG)
@@ -88,8 +88,8 @@ export default function CollegeAdmissionSection({ onOpenEnquiry }) {
                 onClick={(e) => handleTabClick('domains', e)}
                 className={`px-4 sm:px-5 py-2 sm:py-2.5 rounded-lg text-xs sm:text-sm font-semibold transition-all cursor-pointer shrink-0 whitespace-nowrap ${
                   activeTab === 'domains'
-                    ? 'bg-white text-navy-900 shadow-sm'
-                    : 'text-slate-600 hover:text-navy-900'
+                    ? 'bg-white dark:bg-[#111C2E] text-navy-900 dark:text-white shadow-sm'
+                    : 'text-slate-600 dark:text-slate-400 hover:text-navy-900 dark:hover:text-white'
                 }`}
               >
                 Industry Specializations
@@ -104,33 +104,33 @@ export default function CollegeAdmissionSection({ onOpenEnquiry }) {
             {coursesData.undergraduate.map((course, idx) => (
               <div
                 key={idx}
-                className="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-xs hover:shadow-lg hover:border-orange-200 transition-all flex flex-col justify-between group"
+                className="bg-white dark:bg-[#17243A] rounded-2xl p-6 border border-slate-200/80 dark:border-[#29384F] shadow-xs hover:shadow-lg hover:border-orange-200 dark:hover:border-orange-500/40 transition-all flex flex-col justify-between group"
               >
                 <div>
                   <div className="flex items-center justify-between mb-3">
-                    <span className="text-xs font-semibold px-2.5 py-1 rounded-md bg-orange-50 text-orange-600 border border-orange-100">
+                    <span className="text-xs font-semibold px-2.5 py-1 rounded-md bg-orange-50 dark:bg-orange-950/60 text-orange-600 dark:text-orange-400 border border-orange-100 dark:border-orange-800/40">
                       {course.tag}
                     </span>
-                    <span className="text-xs text-slate-500 flex items-center gap-1">
+                    <span className="text-xs text-slate-500 dark:text-slate-400 flex items-center gap-1">
                       <Clock className="w-3.5 h-3.5" />
                       {course.duration}
                     </span>
                   </div>
 
-                  <h3 className="text-xl font-bold text-navy-900 mb-1 group-hover:text-orange-600 transition-colors">
+                  <h3 className="text-xl font-bold text-navy-900 dark:text-white mb-1 group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors">
                     {course.name}
                   </h3>
 
-                  <p className="text-xs text-slate-600 mb-4">
+                  <p className="text-xs text-slate-600 dark:text-slate-300 mb-4">
                     Key Focus: {course.focus}
                   </p>
                 </div>
 
-                <div className="pt-4 border-t border-slate-100 flex items-center justify-between">
-                  <span className="text-xs text-slate-500 font-medium">Admissions Open 2026</span>
+                <div className="pt-4 border-t border-slate-100 dark:border-[#29384F] flex items-center justify-between">
+                  <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">Admissions Open 2026</span>
                   <button
                     onClick={() => onOpenEnquiry({ service: 'college-admission', course: course.name })}
-                    className="text-xs font-bold text-orange-600 hover:text-orange-700 flex items-center gap-1 cursor-pointer"
+                    className="text-xs font-bold text-orange-600 dark:text-orange-400 hover:text-orange-700 dark:hover:text-orange-300 flex items-center gap-1 cursor-pointer"
                   >
                     <span>Get Guidance</span>
                     <ArrowRight className="w-3.5 h-3.5" />
@@ -147,33 +147,33 @@ export default function CollegeAdmissionSection({ onOpenEnquiry }) {
             {coursesData.postgraduate.map((course, idx) => (
               <div
                 key={idx}
-                className="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-xs hover:shadow-lg hover:border-orange-200 transition-all flex flex-col justify-between group"
+                className="bg-white dark:bg-[#17243A] rounded-2xl p-6 border border-slate-200/80 dark:border-[#29384F] shadow-xs hover:shadow-lg hover:border-orange-200 dark:hover:border-orange-500/40 transition-all flex flex-col justify-between group"
               >
                 <div>
                   <div className="flex items-center justify-between mb-3">
-                    <span className="text-xs font-semibold px-2.5 py-1 rounded-md bg-blue-50 text-blue-700 border border-blue-100">
+                    <span className="text-xs font-semibold px-2.5 py-1 rounded-md bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 border border-blue-100 dark:border-blue-800/40">
                       {course.tag}
                     </span>
-                    <span className="text-xs text-slate-500 flex items-center gap-1">
+                    <span className="text-xs text-slate-500 dark:text-slate-400 flex items-center gap-1">
                       <Clock className="w-3.5 h-3.5" />
                       {course.duration}
                     </span>
                   </div>
 
-                  <h3 className="text-xl font-bold text-navy-900 mb-1 group-hover:text-orange-600 transition-colors">
+                  <h3 className="text-xl font-bold text-navy-900 dark:text-white mb-1 group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors">
                     {course.name}
                   </h3>
 
-                  <p className="text-xs text-slate-600 mb-4">
+                  <p className="text-xs text-slate-600 dark:text-slate-300 mb-4">
                     Key Focus: {course.focus}
                   </p>
                 </div>
 
-                <div className="pt-4 border-t border-slate-100 flex items-center justify-between">
-                  <span className="text-xs text-slate-500 font-medium">Spot Counselling</span>
+                <div className="pt-4 border-t border-slate-100 dark:border-[#29384F] flex items-center justify-between">
+                  <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">Spot Counselling</span>
                   <button
                     onClick={() => onOpenEnquiry({ service: 'college-admission', course: course.name })}
-                    className="text-xs font-bold text-orange-600 hover:text-orange-700 flex items-center gap-1 cursor-pointer"
+                    className="text-xs font-bold text-orange-600 dark:text-orange-400 hover:text-orange-700 dark:hover:text-orange-300 flex items-center gap-1 cursor-pointer"
                   >
                     <span>Get Guidance</span>
                     <ArrowRight className="w-3.5 h-3.5" />
@@ -192,29 +192,29 @@ export default function CollegeAdmissionSection({ onOpenEnquiry }) {
               return (
                 <div
                   key={idx}
-                  className="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-xs hover:shadow-lg hover:border-orange-200 transition-all flex flex-col justify-between"
+                  className="bg-white dark:bg-[#17243A] rounded-2xl p-6 border border-slate-200/80 dark:border-[#29384F] shadow-xs hover:shadow-lg hover:border-orange-200 dark:hover:border-orange-500/40 transition-all flex flex-col justify-between"
                 >
                   <div>
-                    <div className="w-10 h-10 rounded-xl bg-orange-50 text-orange-600 flex items-center justify-center mb-4">
+                    <div className="w-10 h-10 rounded-xl bg-orange-50 dark:bg-orange-950/60 text-orange-600 dark:text-orange-400 flex items-center justify-center mb-4">
                       <Icon className="w-5 h-5" />
                     </div>
 
-                    <h4 className="text-base font-bold text-navy-900 mb-1">
+                    <h4 className="text-base font-bold text-navy-900 dark:text-white mb-1">
                       {spec.domain}
                     </h4>
 
-                    <p className="text-xs text-slate-500 mb-3">
+                    <p className="text-xs text-slate-500 dark:text-slate-400 mb-3">
                       {spec.desc}
                     </p>
                   </div>
 
-                  <div className="pt-3 border-t border-slate-100 flex items-center justify-between">
-                    <span className="text-[11px] font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded">
+                  <div className="pt-3 border-t border-slate-100 dark:border-[#29384F] flex items-center justify-between">
+                    <span className="text-[11px] font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/60 px-2 py-0.5 rounded">
                       {spec.count}
                     </span>
                     <button
                       onClick={() => onOpenEnquiry({ service: 'college-admission', course: spec.domain })}
-                      className="text-xs font-bold text-orange-600 hover:text-orange-700 flex items-center gap-1 cursor-pointer"
+                      className="text-xs font-bold text-orange-600 dark:text-orange-400 hover:text-orange-700 dark:hover:text-orange-300 flex items-center gap-1 cursor-pointer"
                     >
                       <span>Get Guidance</span>
                       <ArrowRight className="w-3.5 h-3.5" />
@@ -227,9 +227,9 @@ export default function CollegeAdmissionSection({ onOpenEnquiry }) {
         )}
 
         {/* Bottom CTA block */}
-        <div className="mt-14 bg-white rounded-2xl p-8 border border-slate-200 text-center max-w-3xl mx-auto shadow-xs">
-          <h4 className="text-xl font-bold text-navy-900 mb-2">Want to Compare Cutoffs and Course Fees?</h4>
-          <p className="text-sm text-slate-600 mb-6">
+        <div className="mt-14 bg-white dark:bg-[#111C2E] rounded-2xl p-8 border border-slate-200 dark:border-[#29384F] text-center max-w-3xl mx-auto shadow-xs">
+          <h4 className="text-xl font-bold text-navy-900 dark:text-white mb-2">Want to Compare Cutoffs and Course Fees?</h4>
+          <p className="text-sm text-slate-600 dark:text-slate-300 mb-6">
             Our counselors will share unbiased college comparison sheets tailored to your academic score, location preferences, and career expectations.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -241,7 +241,7 @@ export default function CollegeAdmissionSection({ onOpenEnquiry }) {
             </button>
             <Link
               to="/colleges"
-              className="px-6 py-3 rounded-xl font-semibold text-sm text-navy-900 bg-slate-100 hover:bg-slate-200 transition-colors"
+              className="px-6 py-3 rounded-xl font-semibold text-sm text-navy-900 dark:text-white bg-slate-100 dark:bg-[#17243A] hover:bg-slate-200 dark:hover:bg-[#1e2f4a] border border-transparent dark:border-[#29384F] transition-colors"
             >
               Explore Colleges Catalogue
             </Link>

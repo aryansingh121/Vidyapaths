@@ -1,4 +1,4 @@
-# Vidyapaths — Right Guidance. Brighter Future.
+# Vidyapaths — Beginning Your Path
 
 [![React](https://img.shields.io/badge/React-19.2.8-61DAFB?logo=react&logoColor=black)](https://react.dev/)
 [![Vite](https://img.shields.io/badge/Vite-8.3.0-646CFF?logo=vite&logoColor=white)](https://vitejs.dev/)
@@ -32,7 +32,7 @@
 ## Project Overview
 
 - **Platform Name:** Vidyapaths
-- **Tagline:** *"Right Guidance. Brighter Future."*
+- **Tagline:** *"Beginning Your Path"*
 - **Target Audience:** Class 10 & 12 students, undergraduate aspirants, postgraduate applicants, study abroad seekers, and early-career job seekers looking for structured, transparent guidance.
 - **Core Mission:** Eliminate misinformation, quota confusion, and aggressive marketing bias in higher education by providing verified admission information, direct statutory portal links, curated academic pathways, and personalised 1-on-1 mentorship.
 

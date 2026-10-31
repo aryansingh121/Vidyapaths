@@ -194,13 +194,14 @@ export default function CounsellingModal({
       {/* Modal Dialog Card */}
       <div
         ref={modalRef}
-        className="relative w-full max-w-lg bg-white rounded-2xl sm:rounded-3xl shadow-2xl overflow-hidden z-10 flex flex-col my-auto border border-slate-200/80 transition-all"
+        className="relative w-full max-w-lg bg-white dark:bg-[#111C2E] rounded-2xl sm:rounded-3xl shadow-2xl overflow-hidden z-10 flex flex-col my-auto border border-slate-200/80 dark:border-[#29384F] transition-all"
       >
         {/* Navy Header */}
-        <div className="px-5 sm:px-7 py-4 sm:py-5 bg-navy-900 text-white flex items-start justify-between border-b border-navy-800 shrink-0">
+        <div className="px-5 sm:px-7 py-4 sm:py-5 bg-navy-900 dark:bg-[#0B1220] text-white flex items-start justify-between border-b border-navy-800 dark:border-[#29384F] shrink-0">
           <div className="flex items-start gap-3.5 pr-3">
-            <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-white p-1 flex items-center justify-center shrink-0 shadow-md">
-              <img src="/logo-icon.png" alt="Vidyapaths" className="w-full h-full object-contain" />
+            <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-white dark:bg-orange-950/40 p-1 flex items-center justify-center shrink-0 shadow-md border border-transparent dark:border-orange-500/30">
+              <img src="/logo-icon.png" alt="Vidyapaths" className="w-full h-full object-contain dark:hidden" />
+              <img src="/logo-icon-dark.png" alt="Vidyapaths" className="w-full h-full object-contain hidden dark:block" />
             </div>
             <div>
               <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-orange-500 text-white uppercase tracking-wider mb-1.5">
@@ -222,7 +223,7 @@ export default function CounsellingModal({
             type="button"
             onClick={onClose}
             disabled={isSubmitting}
-            className="p-1.5 sm:p-2 rounded-xl text-slate-400 hover:text-white hover:bg-navy-800 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 cursor-pointer shrink-0 disabled:opacity-50"
+            className="p-1.5 sm:p-2 rounded-xl text-slate-400 hover:text-white hover:bg-navy-800 dark:hover:bg-slate-800 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 cursor-pointer shrink-0 disabled:opacity-50"
             aria-label="Close counselling modal"
           >
             <X className="w-5 h-5" />
@@ -234,32 +235,32 @@ export default function CounsellingModal({
           {isSubmitted ? (
             /* Success Confirmation State */
             <div className="py-4 text-center space-y-4 animate-in fade-in zoom-in-95 duration-200">
-              <div className="w-16 h-16 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center mx-auto shadow-inner border border-emerald-100">
+              <div className="w-16 h-16 rounded-2xl bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mx-auto shadow-inner border border-emerald-100 dark:border-emerald-800/60">
                 <CheckCircle2 className="w-9 h-9" />
               </div>
 
               <div className="space-y-1.5">
-                <h3 className="text-xl sm:text-2xl font-bold text-navy-950">
+                <h3 className="text-xl sm:text-2xl font-bold text-navy-950 dark:text-white">
                   Enquiry Submitted Successfully!
                 </h3>
-                <p className="text-xs sm:text-sm text-slate-600 max-w-sm mx-auto leading-relaxed">
-                  Thank you, <strong className="text-navy-900">{formData.name}</strong>! Our counselling team has received your request and will call or WhatsApp you shortly.
+                <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 max-w-sm mx-auto leading-relaxed">
+                  Thank you, <strong className="text-navy-900 dark:text-orange-400">{formData.name}</strong>! Our counselling team has received your request and will call or WhatsApp you shortly.
                 </p>
               </div>
 
               {/* Summary Pill Box */}
-              <div className="bg-slate-50 border border-slate-200/90 rounded-xl p-3.5 text-left text-xs text-slate-600 space-y-1.5 max-w-sm mx-auto">
+              <div className="bg-slate-50 dark:bg-[#17243A] border border-slate-200/90 dark:border-[#29384F] rounded-xl p-3.5 text-left text-xs text-slate-600 dark:text-slate-300 space-y-1.5 max-w-sm mx-auto">
                 <div className="flex justify-between">
                   <span className="text-slate-400">Phone:</span>
-                  <span className="font-semibold text-slate-800">{formData.phone}</span>
+                  <span className="font-semibold text-slate-800 dark:text-slate-100">{formData.phone}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-400">Email:</span>
-                  <span className="font-semibold text-slate-800">{formData.email}</span>
+                  <span className="font-semibold text-slate-800 dark:text-slate-100">{formData.email}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-400">Qualification:</span>
-                  <span className="font-semibold text-slate-800">{formData.qualification}</span>
+                  <span className="font-semibold text-slate-800 dark:text-slate-100">{formData.qualification}</span>
                 </div>
               </div>
 
@@ -267,7 +268,7 @@ export default function CounsellingModal({
                 <button
                   type="button"
                   onClick={onClose}
-                  className="w-full py-3 px-6 rounded-xl font-bold text-sm text-white bg-navy-950 hover:bg-navy-900 transition-colors shadow-md cursor-pointer"
+                  className="w-full py-3 px-6 rounded-xl font-bold text-sm text-white bg-navy-950 hover:bg-navy-900 dark:bg-orange-500 dark:hover:bg-orange-600 transition-colors shadow-md cursor-pointer"
                 >
                   Done
                 </button>
@@ -279,7 +280,7 @@ export default function CounsellingModal({
               {submitError && (
                 <div
                   role="alert"
-                  className="p-3.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs sm:text-sm flex items-start gap-2.5 animate-in fade-in duration-150"
+                  className="p-3.5 rounded-xl bg-rose-50 dark:bg-rose-950/60 border border-rose-200 dark:border-rose-800 text-rose-700 dark:text-rose-300 text-xs sm:text-sm flex items-start gap-2.5 animate-in fade-in duration-150"
                 >
                   <AlertCircle className="w-5 h-5 shrink-0 mt-0.5 text-rose-500" />
                   <div className="flex-1 leading-snug">{submitError}</div>
@@ -290,7 +291,7 @@ export default function CounsellingModal({
               <div>
                 <label
                   htmlFor="counselling-name"
-                  className="block text-xs font-bold text-navy-950 uppercase tracking-wider mb-1.5"
+                  className="block text-xs font-bold text-navy-950 dark:text-slate-100 uppercase tracking-wider mb-1.5"
                 >
                   Name <span className="text-orange-500">*</span>
                 </label>
@@ -314,7 +315,7 @@ export default function CounsellingModal({
                     className={`w-full pl-10 pr-4 py-2.5 sm:py-3 rounded-xl border text-base sm:text-sm transition-all focus:outline-none ${
                       errors.name && touched.name
                         ? 'border-rose-400 bg-rose-50/30 text-rose-900 focus:border-rose-500 focus:ring-2 focus:ring-rose-500/20'
-                        : 'border-slate-200 bg-slate-50/50 text-slate-800 hover:border-slate-300 focus:border-orange-500 focus:bg-white focus:ring-2 focus:ring-orange-500/20'
+                        : 'border-slate-200 dark:border-[#29384F] bg-slate-50/50 dark:bg-[#17243A] text-slate-800 dark:text-slate-100 hover:border-slate-300 dark:hover:border-slate-600 focus:border-orange-500 focus:bg-white dark:focus:bg-[#17243A] focus:ring-2 focus:ring-orange-500/20'
                     }`}
                   />
                 </div>
@@ -329,13 +330,13 @@ export default function CounsellingModal({
               <div>
                 <label
                   htmlFor="counselling-phone"
-                  className="block text-xs font-bold text-navy-950 uppercase tracking-wider mb-1.5"
+                  className="block text-xs font-bold text-navy-950 dark:text-slate-100 uppercase tracking-wider mb-1.5"
                 >
                   Phone Number <span className="text-orange-500">*</span>
                 </label>
-                <div className="relative flex rounded-xl border border-slate-200 bg-slate-50/50 focus-within:border-orange-500 focus-within:bg-white focus-within:ring-2 focus-within:ring-orange-500/20 transition-all overflow-hidden">
-                  <div className="flex items-center gap-1 pl-3.5 pr-2.5 bg-slate-100/80 border-r border-slate-200 text-slate-700 text-xs sm:text-sm font-semibold shrink-0 select-none">
-                    <Phone className="w-3.5 h-3.5 text-slate-500" />
+                <div className="relative flex rounded-xl border border-slate-200 dark:border-[#29384F] bg-slate-50/50 dark:bg-[#17243A] focus-within:border-orange-500 focus-within:bg-white dark:focus-within:bg-[#17243A] focus-within:ring-2 focus-within:ring-orange-500/20 transition-all overflow-hidden">
+                  <div className="flex items-center gap-1 pl-3.5 pr-2.5 bg-slate-100/80 dark:bg-[#1e2f4a] border-r border-slate-200 dark:border-[#29384F] text-slate-700 dark:text-slate-200 text-xs sm:text-sm font-semibold shrink-0 select-none">
+                    <Phone className="w-3.5 h-3.5 text-slate-500 dark:text-slate-400" />
                     <span>+91</span>
                   </div>
                   <input
@@ -351,7 +352,7 @@ export default function CounsellingModal({
                     aria-required="true"
                     aria-invalid={Boolean(errors.phone)}
                     aria-describedby={errors.phone ? 'counselling-phone-error' : undefined}
-                    className="w-full px-3.5 py-2.5 sm:py-3 text-base sm:text-sm bg-transparent text-slate-800 placeholder-slate-400 focus:outline-none"
+                    className="w-full px-3.5 py-2.5 sm:py-3 text-base sm:text-sm bg-transparent text-slate-800 dark:text-slate-100 placeholder-slate-400 focus:outline-none"
                   />
                 </div>
                 {errors.phone && touched.phone && (
@@ -365,7 +366,7 @@ export default function CounsellingModal({
               <div>
                 <label
                   htmlFor="counselling-email"
-                  className="block text-xs font-bold text-navy-950 uppercase tracking-wider mb-1.5"
+                  className="block text-xs font-bold text-navy-950 dark:text-slate-100 uppercase tracking-wider mb-1.5"
                 >
                   Email Address <span className="text-orange-500">*</span>
                 </label>
@@ -389,7 +390,7 @@ export default function CounsellingModal({
                     className={`w-full pl-10 pr-4 py-2.5 sm:py-3 rounded-xl border text-base sm:text-sm transition-all focus:outline-none ${
                       errors.email && touched.email
                         ? 'border-rose-400 bg-rose-50/30 text-rose-900 focus:border-rose-500 focus:ring-2 focus:ring-rose-500/20'
-                        : 'border-slate-200 bg-slate-50/50 text-slate-800 hover:border-slate-300 focus:border-orange-500 focus:bg-white focus:ring-2 focus:ring-orange-500/20'
+                        : 'border-slate-200 dark:border-[#29384F] bg-slate-50/50 dark:bg-[#17243A] text-slate-800 dark:text-slate-100 hover:border-slate-300 dark:hover:border-slate-600 focus:border-orange-500 focus:bg-white dark:focus:bg-[#17243A] focus:ring-2 focus:ring-orange-500/20'
                     }`}
                   />
                 </div>

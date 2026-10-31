@@ -12,6 +12,7 @@ import EnquiryModal from './components/EnquiryModal';
 import CounsellingModal from './components/CounsellingModal';
 import ScrollToTop from './components/ScrollToTop';
 import ErrorBoundary from './components/common/ErrorBoundary';
+import { ThemeProvider } from './context/ThemeContext';
 import { EnquiryProvider } from './context/EnquiryContext';
 import { useEnquiry } from './hooks/useEnquiry';
 import { usePageMeta } from './utils/usePageMeta';
@@ -38,7 +39,7 @@ function AppContent() {
   } = useEnquiry();
 
   return (
-    <div className="min-h-screen flex flex-col bg-white text-slate-800 selection:bg-orange-500 selection:text-white font-sans">
+    <div className="min-h-screen flex flex-col bg-white dark:bg-dark-bg text-slate-800 dark:text-dark-text-primary selection:bg-orange-500 selection:text-white font-sans">
       {/* Scroll restoration across route changes and hash navigation */}
       <ScrollToTop />
 
@@ -152,11 +153,13 @@ function AppContent() {
 export default function App() {
   return (
     <ErrorBoundary>
-      <Router>
-        <EnquiryProvider>
-          <AppContent />
-        </EnquiryProvider>
-      </Router>
+      <ThemeProvider>
+        <Router>
+          <EnquiryProvider>
+            <AppContent />
+          </EnquiryProvider>
+        </Router>
+      </ThemeProvider>
     </ErrorBoundary>
   );
 }

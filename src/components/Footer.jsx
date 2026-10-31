@@ -40,20 +40,25 @@ export default function Footer({ onOpenEnquiry, onOpenCounselling }) {
   const encodedWhatsappMsg = encodeURIComponent(siteConfig.whatsappMessage);
 
   return (
-    <footer className="bg-navy-900 text-slate-300 pt-16 pb-24 sm:pb-28 border-t border-navy-800 relative z-10">
+    <footer className="bg-navy-900 dark:bg-[#070D18] text-slate-300 pt-16 pb-24 sm:pb-28 border-t border-navy-800 dark:border-[#1E2D44] relative z-10 transition-colors duration-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Top Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 pb-14 border-b border-navy-800">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 pb-14 border-b border-navy-800 dark:border-[#1E2D44]">
           
           {/* Brand Col */}
           <div className="lg:col-span-2 space-y-4">
             <Link to="/" onClick={() => handleNavClick('/')} className="flex items-center gap-3 group">
-              <div className="w-11 h-11 rounded-xl bg-white p-1.5 flex items-center justify-center shadow-md shrink-0 group-hover:scale-105 transition-transform duration-200">
+              <div className="w-11 h-11 rounded-xl bg-white dark:bg-orange-950/40 p-1.5 flex items-center justify-center shadow-md border border-transparent dark:border-orange-500/30 shrink-0 group-hover:scale-105 transition-all duration-200">
                 <img 
                   src="/logo-icon.png" 
                   alt="Vidyapaths Logo" 
-                  className="w-full h-full object-contain" 
+                  className="w-full h-full object-contain dark:hidden" 
+                />
+                <img 
+                  src="/logo-icon-dark.png" 
+                  alt="Vidyapaths Logo" 
+                  className="w-full h-full object-contain hidden dark:block" 
                 />
               </div>
               <div className="flex flex-col text-left">
@@ -162,7 +167,7 @@ export default function Footer({ onOpenEnquiry, onOpenCounselling }) {
         </div>
 
         {/* Study Abroad Country Badges */}
-        <div className="py-6 border-b border-navy-800 flex flex-wrap items-center gap-2">
+        <div className="py-6 border-b border-navy-800 dark:border-[#1E2D44] flex flex-wrap items-center gap-2">
           <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider mr-2">
             Study Destinations:
           </span>
@@ -170,7 +175,7 @@ export default function Footer({ onOpenEnquiry, onOpenCounselling }) {
             <Link
               key={dest.id}
               to={`/study-abroad#${dest.id}`}
-              className="text-xs bg-navy-800/80 hover:bg-navy-700 hover:text-white text-slate-300 px-2.5 py-1 rounded-md transition-colors"
+              className="text-xs bg-navy-800/80 dark:bg-[#111C2E] hover:bg-navy-700 dark:hover:bg-[#17243A] hover:text-white text-slate-300 px-2.5 py-1 rounded-md border border-transparent dark:border-[#29384F]/60 transition-colors"
             >
               {dest.name}
             </Link>

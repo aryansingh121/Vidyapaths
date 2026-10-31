@@ -12,14 +12,18 @@ import {
   Globe, 
   Briefcase, 
   Mail,
-  ChevronRight
+  ChevronRight,
+  Sun,
+  Moon
 } from 'lucide-react';
 import { siteConfig } from '../data/siteData';
+import { useTheme } from '../context/ThemeContext';
 
 export default function Navbar({ onOpenEnquiry, onOpenCounselling }) {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
+  const { isDark, toggleTheme } = useTheme();
 
   const handleCounsellingClick = (triggerSource) => {
     if (onOpenCounselling) {
@@ -66,10 +70,10 @@ export default function Navbar({ onOpenEnquiry, onOpenCounselling }) {
 
   return (
     <header 
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-in-out w-full ${
+      className={`fixed top-0 left-0 right-0 z-50 transition-[background-color,border-color,box-shadow,padding] duration-200 ease-out w-full ${
         scrolled 
-          ? 'bg-white/95 backdrop-blur-md border-b border-slate-200/80 shadow-[0_4px_20px_-4px_rgba(11,31,58,0.06)] py-2 sm:py-2.5' 
-          : 'bg-white border-b border-slate-100 shadow-[0_1px_3px_0_rgba(11,31,58,0.02)] py-2.5 sm:py-3.5'
+          ? 'bg-white/95 dark:bg-[#0B1220]/95 backdrop-blur-md border-b border-slate-200/80 dark:border-[#29384F] shadow-[0_4px_20px_-4px_rgba(11,31,58,0.06)] dark:shadow-black/20 py-2 sm:py-2.5' 
+          : 'bg-white dark:bg-[#0B1220] border-b border-slate-100 dark:border-[#29384F]/60 shadow-[0_1px_3px_0_rgba(11,31,58,0.02)] dark:shadow-none py-2.5 sm:py-3.5'
       }`}
     >
       <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 w-full">
@@ -82,19 +86,24 @@ export default function Navbar({ onOpenEnquiry, onOpenCounselling }) {
             className="flex items-center gap-2.5 sm:gap-3 group focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 rounded-xl min-h-[44px] shrink-0"
             aria-label="Vidyapaths Home"
           >
-            <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-orange-50/90 border border-orange-200/80 p-1 flex items-center justify-center shadow-xs group-hover:scale-105 group-hover:border-orange-300 transition-all duration-200 shrink-0">
+            <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-orange-50/90 dark:bg-orange-950/40 border border-orange-200/80 dark:border-orange-500/30 p-1 flex items-center justify-center shadow-xs group-hover:scale-105 group-hover:border-orange-300 dark:group-hover:border-orange-500/50 transition-all duration-200 shrink-0">
               <img 
                 src="/logo-icon.png" 
                 alt="Vidyapaths Logo" 
-                className="w-full h-full object-contain" 
+                className="w-full h-full object-contain dark:hidden" 
+              />
+              <img 
+                src="/logo-icon-dark.png" 
+                alt="Vidyapaths Logo" 
+                className="w-full h-full object-contain hidden dark:block" 
               />
             </div>
             
             <div className="flex flex-col text-left">
-              <span className="text-base min-[360px]:text-lg sm:text-xl font-extrabold tracking-tight text-navy-950 leading-none whitespace-nowrap">
+              <span className="text-base min-[360px]:text-lg sm:text-xl font-extrabold tracking-tight text-navy-950 dark:text-white leading-none whitespace-nowrap">
                 Vidya<span className="text-orange-500">paths</span>
               </span>
-              <span className="hidden min-[380px]:block text-[8px] sm:text-[9px] uppercase tracking-[0.16em] font-bold text-slate-500 mt-1 leading-none whitespace-nowrap">
+              <span className="hidden min-[380px]:block text-[8px] sm:text-[9px] uppercase tracking-[0.16em] font-bold text-slate-500 dark:text-slate-400 mt-1 leading-none whitespace-nowrap">
                 Career Consultants
               </span>
             </div>
@@ -114,8 +123,8 @@ export default function Navbar({ onOpenEnquiry, onOpenCounselling }) {
                   onClick={() => handleNavClick(link.path)}
                   className={`px-2 xl:px-2.5 py-1.5 xl:py-2 rounded-lg text-xs xl:text-sm font-medium transition-all whitespace-nowrap relative ${
                     active
-                      ? 'text-orange-600 bg-orange-50/80 font-semibold shadow-xs'
-                      : 'text-slate-600 hover:text-navy-950 hover:bg-slate-50'
+                      ? 'text-orange-600 dark:text-orange-400 bg-orange-50/80 dark:bg-orange-950/40 font-semibold shadow-xs'
+                      : 'text-slate-600 dark:text-slate-300 hover:text-navy-950 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800/60'
                   }`}
                 >
                   <span>{link.name}</span>
@@ -130,17 +139,31 @@ export default function Navbar({ onOpenEnquiry, onOpenCounselling }) {
             })}
           </nav>
 
-          {/* Desktop Right Actions (Phone Secondary on 2XL + Primary CTA) */}
+          {/* Desktop Right Actions (Phone Secondary on 2XL + Theme Toggle + Primary CTA) */}
           <div className="hidden lg:flex items-center gap-2 xl:gap-2.5 shrink-0">
             {/* Secondary Phone (only on wide screens to prevent crowding) */}
             <a
               href={`tel:${siteConfig.phoneRaw}`}
-              className="hidden 2xl:inline-flex items-center gap-1.5 text-xs font-medium text-slate-500 hover:text-navy-950 px-2.5 py-2 rounded-lg hover:bg-slate-50 transition-colors whitespace-nowrap group"
+              className="hidden 2xl:inline-flex items-center gap-1.5 text-xs font-medium text-slate-500 dark:text-slate-400 hover:text-navy-950 dark:hover:text-white px-2.5 py-2 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800/60 transition-colors whitespace-nowrap group"
               title={`Call ${siteConfig.phone}`}
             >
-              <Phone className="w-3.5 h-3.5 text-slate-400 group-hover:text-orange-500 transition-colors" />
+              <Phone className="w-3.5 h-3.5 text-slate-400 dark:text-slate-400 group-hover:text-orange-500 transition-colors" />
               <span>{siteConfig.phone}</span>
             </a>
+
+            {/* Desktop Theme Switcher */}
+            <button
+              onClick={toggleTheme}
+              className="p-2 rounded-xl text-slate-600 hover:text-navy-950 dark:text-slate-300 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/80 border border-transparent dark:border-[#29384F] transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 min-h-[40px] min-w-[40px] flex items-center justify-center cursor-pointer"
+              aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
+              title={isDark ? "Switch to light mode" : "Switch to dark mode"}
+            >
+              {isDark ? (
+                <Sun className="w-4.5 h-4.5 text-amber-400 transition-transform duration-300 hover:rotate-45" />
+              ) : (
+                <Moon className="w-4.5 h-4.5 text-slate-600 transition-transform duration-300 hover:-rotate-12" />
+              )}
+            </button>
 
             {/* Primary Orange CTA */}
             <button
@@ -154,6 +177,20 @@ export default function Navbar({ onOpenEnquiry, onOpenCounselling }) {
 
           {/* Mobile & Tablet Header Controls */}
           <div className="flex items-center gap-1.5 sm:gap-2 lg:hidden shrink-0">
+            {/* Mobile Header Theme Toggle */}
+            <button
+              onClick={toggleTheme}
+              className="p-2 rounded-lg text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800/80 focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 min-h-[40px] min-w-[40px] flex items-center justify-center cursor-pointer transition-colors"
+              aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
+              title={isDark ? "Switch to light mode" : "Switch to dark mode"}
+            >
+              {isDark ? (
+                <Sun className="w-5 h-5 text-amber-400" />
+              ) : (
+                <Moon className="w-5 h-5 text-slate-700" />
+              )}
+            </button>
+
             {/* Compact Header CTA Button (available on 350px+) */}
             <button
               onClick={() => handleCounsellingClick('Navbar Mobile Header')}
@@ -165,14 +202,14 @@ export default function Navbar({ onOpenEnquiry, onOpenCounselling }) {
             {/* Accessible Hamburger Button */}
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="p-2 rounded-lg text-slate-700 hover:text-navy-950 hover:bg-slate-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 min-h-[44px] min-w-[44px] flex items-center justify-center cursor-pointer transition-colors"
+              className="p-2 rounded-lg text-slate-700 dark:text-slate-200 hover:text-navy-950 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/80 focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 min-h-[44px] min-w-[44px] flex items-center justify-center cursor-pointer transition-colors"
               aria-label={isOpen ? "Close main menu" : "Open main menu"}
               aria-expanded={isOpen}
             >
               {isOpen ? (
-                <X className="w-5 h-5 sm:w-6 sm:h-6 text-navy-900" />
+                <X className="w-5 h-5 sm:w-6 sm:h-6 text-navy-900 dark:text-white" />
               ) : (
-                <Menu className="w-5 h-5 sm:w-6 sm:h-6 text-navy-900" />
+                <Menu className="w-5 h-5 sm:w-6 sm:h-6 text-navy-900 dark:text-white" />
               )}
             </button>
           </div>
@@ -183,7 +220,7 @@ export default function Navbar({ onOpenEnquiry, onOpenCounselling }) {
       {/* Mobile & Tablet Dropdown Navigation */}
       {isOpen && (
         <div 
-          className="lg:hidden bg-white/98 backdrop-blur-md border-b border-slate-200 shadow-xl px-4 pt-3 pb-6 animate-in slide-in-from-top-2 duration-200 max-h-[85vh] overflow-y-auto"
+          className="lg:hidden bg-white/98 dark:bg-[#111C2E]/98 backdrop-blur-md border-b border-slate-200 dark:border-[#29384F] shadow-xl px-4 pt-3 pb-6 animate-in slide-in-from-top-2 duration-200 max-h-[85vh] overflow-y-auto"
           id="mobile-navigation-menu"
         >
           <div className="flex flex-col space-y-1">
@@ -204,28 +241,44 @@ export default function Navbar({ onOpenEnquiry, onOpenCounselling }) {
                   }}
                   className={`px-3.5 py-3 rounded-xl text-sm font-medium min-h-[44px] flex items-center justify-between transition-colors ${
                     active
-                      ? 'text-orange-600 bg-orange-50/80 font-semibold'
-                      : 'text-slate-800 hover:bg-slate-50 active:bg-slate-100'
+                      ? 'text-orange-600 dark:text-orange-400 bg-orange-50/80 dark:bg-orange-950/40 font-semibold'
+                      : 'text-slate-800 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800/60 active:bg-slate-100 dark:active:bg-slate-800'
                   }`}
                 >
                   <div className="flex items-center gap-3">
                     <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${
-                      active ? 'bg-orange-100 text-orange-600' : 'bg-slate-100 text-slate-500'
+                      active 
+                        ? 'bg-orange-100 dark:bg-orange-900/60 text-orange-600 dark:text-orange-400' 
+                        : 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400'
                     }`}>
                       <Icon className="w-4 h-4" />
                     </div>
                     <span className="truncate">{link.name}</span>
                   </div>
-                  <ChevronRight className={`w-4 h-4 shrink-0 ${active ? 'text-orange-500' : 'text-slate-300'}`} />
+                  <ChevronRight className={`w-4 h-4 shrink-0 ${active ? 'text-orange-500' : 'text-slate-300 dark:text-slate-600'}`} />
                 </Link>
               );
             })}
 
-            {/* Mobile Contact & CTA Footer */}
-            <div className="pt-4 border-t border-slate-100 mt-2 space-y-2.5">
+            {/* Mobile Contact, Theme & CTA Footer */}
+            <div className="pt-4 border-t border-slate-100 dark:border-[#29384F] mt-2 space-y-2.5">
+              {/* Mobile Drawer Theme Quick Toggle */}
+              <div className="flex items-center justify-between p-2.5 rounded-xl bg-slate-50 dark:bg-[#17243A] border border-slate-200 dark:border-[#29384F]">
+                <div className="flex items-center gap-2 text-xs font-semibold text-slate-700 dark:text-slate-200">
+                  {isDark ? <Moon className="w-4 h-4 text-orange-400" /> : <Sun className="w-4 h-4 text-amber-500" />}
+                  <span>{isDark ? 'Dark Mode' : 'Light Mode'}</span>
+                </div>
+                <button
+                  onClick={toggleTheme}
+                  className="px-3 py-1 rounded-lg text-xs font-bold text-orange-600 dark:text-orange-400 bg-orange-50 dark:bg-orange-950/60 border border-orange-200 dark:border-orange-800/60 cursor-pointer"
+                >
+                  Switch to {isDark ? 'Light' : 'Dark'}
+                </button>
+              </div>
+
               <a
                 href={`tel:${siteConfig.phoneRaw}`}
-                className="flex items-center justify-center gap-2 w-full py-2.5 px-4 rounded-xl text-xs font-semibold text-slate-700 bg-slate-50 hover:bg-slate-100 border border-slate-200 min-h-[44px] transition-colors"
+                className="flex items-center justify-center gap-2 w-full py-2.5 px-4 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-200 bg-slate-50 dark:bg-[#17243A] hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200 dark:border-[#29384F] min-h-[44px] transition-colors"
               >
                 <Phone className="w-4 h-4 text-orange-500 shrink-0" />
                 <span className="truncate">Direct Support: {siteConfig.phone}</span>

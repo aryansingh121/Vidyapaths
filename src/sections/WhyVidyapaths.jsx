@@ -37,7 +37,7 @@ export default function WhyVidyapaths() {
   ];
 
   return (
-    <section className="py-20 md:py-28 bg-slate-50">
+    <section className="py-20 md:py-28 bg-slate-50 dark:bg-[#0B1220]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         <SectionHeading
@@ -52,17 +52,17 @@ export default function WhyVidyapaths() {
             return (
               <div
                 key={idx}
-                className="bg-white rounded-2xl p-7 border border-slate-200/80 shadow-xs hover:shadow-lg hover:border-orange-200 transition-all duration-300 group"
+                className="bg-white dark:bg-[#17243A] rounded-2xl p-7 border border-slate-200/80 dark:border-[#29384F] shadow-xs hover:shadow-lg hover:border-orange-200 dark:hover:border-orange-500/40 transition-[border-color,box-shadow,background-color] duration-200 group"
               >
-                <div className="w-12 h-12 rounded-xl bg-navy-900 text-white flex items-center justify-center mb-5 group-hover:bg-orange-500 transition-colors duration-300">
+                <div className="w-12 h-12 rounded-xl bg-navy-900 dark:bg-[#111C2E] border border-transparent dark:border-[#29384F] text-white flex items-center justify-center mb-5 group-hover:bg-orange-500 dark:group-hover:bg-orange-500 transition-colors duration-300">
                   <Icon className="w-6 h-6 text-orange-400 group-hover:text-white transition-colors" />
                 </div>
 
-                <h3 className="text-xl font-bold text-navy-900 mb-2 group-hover:text-orange-600 transition-colors">
+                <h3 className="text-xl font-bold text-navy-900 dark:text-white mb-2 group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors">
                   {item.title}
                 </h3>
 
-                <p className="text-sm text-slate-600 leading-relaxed">
+                <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
                   {item.description}
                 </p>
               </div>

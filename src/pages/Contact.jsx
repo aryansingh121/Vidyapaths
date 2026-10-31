@@ -18,17 +18,17 @@ export default function Contact() {
   const whatsappUrl = `https://wa.me/${cleanNumber}?text=${encodedMsg}`;
 
   return (
-    <div className="pt-24 md:pt-28 bg-slate-50 min-h-screen">
+    <div className="pt-24 md:pt-28 bg-slate-50 dark:bg-[#0B1220] min-h-screen">
       {/* Header */}
-      <section className="bg-white py-14 md:py-20 border-b border-slate-200">
+      <section className="bg-white dark:bg-[#0B1220] py-14 md:py-20 border-b border-slate-200 dark:border-[#1E2D44]">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-3">
-          <span className="inline-block px-3.5 py-1 text-xs font-semibold rounded-full uppercase tracking-wider bg-orange-50 text-orange-600 border border-orange-200">
+          <span className="inline-block px-3.5 py-1 text-xs font-semibold rounded-full uppercase tracking-wider bg-orange-50 dark:bg-orange-950/60 text-orange-600 dark:text-orange-400 border border-orange-200 dark:border-orange-800/60">
             Contact Vidyapaths
           </span>
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-navy-900 tracking-tight">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-navy-900 dark:text-white tracking-tight">
             Let's Talk About Your <span className="text-orange-500">Career Goals</span>
           </h1>
-          <p className="text-base sm:text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-base sm:text-lg text-slate-600 dark:text-slate-300 max-w-2xl mx-auto leading-relaxed">
             Have questions about college cutoffs, study abroad options, or internship guidance? Reach out today—our academic mentors are here to guide you.
           </p>
         </div>
@@ -43,7 +43,7 @@ export default function Contact() {
             <div className="lg:col-span-5 space-y-6">
               
               {/* Fast Connect Card */}
-              <div className="bg-navy-900 text-white rounded-3xl p-7 sm:p-8 shadow-xl border border-navy-800 space-y-6">
+              <div className="bg-navy-900 dark:bg-[#111C2E] text-white rounded-3xl p-7 sm:p-8 shadow-xl border border-navy-800 dark:border-[#29384F] space-y-6">
                 <div>
                   <span className="text-xs font-bold text-orange-400 uppercase tracking-wider">
                     Direct Assistance
@@ -108,7 +108,7 @@ export default function Contact() {
                 </div>
 
                 {/* Social Connect */}
-                <div className="pt-4 border-t border-navy-800">
+                <div className="pt-4 border-t border-navy-800 dark:border-[#1E2D44]">
                   <span className="text-xs font-semibold text-slate-400 block mb-3">Connect On Social Media</span>
                   <div className="flex items-center gap-3">
                     <a
@@ -154,25 +154,25 @@ export default function Contact() {
 
               {/* Consultation Format Box */}
               {siteConfig.address ? (
-                <div className="bg-white rounded-3xl p-6 border border-slate-200/80 shadow-xs space-y-3">
-                  <div className="flex items-center gap-2 text-navy-900 font-bold text-sm">
+                <div className="bg-white dark:bg-[#111C2E] rounded-3xl p-6 border border-slate-200/80 dark:border-[#29384F] shadow-xs space-y-3">
+                  <div className="flex items-center gap-2 text-navy-900 dark:text-white font-bold text-sm">
                     <MapPin className="w-4 h-4 text-orange-500" />
                     <span>Main Consulting Office</span>
                   </div>
-                  <p className="text-xs text-slate-600 leading-relaxed">
+                  <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
                     {siteConfig.address}
                   </p>
                 </div>
               ) : (
-                <div className="bg-white rounded-3xl p-6 border border-slate-200/80 shadow-xs space-y-3">
-                  <div className="flex items-center gap-2 text-navy-900 font-bold text-sm">
+                <div className="bg-white dark:bg-[#111C2E] rounded-3xl p-6 border border-slate-200/80 dark:border-[#29384F] shadow-xs space-y-3">
+                  <div className="flex items-center gap-2 text-navy-900 dark:text-white font-bold text-sm">
                     <Globe className="w-4 h-4 text-orange-500" />
                     <span>Pan-India Virtual Consultation</span>
                   </div>
-                  <p className="text-xs text-slate-600 leading-relaxed">
+                  <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
                     Personalized 1-on-1 career, college admission, and study abroad counselling sessions available online via video call, phone, and WhatsApp across India.
                   </p>
-                  <div className="p-3.5 bg-orange-50/70 rounded-xl border border-orange-100 flex items-center gap-2.5 text-xs text-orange-800 font-medium">
+                  <div className="p-3.5 bg-orange-50/70 dark:bg-orange-950/40 rounded-xl border border-orange-100 dark:border-orange-900/40 flex items-center gap-2.5 text-xs text-orange-800 dark:text-orange-300 font-medium">
                     <Sparkles className="w-4 h-4 text-orange-600 shrink-0" />
                     <span>Expert guidance from anywhere, at your convenience</span>
                   </div>

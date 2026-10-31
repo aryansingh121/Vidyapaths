@@ -134,17 +134,17 @@ export default function EnquiryForm({
       noValidate 
       className={isModal 
         ? "flex flex-col flex-1 min-h-0 w-full box-border" 
-        : "bg-white rounded-2xl p-6 sm:p-8 border border-slate-200/80 shadow-sm box-border"
+        : "bg-white dark:bg-[#111C2E] rounded-2xl p-6 sm:p-8 border border-slate-200/80 dark:border-[#29384F] shadow-sm box-border transition-colors duration-200"
       }
     >
       {!isModal && (
         <div className="flex items-center gap-2 mb-4">
-          <span className="w-7 h-7 rounded-lg bg-orange-100 text-orange-600 flex items-center justify-center shrink-0">
+          <span className="w-7 h-7 rounded-lg bg-orange-100 dark:bg-orange-950/60 text-orange-600 dark:text-orange-400 flex items-center justify-center shrink-0">
             <Sparkles className="w-3.5 h-3.5" />
           </span>
           <div>
-            <h3 className="text-lg font-bold text-navy-900">{activeConfig.modalHeading}</h3>
-            <p className="text-xs text-slate-500">{activeConfig.shortDescription}</p>
+            <h3 className="text-lg font-bold text-navy-900 dark:text-white">{activeConfig.modalHeading}</h3>
+            <p className="text-xs text-slate-500 dark:text-slate-400">{activeConfig.shortDescription}</p>
           </div>
         </div>
       )}
@@ -154,10 +154,10 @@ export default function EnquiryForm({
         
         {/* Service Selector or Banner */}
         {activeConfig.hideServiceSelector ? (
-          <div className="flex items-center justify-between bg-orange-50/80 border border-orange-200/80 rounded-xl px-3.5 py-2 mb-2">
+          <div className="flex items-center justify-between bg-orange-50/80 dark:bg-orange-950/60 border border-orange-200/80 dark:border-orange-800/40 rounded-xl px-3.5 py-2 mb-2">
             <div className="flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-orange-500 animate-pulse"></span>
-              <span className="text-xs font-semibold text-orange-950">
+              <span className="text-xs font-semibold text-orange-950 dark:text-orange-300">
                 {activeConfig.bannerTitle || activeConfig.displayName}
               </span>
             </div>
@@ -193,7 +193,7 @@ export default function EnquiryForm({
             <div key={field.name} className="col-span-1">
               <label 
                 htmlFor={`${formUid}-${field.name}`} 
-                className="block text-[13px] font-medium text-slate-700 mb-1 leading-none"
+                className="block text-[13px] font-medium text-slate-700 dark:text-slate-200 mb-1 leading-none"
               >
                 {field.label} {field.required && <span className="text-red-500 font-bold ml-0.5">*</span>}
               </label>
@@ -206,8 +206,8 @@ export default function EnquiryForm({
                 onChange={(e) => handleSharedChange(field.name, e.target.value)}
                 aria-invalid={!!errors[field.name]}
                 aria-describedby={errors[field.name] ? `${formUid}-${field.name}-err` : undefined}
-                className={`w-full px-3 text-base sm:text-[13.5px] rounded-xl border h-[40px] sm:h-[40px] transition-colors bg-white text-navy-900 placeholder:text-slate-400 placeholder:font-normal placeholder:opacity-100 ${
-                  errors[field.name] ? 'border-red-400 bg-red-50/30' : 'border-slate-300 focus:border-orange-500'
+                className={`w-full px-3 text-base sm:text-[13.5px] rounded-xl border h-[40px] sm:h-[40px] transition-colors bg-white dark:bg-[#17243A] text-navy-900 dark:text-white placeholder:text-slate-400 placeholder:font-normal placeholder:opacity-100 ${
+                  errors[field.name] ? 'border-red-400 bg-red-50/30' : 'border-slate-300 dark:border-[#29384F] focus:border-orange-500'
                 } focus:outline-none focus:ring-1 focus:ring-orange-500`}
               />
               {errors[field.name] && (
@@ -233,8 +233,8 @@ export default function EnquiryForm({
                   htmlFor={`${formUid}-${field.name}`} 
                   className={`block mb-1 leading-none ${
                     field.required 
-                      ? 'text-[13px] font-medium text-slate-700' 
-                      : 'text-[13px] font-normal text-slate-500'
+                      ? 'text-[13px] font-medium text-slate-700 dark:text-slate-200' 
+                      : 'text-[13px] font-normal text-slate-500 dark:text-slate-400'
                   }`}
                 >
                   {field.label} {field.required ? (
@@ -256,8 +256,8 @@ export default function EnquiryForm({
                             htmlFor={optId}
                             className={`flex items-start gap-2.5 p-2.5 rounded-xl border text-xs cursor-pointer transition-all select-none ${
                               isChecked
-                                ? 'border-orange-500 bg-orange-50/80 text-navy-950 font-medium shadow-xs ring-1 ring-orange-500/30'
-                                : 'border-slate-200 bg-white hover:bg-slate-50 hover:border-slate-300 text-slate-700'
+                                ? 'border-orange-500 bg-orange-50/80 dark:bg-orange-950/60 text-navy-950 dark:text-orange-300 font-medium shadow-xs ring-1 ring-orange-500/30'
+                                : 'border-slate-200 dark:border-[#29384F] bg-white dark:bg-[#17243A] hover:bg-slate-50 dark:hover:bg-[#1e2f4a] hover:border-slate-300 dark:hover:border-slate-500 text-slate-700 dark:text-slate-200'
                             }`}
                           >
                             <input
@@ -282,25 +282,22 @@ export default function EnquiryForm({
                       name={field.name}
                       value={value}
                       onChange={(e) => handleFieldChange(field.name, e.target.value)}
-                      style={{ color: !value ? '#94A3B8' : '#0B1F3A' }}
                       aria-invalid={!!fieldError}
                       aria-describedby={fieldError ? `${formUid}-${field.name}-err` : undefined}
-                      className={`w-full px-3 text-base sm:text-[13.5px] rounded-xl border h-[40px] sm:h-[40px] transition-colors bg-white appearance-none pr-8 cursor-pointer ${
-                        !value ? 'text-[#94A3B8]' : 'text-[#0B1F3A] font-normal'
-                      } ${
-                        fieldError ? 'border-red-400 bg-red-50/30' : 'border-slate-300 focus:border-orange-500'
+                      className={`w-full px-3 text-base sm:text-[13.5px] rounded-xl border h-[40px] sm:h-[40px] transition-colors bg-white dark:bg-[#17243A] text-navy-900 dark:text-white appearance-none pr-8 cursor-pointer ${
+                        fieldError ? 'border-red-400 bg-red-50/30' : 'border-slate-300 dark:border-[#29384F] focus:border-orange-500'
                       } focus:outline-none focus:ring-1 focus:ring-orange-500`}
                     >
-                      <option value="" className="text-[#94A3B8]">
+                      <option value="" className="text-slate-400">
                         Select {field.label.toLowerCase()}
                       </option>
                       {field.options.map((opt) => (
-                        <option key={opt} value={opt} className="text-[#0B1F3A]">
+                        <option key={opt} value={opt} className="text-navy-900 dark:text-white dark:bg-[#17243A]">
                           {opt}
                         </option>
                       ))}
                       {value && !field.options.includes(value) && (
-                        <option key={value} value={value} className="text-[#0B1F3A]">
+                        <option key={value} value={value} className="text-navy-900 dark:text-white dark:bg-[#17243A]">
                           {value}
                         </option>
                       )}
@@ -317,8 +314,8 @@ export default function EnquiryForm({
                     onChange={(e) => handleFieldChange(field.name, e.target.value)}
                     aria-invalid={!!fieldError}
                     aria-describedby={fieldError ? `${formUid}-${field.name}-err` : undefined}
-                    className={`w-full px-3 py-1.5 text-base sm:text-[13.5px] rounded-xl border min-h-[48px] sm:h-[50px] resize-none transition-colors leading-snug bg-white text-navy-900 placeholder:text-slate-400 placeholder:font-normal placeholder:opacity-100 ${
-                      fieldError ? 'border-red-400 bg-red-50/30' : 'border-slate-300 focus:border-orange-500'
+                    className={`w-full px-3 py-1.5 text-base sm:text-[13.5px] rounded-xl border min-h-[48px] sm:h-[50px] resize-none transition-colors leading-snug bg-white dark:bg-[#17243A] text-navy-900 dark:text-white placeholder:text-slate-400 placeholder:font-normal placeholder:opacity-100 ${
+                      fieldError ? 'border-red-400 bg-red-50/30' : 'border-slate-300 dark:border-[#29384F] focus:border-orange-500'
                     } focus:outline-none focus:ring-1 focus:ring-orange-500`}
                   />
                 ) : (
@@ -331,8 +328,8 @@ export default function EnquiryForm({
                     onChange={(e) => handleFieldChange(field.name, e.target.value)}
                     aria-invalid={!!fieldError}
                     aria-describedby={fieldError ? `${formUid}-${field.name}-err` : undefined}
-                    className={`w-full px-3 text-base sm:text-[13.5px] rounded-xl border h-[40px] sm:h-[40px] transition-colors bg-white text-navy-900 placeholder:text-slate-400 placeholder:font-normal placeholder:opacity-100 ${
-                      fieldError ? 'border-red-400 bg-red-50/30' : 'border-slate-300 focus:border-orange-500'
+                    className={`w-full px-3 text-base sm:text-[13.5px] rounded-xl border h-[40px] sm:h-[40px] transition-colors bg-white dark:bg-[#17243A] text-navy-900 dark:text-white placeholder:text-slate-400 placeholder:font-normal placeholder:opacity-100 ${
+                      fieldError ? 'border-red-400 bg-red-50/30' : 'border-slate-300 dark:border-[#29384F] focus:border-orange-500'
                     } focus:outline-none focus:ring-1 focus:ring-orange-500`}
                   />
                 )}

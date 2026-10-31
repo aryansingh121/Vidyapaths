@@ -39,8 +39,8 @@ In single-page applications, route transitions do not perform full browser reloa
 
 | Route Path | Synchronized Page Title | Meta Description |
 | :--- | :--- | :--- |
-| `/` | `Vidyapaths — Right Guidance. Brighter Future. \| Career & Education Consultancy` | *Vidyapaths is a student-focused Career & Education Consultancy helping students make confident decisions for college admissions, career guidance, internships, and study abroad.* |
-| `/about` | `About Vidyapaths \| Mission, Vision & Student-First Mentorship` | *Learn about Vidyapaths, our ethical advisory philosophy, transparent college cutoffs analysis, and student-focused career guidance.* |
+| `/` | `Vidyapaths — Beginning Your Path \| Career & Education Consultancy` | *Vidyapaths is a student-focused Career & Education Consultancy helping students make confident decisions for college admissions, career guidance, internships, and study abroad.* |
+| `/about` | `About Vidyapaths: Your Trusted Partner from Classroom to Career` | *We Bridge the Gap Between Academic Confusion and Lifelong Professional Success. Beginning Your Path with Vidyapaths.* |
 | `/services` | `Our Services \| College Admissions, Career Counselling & Study Abroad — Vidyapaths` | *Explore Vidyapaths comprehensive education guidance services: UG/PG admissions, career counselling, internship assistance, and international degrees.* |
 | `/colleges` | `Explore Colleges & Courses \| UG, PG & Specialized Programs — Vidyapaths` | *Discover colleges and explore undergraduate, postgraduate, and specialized programs. Get personalized guidance to choose a course that fits your career goals.* |
 | `/study-abroad` | `Study Abroad Consultancy \| UK, USA, Canada, Australia & More — Vidyapaths` | *End-to-end overseas education guidance for 9 top destinations: UK, USA, Canada, Australia, Germany, Ireland, New Zealand, UAE, and Singapore.* |
@@ -57,13 +57,13 @@ The root `index.html` file includes standardized OpenGraph and Twitter Card mark
 <!-- Open Graph / Facebook -->
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://vidyapaths.com/" />
-<meta property="og:title" content="Vidyapaths — Right Guidance. Brighter Future." />
+<meta property="og:title" content="Vidyapaths — Beginning Your Path" />
 <meta property="og:description" content="Student-focused Career & Education Consultancy: College Admissions, Career Counselling, Internships & Study Abroad." />
 <meta property="og:image" content="/og-image.png" />
 
 <!-- Twitter Cards -->
 <meta property="twitter:card" content="summary_large_image" />
-<meta property="twitter:title" content="Vidyapaths — Right Guidance. Brighter Future." />
+<meta property="twitter:title" content="Vidyapaths — Beginning Your Path" />
 <meta property="twitter:description" content="Student-focused Career & Education Consultancy: College Admissions, Career Counselling, Internships & Study Abroad." />
 ```
 

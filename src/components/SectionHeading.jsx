@@ -13,19 +13,19 @@ export default function SectionHeading({
         <span className={`inline-block px-3.5 py-1 text-xs font-semibold rounded-full uppercase tracking-wider mb-3 ${
           theme === 'dark'
             ? 'bg-orange-500/10 text-orange-400 border border-orange-500/20'
-            : 'bg-orange-50 text-orange-600 border border-orange-200/60'
+            : 'bg-orange-50 dark:bg-orange-950/60 text-orange-600 dark:text-orange-400 border border-orange-200/60 dark:border-orange-800/40'
         }`}>
           {badge}
         </span>
       )}
       <h2 className={`text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight mb-4 ${
-        theme === 'dark' ? 'text-white' : 'text-navy-900'
+        theme === 'dark' ? 'text-white' : 'text-navy-900 dark:text-white'
       }`}>
         {title}
       </h2>
       {subtitle && (
         <p className={`text-base sm:text-lg leading-relaxed ${
-          theme === 'dark' ? 'text-slate-300' : 'text-slate-600'
+          theme === 'dark' ? 'text-slate-300' : 'text-slate-600 dark:text-slate-300'
         }`}>
           {subtitle}
         </p>

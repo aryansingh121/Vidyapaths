@@ -7,10 +7,12 @@ import { env } from '../config/env';
 
 export const siteConfig = {
   name: "Vidyapaths",
-  tagline: "Right Guidance. Brighter Future.",
+  tagline: "Beginning Your Path",
   subTagline: "Career Consultants",
   logo: "/logo.png",
+  logoDark: "/logo-dark.png",
   logoIcon: "/logo-icon.png",
+  logoIconDark: "/logo-icon-dark.png",
   shortDescription: "Student-focused Career & Education Consultancy helping you make confident decisions about colleges, careers, internships, and global education.",
   
   // Official Client contact details linked to environment

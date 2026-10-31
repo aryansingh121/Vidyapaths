@@ -241,23 +241,23 @@ export default function Colleges({ onOpenEnquiry, onOpenCounselling }) {
   const activeCategoryObject = directoryFilterCategories.find(c => c.id === activeCategory);
 
   return (
-    <div className="pt-24 md:pt-28 bg-white min-h-screen">
+    <div className="pt-24 md:pt-28 bg-white dark:bg-[#0B1220] min-h-screen">
       
       {/* ====================================================
           A. HERO SECTION
           ==================================================== */}
-      <section className="bg-gradient-to-b from-slate-50 via-white to-white py-14 sm:py-20 md:py-24 border-b border-slate-100">
+      <section className="bg-gradient-to-b from-slate-50 via-white to-white dark:bg-none dark:bg-[#0B1220] py-14 sm:py-20 md:py-24 border-b border-slate-100 dark:border-[#1E2D44] transition-colors duration-200">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-5">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-orange-50 border border-orange-200 text-orange-600 text-xs font-semibold uppercase tracking-wider">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-orange-50 dark:bg-orange-950/60 border border-orange-200 dark:border-orange-800/60 text-orange-600 dark:text-orange-400 text-xs font-semibold uppercase tracking-wider">
             <Sparkles className="w-3.5 h-3.5 text-orange-500" />
             <span>National College & Higher Education Directory</span>
           </div>
 
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-navy-950 tracking-tight leading-tight">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-navy-950 dark:text-white tracking-tight leading-tight">
             Explore <span className="text-orange-500">Colleges & Courses</span> by Location
           </h1>
 
-          <p className="text-base sm:text-lg text-slate-600 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-base sm:text-lg text-slate-600 dark:text-slate-300 max-w-3xl mx-auto leading-relaxed">
             Discover premier universities and accredited colleges across Delhi NCR, capital cities, and leading educational hubs in India. Filter by state, city, category, and degree programs with personalized admission guidance.
           </p>
 
@@ -271,7 +271,7 @@ export default function Colleges({ onOpenEnquiry, onOpenCounselling }) {
             </button>
             <a
               href="#college-directory"
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl font-semibold text-sm text-navy-900 bg-slate-100 hover:bg-slate-200 transition-colors min-h-[46px]"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl font-semibold text-sm text-navy-900 dark:text-white bg-slate-100 dark:bg-[#17243A] hover:bg-slate-200 dark:hover:bg-[#1e2f4a] border border-transparent dark:border-[#29384F] transition-colors min-h-[46px]"
             >
               <BookOpen className="w-4 h-4 text-orange-500" />
               <span>Browse 320+ Institutions</span>
@@ -279,7 +279,7 @@ export default function Colleges({ onOpenEnquiry, onOpenCounselling }) {
           </div>
 
           {/* Verification Integrity Notice */}
-          <div className="mt-8 p-3.5 rounded-xl bg-slate-50 border border-slate-200/80 max-w-2xl mx-auto text-xs text-slate-500 flex items-center justify-center gap-2">
+          <div className="mt-8 p-3.5 rounded-xl bg-slate-50 dark:bg-[#111C2E] border border-slate-200/80 dark:border-[#29384F] max-w-2xl mx-auto text-xs text-slate-500 dark:text-slate-400 flex items-center justify-center gap-2">
             <Info className="w-4 h-4 text-orange-500 shrink-0" />
             <span>Directory compiled from official institutional prospectuses and verified university registries. Admission cutoffs & quotas are governed by official university notices.</span>
           </div>
@@ -289,16 +289,16 @@ export default function Colleges({ onOpenEnquiry, onOpenCounselling }) {
       {/* ====================================================
           B. COMMON COURSE CATEGORIES & STREAMS
           ==================================================== */}
-      <section id="academic-streams" className="py-16 md:py-20 bg-slate-50/60 border-b border-slate-100">
+      <section id="academic-streams" className="py-16 md:py-20 bg-slate-50/60 dark:bg-[#0B1220] border-b border-slate-100 dark:border-[#1E2D44]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto mb-12">
             <span className="text-xs font-bold text-orange-600 uppercase tracking-wider block mb-2">
               Academic Streams
             </span>
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-navy-950 mb-3">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-navy-950 dark:text-white mb-3">
               Common Course Categories
             </h2>
-            <p className="text-sm sm:text-base text-slate-600">
+            <p className="text-sm sm:text-base text-slate-600 dark:text-slate-300">
               Explore key disciplines offered across premier Indian universities. Click any stream to view institutions offering related programs.
             </p>
           </div>
@@ -309,26 +309,26 @@ export default function Colleges({ onOpenEnquiry, onOpenCounselling }) {
               return (
                 <div
                   key={cat.id}
-                  className="bg-white rounded-2xl p-5 sm:p-6 border border-slate-200/90 shadow-xs hover:border-orange-300 hover:shadow-md transition-all flex flex-col justify-between group"
+                  className="bg-white dark:bg-[#111C2E] rounded-2xl p-5 sm:p-6 border border-slate-200/90 dark:border-[#29384F] shadow-xs hover:border-orange-300 dark:hover:border-orange-500/50 hover:shadow-md transition-all flex flex-col justify-between group"
                 >
                   <div>
-                    <div className="w-12 h-12 rounded-xl bg-orange-50 border border-orange-100 flex items-center justify-center text-orange-500 mb-4 group-hover:bg-orange-500 group-hover:text-white transition-colors">
+                    <div className="w-12 h-12 rounded-xl bg-orange-50 dark:bg-orange-950/60 border border-orange-100 dark:border-orange-900/40 flex items-center justify-center text-orange-500 mb-4 group-hover:bg-orange-500 group-hover:text-white transition-colors">
                       <IconComponent className="w-6 h-6" />
                     </div>
 
-                    <h3 className="text-lg font-bold text-navy-950 mb-2">
+                    <h3 className="text-lg font-bold text-navy-950 dark:text-white mb-2">
                       {cat.name}
                     </h3>
 
-                    <p className="text-xs text-slate-500 mb-3 leading-relaxed">
+                    <p className="text-xs text-slate-500 dark:text-slate-400 mb-3 leading-relaxed">
                       {cat.description}
                     </p>
 
-                    <div className="bg-slate-50 rounded-lg p-2.5 border border-slate-100 mb-4">
-                      <span className="text-[11px] font-semibold text-slate-600 block mb-1">
+                    <div className="bg-slate-50 dark:bg-[#17243A] rounded-lg p-2.5 border border-slate-100 dark:border-[#29384F] mb-4">
+                      <span className="text-[11px] font-semibold text-slate-600 dark:text-slate-300 block mb-1">
                         Key Degrees & Specializations:
                       </span>
-                      <p className="text-[11px] text-slate-500 leading-normal">
+                      <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-normal">
                         {cat.programs}
                       </p>
                     </div>
@@ -336,7 +336,7 @@ export default function Colleges({ onOpenEnquiry, onOpenCounselling }) {
 
                   <button
                     onClick={() => handleStreamClick(cat.id)}
-                    className="w-full inline-flex items-center justify-center gap-1.5 py-2 px-3 rounded-lg text-xs font-semibold text-orange-600 bg-orange-50 hover:bg-orange-100 transition-colors cursor-pointer min-h-[38px]"
+                    className="w-full inline-flex items-center justify-center gap-1.5 py-2 px-3 rounded-lg text-xs font-semibold text-orange-600 dark:text-orange-400 bg-orange-50 dark:bg-orange-950/50 hover:bg-orange-100 dark:hover:bg-orange-900/50 transition-colors cursor-pointer min-h-[38px]"
                   >
                     <span>View Institutions</span>
                     <ArrowRight className="w-3.5 h-3.5" />
@@ -351,25 +351,25 @@ export default function Colleges({ onOpenEnquiry, onOpenCounselling }) {
       {/* ====================================================
           C. COLLEGE & UNIVERSITY DIRECTORY (LOCATION SEARCH & FILTERS)
           ==================================================== */}
-      <section id="college-directory" className="py-16 md:py-24 bg-white">
+      <section id="college-directory" className="py-16 md:py-24 bg-white dark:bg-[#0B1220]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           
           {/* Section Header with Dynamic Result Counter */}
-          <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4 border-b border-slate-100 pb-6">
+          <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4 border-b border-slate-100 dark:border-[#1E2D44] pb-6">
             <div>
               <span className="text-xs font-bold text-orange-600 uppercase tracking-wider block mb-1">
                 Higher Education Directory
               </span>
-              <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-navy-950">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-navy-950 dark:text-white">
                 Colleges & Universities in India
               </h2>
-              <p className="text-xs sm:text-sm text-slate-500 mt-1">
+              <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
                 Explore accredited universities, Delhi NCR institutions, central universities, and top private colleges.
               </p>
             </div>
             
             <div className="shrink-0 flex items-center gap-2">
-              <span className="px-3.5 py-1.5 rounded-full text-xs font-bold bg-navy-50 text-navy-950 border border-navy-100">
+              <span className="px-3.5 py-1.5 rounded-full text-xs font-bold bg-navy-50 dark:bg-[#17243A] text-navy-950 dark:text-white border border-navy-100 dark:border-[#29384F]">
                 Showing {filteredColleges.length} of {collegesData.length} Institutions {locationResultText}
               </span>
             </div>
@@ -406,8 +406,8 @@ export default function Colleges({ onOpenEnquiry, onOpenCounselling }) {
                     onClick={() => handleCategoryChange(filter.id)}
                     className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all cursor-pointer whitespace-nowrap min-h-[40px] flex items-center border ${
                       isActive
-                        ? 'bg-navy-950 text-white border-navy-950 shadow-xs'
-                        : 'bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100 hover:text-navy-950'
+                        ? 'bg-navy-950 dark:bg-orange-600 text-white border-navy-950 dark:border-orange-600 shadow-xs'
+                        : 'bg-slate-50 dark:bg-[#111C2E] text-slate-600 dark:text-slate-300 border-slate-200 dark:border-[#29384F] hover:bg-slate-100 dark:hover:bg-[#17243A] hover:text-navy-950 dark:hover:text-white'
                     }`}
                   >
                     {filter.label}
@@ -418,11 +418,11 @@ export default function Colleges({ onOpenEnquiry, onOpenCounselling }) {
           </div>
 
           {/* Results Summary & Pagination Count Header */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6 text-xs text-slate-500">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6 text-xs text-slate-500 dark:text-slate-400">
             <div className="font-medium">
               {filteredColleges.length > 0 ? (
                 <span>
-                  Showing <strong className="text-navy-950 font-bold">{(currentPage - 1) * ITEMS_PER_PAGE + 1}</strong> - <strong className="text-navy-950 font-bold">{Math.min(currentPage * ITEMS_PER_PAGE, filteredColleges.length)}</strong> of <strong className="text-navy-950 font-bold">{filteredColleges.length}</strong> matching institutions
+                  Showing <strong className="text-navy-950 dark:text-white font-bold">{(currentPage - 1) * ITEMS_PER_PAGE + 1}</strong> - <strong className="text-navy-950 dark:text-white font-bold">{Math.min(currentPage * ITEMS_PER_PAGE, filteredColleges.length)}</strong> of <strong className="text-navy-950 dark:text-white font-bold">{filteredColleges.length}</strong> matching institutions
                 </span>
               ) : (
                 <span>No matching institutions found</span>
@@ -430,8 +430,8 @@ export default function Colleges({ onOpenEnquiry, onOpenCounselling }) {
             </div>
 
             {totalPages > 1 && (
-              <div className="text-slate-500">
-                Page <strong className="text-navy-950">{currentPage}</strong> of <strong className="text-navy-950">{totalPages}</strong>
+              <div className="text-slate-500 dark:text-slate-400">
+                Page <strong className="text-navy-950 dark:text-white">{currentPage}</strong> of <strong className="text-navy-950 dark:text-white">{totalPages}</strong>
               </div>
             )}
           </div>
@@ -451,17 +451,17 @@ export default function Colleges({ onOpenEnquiry, onOpenCounselling }) {
 
           {/* Empty Search State */}
           {filteredColleges.length === 0 && (
-            <div className="text-center py-16 px-4 bg-slate-50 rounded-2xl border border-slate-200">
-              <div className="w-14 h-14 mx-auto mb-4 rounded-full bg-orange-100 text-orange-500 flex items-center justify-center">
+            <div className="text-center py-16 px-4 bg-slate-50 dark:bg-[#111C2E] rounded-2xl border border-slate-200 dark:border-[#29384F]">
+              <div className="w-14 h-14 mx-auto mb-4 rounded-full bg-orange-100 dark:bg-orange-950/60 text-orange-500 flex items-center justify-center">
                 <Search className="w-7 h-7" />
               </div>
-              <h3 className="text-lg font-bold text-navy-950 mb-2">No institutions found for this location</h3>
-              <p className="text-xs sm:text-sm text-slate-600 max-w-md mx-auto mb-5 leading-relaxed">
+              <h3 className="text-lg font-bold text-navy-950 dark:text-white mb-2">No institutions found for this location</h3>
+              <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 max-w-md mx-auto mb-5 leading-relaxed">
                 We couldn't find any institutions matching your selected location {locationResultText} and filter criteria. Try selecting "All Cities", clearing your course keyword, or resetting all filters.
               </p>
               <button
                 onClick={handleClearFilters}
-                className="inline-flex items-center gap-1.5 px-6 py-2.5 rounded-xl text-xs sm:text-sm font-bold text-white bg-navy-950 hover:bg-navy-900 cursor-pointer transition-all"
+                className="inline-flex items-center gap-1.5 px-6 py-2.5 rounded-xl text-xs sm:text-sm font-bold text-white bg-navy-950 dark:bg-orange-600 hover:bg-navy-900 dark:hover:bg-orange-500 cursor-pointer transition-all"
               >
                 <RotateCcw className="w-4 h-4" />
                 <span>Reset All Filters</span>
@@ -471,9 +471,9 @@ export default function Colleges({ onOpenEnquiry, onOpenCounselling }) {
 
           {/* Pagination Controls */}
           {totalPages > 1 && (
-            <div className="mt-12 flex flex-col sm:flex-row items-center justify-between gap-4 pt-6 border-t border-slate-200/80">
-              <span className="text-xs text-slate-500 order-2 sm:order-1">
-                Showing page <strong className="text-navy-950">{currentPage}</strong> of <strong className="text-navy-950">{totalPages}</strong> ({filteredColleges.length} institutions)
+            <div className="mt-12 flex flex-col sm:flex-row items-center justify-between gap-4 pt-6 border-t border-slate-200/80 dark:border-[#1E2D44]">
+              <span className="text-xs text-slate-500 dark:text-slate-400 order-2 sm:order-1">
+                Showing page <strong className="text-navy-950 dark:text-white">{currentPage}</strong> of <strong className="text-navy-950 dark:text-white">{totalPages}</strong> ({filteredColleges.length} institutions)
               </span>
 
               <div className="flex items-center gap-1.5 order-1 sm:order-2">
@@ -481,7 +481,7 @@ export default function Colleges({ onOpenEnquiry, onOpenCounselling }) {
                   type="button"
                   onClick={() => handlePageChange(currentPage - 1)}
                   disabled={currentPage === 1}
-                  className="px-3 py-2 rounded-xl text-xs font-semibold text-slate-700 bg-white border border-slate-200 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors flex items-center gap-1 min-h-[38px]"
+                  className="px-3 py-2 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-300 bg-white dark:bg-[#111C2E] border border-slate-200 dark:border-[#29384F] hover:bg-slate-50 dark:hover:bg-[#17243A] disabled:opacity-40 disabled:cursor-not-allowed transition-colors flex items-center gap-1 min-h-[38px]"
                   aria-label="Previous page"
                 >
                   <ChevronLeft className="w-4 h-4" />
@@ -510,8 +510,8 @@ export default function Colleges({ onOpenEnquiry, onOpenCounselling }) {
                           onClick={() => handlePageChange(page)}
                           className={`w-9 h-9 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                             currentPage === page
-                              ? 'bg-navy-950 text-white shadow-xs'
-                              : 'bg-white text-slate-700 border border-slate-200 hover:bg-slate-100 hover:text-navy-950'
+                              ? 'bg-navy-950 dark:bg-orange-600 text-white shadow-xs'
+                              : 'bg-white dark:bg-[#111C2E] text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-[#29384F] hover:bg-slate-100 dark:hover:bg-[#17243A] hover:text-navy-950 dark:hover:text-white'
                           }`}
                           aria-current={currentPage === page ? 'page' : undefined}
                         >
@@ -525,7 +525,7 @@ export default function Colleges({ onOpenEnquiry, onOpenCounselling }) {
                   type="button"
                   onClick={() => handlePageChange(currentPage + 1)}
                   disabled={currentPage === totalPages}
-                  className="px-3 py-2 rounded-xl text-xs font-semibold text-slate-700 bg-white border border-slate-200 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors flex items-center gap-1 min-h-[38px]"
+                  className="px-3 py-2 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-300 bg-white dark:bg-[#111C2E] border border-slate-200 dark:border-[#29384F] hover:bg-slate-50 dark:hover:bg-[#17243A] disabled:opacity-40 disabled:cursor-not-allowed transition-colors flex items-center gap-1 min-h-[38px]"
                   aria-label="Next page"
                 >
                   <span>Next</span>
@@ -541,15 +541,15 @@ export default function Colleges({ onOpenEnquiry, onOpenCounselling }) {
       {/* ====================================================
           D. 1-ON-1 ADMISSION GUIDANCE CTA
           ==================================================== */}
-      <section className="py-20 bg-slate-50 border-t border-slate-200/80">
+      <section className="py-20 bg-slate-50 dark:bg-[#111C2E] border-t border-slate-200/80 dark:border-[#1E2D44]">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-4">
-          <span className="inline-block px-3.5 py-1 text-xs font-semibold rounded-full uppercase tracking-wider bg-orange-50 text-orange-600 border border-orange-200">
+          <span className="inline-block px-3.5 py-1 text-xs font-semibold rounded-full uppercase tracking-wider bg-orange-50 dark:bg-orange-950/60 border border-orange-200 dark:border-orange-800/60 text-orange-600 dark:text-orange-400">
             Expert Advisory
           </span>
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-navy-950">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-navy-950 dark:text-white">
             Need Help Choosing the Right College?
           </h2>
-          <p className="text-sm sm:text-base text-slate-600 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-sm sm:text-base text-slate-600 dark:text-slate-300 max-w-2xl mx-auto leading-relaxed">
             Our team can help you explore suitable courses, understand the CUET, JEE, NEET or institutional admission process, and prepare a personalized college shortlist based on your scores and location preferences.
           </p>
           <div className="pt-2">

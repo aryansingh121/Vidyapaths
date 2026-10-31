@@ -41,9 +41,9 @@ export default function StudyAbroad({ onOpenEnquiry, onOpenCounselling }) {
   ];
 
   return (
-    <div className="pt-24 md:pt-28">
+    <div className="pt-24 md:pt-28 bg-white dark:bg-[#0B1220] min-h-screen">
       {/* Hero Header */}
-      <section className="bg-navy-900 text-white py-16 md:py-24 relative overflow-hidden">
+      <section className="bg-navy-900 dark:bg-[#0B1220] text-white py-16 md:py-24 relative overflow-hidden border-b dark:border-[#1E2D44]">
         <div className="absolute top-0 right-0 w-96 h-96 bg-orange-500/10 rounded-full blur-3xl pointer-events-none"></div>
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-4 relative z-10">
           <span className="inline-block px-3.5 py-1 text-xs font-semibold rounded-full uppercase tracking-wider bg-orange-500/20 text-orange-400 border border-orange-500/30">
@@ -68,7 +68,7 @@ export default function StudyAbroad({ onOpenEnquiry, onOpenCounselling }) {
       </section>
 
       {/* 9 Countries Detailed Section */}
-      <section className="py-20 bg-slate-50">
+      <section className="py-20 bg-slate-50 dark:bg-[#0B1220]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeading
             badge="Top Global Destinations"
@@ -81,7 +81,7 @@ export default function StudyAbroad({ onOpenEnquiry, onOpenCounselling }) {
               <div
                 key={country.id}
                 id={country.id}
-                className="bg-white rounded-2xl p-7 border border-slate-200/80 shadow-xs hover:shadow-xl hover:border-orange-300 transition-all duration-300 flex flex-col justify-between group scroll-mt-28 target:border-orange-500 target:ring-2 target:ring-orange-500/20"
+                className="bg-white dark:bg-[#111C2E] rounded-2xl p-7 border border-slate-200/80 dark:border-[#29384F] shadow-xs hover:shadow-xl hover:border-orange-300 dark:hover:border-orange-500/50 transition-all duration-300 flex flex-col justify-between group scroll-mt-28 target:border-orange-500 target:ring-2 target:ring-orange-500/20"
               >
                 <div>
                   <div className="flex items-center justify-between mb-4">
@@ -89,44 +89,44 @@ export default function StudyAbroad({ onOpenEnquiry, onOpenCounselling }) {
                       <CountryFlag 
                         countryId={country.id} 
                         countryName={country.name}
-                        className="w-12 h-8.5 sm:w-14 sm:h-9.5 rounded-lg border border-slate-200/90 shadow-xs" 
+                        className="w-12 h-8.5 sm:w-14 sm:h-9.5 rounded-lg border border-slate-200/90 dark:border-[#29384F] shadow-xs" 
                       />
                       <div>
-                        <h3 className="text-xl font-bold text-navy-900 group-hover:text-orange-600 transition-colors leading-snug">
+                        <h3 className="text-xl font-bold text-navy-900 dark:text-white group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors leading-snug">
                           {country.name}
                         </h3>
-                        <span className="text-xs font-semibold text-slate-500">
+                        <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">
                           {country.short}
                         </span>
                       </div>
                     </div>
                   </div>
 
-                  <p className="text-xs text-slate-600 mb-5 leading-relaxed">
+                  <p className="text-xs text-slate-600 dark:text-slate-300 mb-5 leading-relaxed">
                     {country.highlights}
                   </p>
 
-                  <div className="space-y-3 pt-3 border-t border-slate-100 text-xs">
+                  <div className="space-y-3 pt-3 border-t border-slate-100 dark:border-[#1E2D44] text-xs">
                     <div>
-                      <span className="font-bold text-slate-700 block mb-1">Post-Study Work Rights:</span>
-                      <span className="text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded font-semibold inline-block">
+                      <span className="font-bold text-slate-700 dark:text-slate-300 block mb-1">Post-Study Work Rights:</span>
+                      <span className="text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/60 px-2 py-0.5 rounded font-semibold inline-block">
                         {country.workPermit}
                       </span>
                     </div>
 
                     <div>
-                      <span className="font-bold text-slate-700 block mb-1">Target Intakes:</span>
-                      <span className="text-slate-600 flex items-center gap-1">
+                      <span className="font-bold text-slate-700 dark:text-slate-300 block mb-1">Target Intakes:</span>
+                      <span className="text-slate-600 dark:text-slate-300 flex items-center gap-1">
                         <Calendar className="w-3.5 h-3.5 text-orange-500 shrink-0" />
                         {country.intakes}
                       </span>
                     </div>
 
                     <div>
-                      <span className="font-bold text-slate-700 block mb-1">Top Career Disciplines:</span>
+                      <span className="font-bold text-slate-700 dark:text-slate-300 block mb-1">Top Career Disciplines:</span>
                       <div className="flex flex-wrap gap-1">
                         {country.popularCourses.map((c, i) => (
-                          <span key={i} className="bg-slate-100 text-slate-700 px-2 py-0.5 rounded text-[11px]">
+                          <span key={i} className="bg-slate-100 dark:bg-[#17243A] text-slate-700 dark:text-slate-300 border border-transparent dark:border-[#29384F]/60 px-2 py-0.5 rounded text-[11px]">
                             {c}
                           </span>
                         ))}
@@ -135,11 +135,11 @@ export default function StudyAbroad({ onOpenEnquiry, onOpenCounselling }) {
                   </div>
                 </div>
 
-                <div className="pt-6 mt-4 border-t border-slate-100 flex items-center justify-between">
+                <div className="pt-6 mt-4 border-t border-slate-100 dark:border-[#1E2D44] flex items-center justify-between">
                   <span className="text-xs text-slate-400">Applications Open</span>
                   <button
                     onClick={() => onOpenEnquiry({ service: 'study-abroad', country: country.name })}
-                    className="inline-flex items-center gap-1.5 text-xs font-bold text-white bg-navy-900 hover:bg-orange-500 px-3.5 py-2 rounded-lg transition-colors cursor-pointer"
+                    className="inline-flex items-center gap-1.5 text-xs font-bold text-white bg-navy-900 dark:bg-orange-600 hover:bg-orange-500 dark:hover:bg-orange-500 px-3.5 py-2 rounded-lg transition-colors cursor-pointer"
                   >
                     <span>Apply for {country.short}</span>
                     <ArrowRight className="w-3.5 h-3.5" />
@@ -152,7 +152,7 @@ export default function StudyAbroad({ onOpenEnquiry, onOpenCounselling }) {
       </section>
 
       {/* 6 Step Global Process */}
-      <section className="py-20 bg-white">
+      <section className="py-20 bg-white dark:bg-[#0B1220]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeading
             badge="The Process"
@@ -164,13 +164,13 @@ export default function StudyAbroad({ onOpenEnquiry, onOpenCounselling }) {
             {processSteps.map((step, idx) => (
               <div
                 key={idx}
-                className="p-6 rounded-2xl bg-slate-50 border border-slate-200/80 hover:bg-white hover:border-orange-200 hover:shadow-lg transition-all"
+                className="p-6 rounded-2xl bg-slate-50 dark:bg-[#111C2E] border border-slate-200/80 dark:border-[#29384F] hover:bg-white dark:hover:bg-[#17243A] hover:border-orange-200 dark:hover:border-orange-500/50 hover:shadow-lg transition-all"
               >
-                <div className="w-10 h-10 rounded-xl bg-navy-900 text-orange-400 font-bold flex items-center justify-center mb-4 text-sm">
+                <div className="w-10 h-10 rounded-xl bg-navy-900 dark:bg-[#0B1220] text-orange-400 font-bold flex items-center justify-center mb-4 text-sm">
                   {step.num}
                 </div>
-                <h3 className="text-lg font-bold text-navy-900 mb-2">{step.title}</h3>
-                <p className="text-xs text-slate-600 leading-relaxed">{step.desc}</p>
+                <h3 className="text-lg font-bold text-navy-900 dark:text-white mb-2">{step.title}</h3>
+                <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">{step.desc}</p>
               </div>
             ))}
           </div>

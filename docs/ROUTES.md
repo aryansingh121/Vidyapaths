@@ -35,7 +35,7 @@ Each route is automatically synchronized with dynamic SEO document titles and de
 
 | Path | Component File | Page Title (`document.title`) | Active Navbar Key | Canonical / Alias |
 | :--- | :--- | :--- | :--- | :--- |
-| `/` | `src/pages/Home.jsx` | `Vidyapaths — Right Guidance. Brighter Future. \| Career & Education Consultancy` | `Home` | Canonical |
+| `/` | `src/pages/Home.jsx` | `Vidyapaths — Beginning Your Path \| Career & Education Consultancy` | `Home` | Canonical |
 | `/about` | `src/pages/About.jsx` | `About Vidyapaths \| Mission, Vision & Student-First Mentorship` | `About` | Canonical |
 | `/services` | `src/pages/Services.jsx` | `Our Services \| College Admissions, Career Counselling & Study Abroad — Vidyapaths` | `Services` | Canonical |
 | `/colleges` | `src/pages/Colleges.jsx` | `Explore Colleges & Courses \| UG, PG & Specialized Programs — Vidyapaths` | `Colleges` | Canonical |

@@ -7,7 +7,7 @@ import { Plane, Award, ArrowRight, ShieldCheck } from 'lucide-react';
 
 export default function StudyAbroadSection({ onOpenEnquiry }) {
   return (
-    <section className="py-20 md:py-28 bg-navy-900 text-white relative overflow-hidden">
+    <section className="py-20 md:py-28 bg-navy-900 dark:bg-[#0B1220] border-y border-transparent dark:border-[#29384F]/60 text-white relative overflow-hidden transition-colors duration-200">
       {/* Decorative background glow */}
       <div className="absolute top-0 right-0 w-96 h-96 bg-orange-500/10 rounded-full blur-3xl pointer-events-none"></div>
       <div className="absolute bottom-0 left-0 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl pointer-events-none"></div>
@@ -26,7 +26,7 @@ export default function StudyAbroadSection({ onOpenEnquiry }) {
           {countriesData.map((country) => (
             <div
               key={country.id}
-              className="bg-navy-800/80 hover:bg-navy-800 border border-navy-700/80 hover:border-orange-500/40 rounded-2xl p-6 transition-all duration-300 flex flex-col justify-between group shadow-lg"
+              className="bg-navy-800/80 hover:bg-navy-800 dark:bg-[#17243A] dark:hover:bg-[#1e2f4a] border border-navy-700/80 dark:border-[#29384F] hover:border-orange-500/40 rounded-2xl p-6 transition-[border-color,box-shadow,background-color] duration-200 flex flex-col justify-between group shadow-lg"
             >
               <div>
                 <div className="flex items-center justify-between mb-4">
@@ -89,7 +89,7 @@ export default function StudyAbroadSection({ onOpenEnquiry }) {
         </div>
 
         {/* Global Support Highlights Banner */}
-        <div className="mt-14 bg-navy-950 rounded-3xl p-8 border border-navy-800 shadow-xl">
+        <div className="mt-14 bg-navy-950 dark:bg-[#111C2E] rounded-3xl p-8 border border-navy-800 dark:border-[#29384F] shadow-xl">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center md:text-left">
             <div className="flex items-start gap-4">
               <div className="w-12 h-12 rounded-xl bg-orange-500/10 text-orange-400 flex items-center justify-center shrink-0">

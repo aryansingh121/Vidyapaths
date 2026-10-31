@@ -8,7 +8,7 @@
 
 **Vidyapaths** is a high-conversion, student-centric career and education consultancy platform. Its primary mission is to democratize ethical, transparent, and structured academic guidance for students navigating higher education, career transitions, competitive admissions, internship opportunities, and international study.
 
-- **Brand Slogan:** *"Right Guidance. Brighter Future."*
+- **Brand Slogan:** *"Beginning Your Path"*
 - **Core Value Proposition:** Unbiased, student-first mentoring backed by authentic institution criteria, cutoffs, and transparent admission guidance—free from the commercial bias often found in commission-driven consultancy models.
 
 ---

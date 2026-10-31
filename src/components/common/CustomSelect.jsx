@@ -184,13 +184,13 @@ export default function CustomSelect({
         aria-label={ariaLabel || label}
         onClick={() => setIsOpen(prev => !prev)}
         onKeyDown={handleKeyDown}
-        className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl border text-base md:text-sm bg-white text-navy-950 transition-all shadow-xs min-h-[46px] cursor-pointer text-left ${
+        className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl border text-base md:text-sm bg-white dark:bg-[#17243A] text-navy-950 dark:text-white transition-all shadow-xs min-h-[46px] cursor-pointer text-left ${
           isOpen
-            ? 'border-orange-500 ring-2 ring-orange-100 shadow-sm'
-            : 'border-slate-300 hover:border-slate-400 focus:border-orange-500 focus:ring-2 focus:ring-orange-100 focus:outline-none'
+            ? 'border-orange-500 ring-2 ring-orange-100 dark:ring-orange-950/40 shadow-sm'
+            : 'border-slate-300 dark:border-[#29384F] hover:border-slate-400 dark:hover:border-slate-500 focus:border-orange-500 focus:ring-2 focus:ring-orange-100 dark:focus:ring-orange-950/40 focus:outline-none'
         }`}
       >
-        <span className="truncate block font-normal text-slate-800 pr-2">
+        <span className="truncate block font-normal text-slate-800 dark:text-slate-100 pr-2">
           {selectedOption ? selectedOption.label : placeholder}
         </span>
         <ChevronDown 
@@ -207,11 +207,11 @@ export default function CustomSelect({
           ref={listboxRef}
           role="listbox"
           tabIndex={-1}
-          className="absolute z-50 left-0 right-0 top-full mt-1.5 bg-white rounded-xl border border-slate-200/90 shadow-xl overflow-hidden animate-in fade-in zoom-in-95 duration-150"
+          className="absolute z-50 left-0 right-0 top-full mt-1.5 bg-white dark:bg-[#17243A] rounded-xl border border-slate-200/90 dark:border-[#29384F] shadow-xl overflow-hidden animate-in fade-in zoom-in-95 duration-150"
         >
           {/* Real-time search inside dropdown with iOS 16px auto-zoom prevention */}
           {searchable && (
-            <div className="p-2 border-b border-slate-100 bg-slate-50/70">
+            <div className="p-2 border-b border-slate-100 dark:border-[#29384F] bg-slate-50/70 dark:bg-[#111C2E]">
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-2.5 flex items-center pointer-events-none text-slate-400">
                   <Search className="w-3.5 h-3.5" />
@@ -223,7 +223,7 @@ export default function CustomSelect({
                   onChange={(e) => setSearchQuery(e.target.value)}
                   onKeyDown={handleKeyDown}
                   placeholder={searchPlaceholder}
-                  className="w-full pl-8 pr-7 py-2 rounded-lg border border-slate-200 bg-white text-base md:text-xs text-navy-950 placeholder:text-slate-400 focus:border-orange-500 focus:ring-1 focus:ring-orange-500 focus:outline-none transition-all"
+                  className="w-full pl-8 pr-7 py-2 rounded-lg border border-slate-200 dark:border-[#29384F] bg-white dark:bg-[#17243A] text-base md:text-xs text-navy-950 dark:text-white placeholder:text-slate-400 focus:border-orange-500 focus:ring-1 focus:ring-orange-500 focus:outline-none transition-all"
                   aria-label={searchPlaceholder}
                 />
                 {searchQuery && (
@@ -233,7 +233,7 @@ export default function CustomSelect({
                       setSearchQuery('');
                       searchInputRef.current?.focus();
                     }}
-                    className="absolute inset-y-0 right-0 pr-2 flex items-center text-slate-400 hover:text-slate-600 cursor-pointer"
+                    className="absolute inset-y-0 right-0 pr-2 flex items-center text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 cursor-pointer"
                     aria-label="Clear search text"
                   >
                     <X className="w-3.5 h-3.5" />
@@ -249,7 +249,7 @@ export default function CustomSelect({
             className="max-h-60 overflow-y-auto overscroll-contain py-1"
           >
             {filteredOptions.length === 0 ? (
-              <div className="px-4 py-6 text-center text-xs text-slate-500 italic">
+              <div className="px-4 py-6 text-center text-xs text-slate-500 dark:text-slate-400 italic">
                 {emptyMessage}
               </div>
             ) : (
@@ -261,7 +261,7 @@ export default function CustomSelect({
                   <React.Fragment key={opt.value}>
                     {/* Render optional group separator header */}
                     {opt.groupHeader && (
-                      <div className="px-3.5 py-1 text-[10px] font-bold uppercase tracking-wider text-slate-400 bg-slate-50/60 select-none">
+                      <div className="px-3.5 py-1 text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-400 bg-slate-50/60 dark:bg-[#111C2E] select-none">
                         {opt.groupHeader}
                       </div>
                     )}
@@ -273,13 +273,13 @@ export default function CustomSelect({
                       onMouseEnter={() => setFocusedIndex(index)}
                       className={`px-3.5 py-2.5 text-xs sm:text-sm flex items-center justify-between cursor-pointer transition-colors select-none ${
                         isSelected
-                          ? 'bg-orange-50/80 text-orange-950 font-medium'
+                          ? 'bg-orange-50/80 dark:bg-orange-950/60 text-orange-950 dark:text-orange-300 font-medium'
                           : isFocused
-                          ? 'bg-slate-50 text-navy-950'
-                          : 'text-slate-700 hover:bg-slate-50 hover:text-navy-950'
+                          ? 'bg-slate-50 dark:bg-[#1e2f4a] text-navy-950 dark:text-white'
+                          : 'text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-[#1e2f4a] hover:text-navy-950 dark:hover:text-white'
                       }`}
                     >
-                      <span className="truncate pr-2 font-normal text-slate-800">
+                      <span className="truncate pr-2 font-normal text-slate-800 dark:text-slate-200">
                         {opt.label}
                       </span>
                       {isSelected && (

@@ -49,10 +49,10 @@ export function Modal({
 
       {/* Dialog Content */}
       <div 
-        className={`relative w-full ${maxWidth} bg-white rounded-2xl sm:rounded-3xl shadow-2xl overflow-hidden z-10 max-h-[calc(100dvh-24px)] sm:max-h-[calc(100dvh-36px)] flex flex-col my-auto box-border border border-slate-200/80 ${className}`}
+        className={`relative w-full ${maxWidth} bg-white dark:bg-[#111C2E] rounded-2xl sm:rounded-3xl shadow-2xl overflow-hidden z-10 max-h-[calc(100dvh-24px)] sm:max-h-[calc(100dvh-36px)] flex flex-col my-auto box-border border border-slate-200/80 dark:border-[#29384F] transition-colors ${className}`}
       >
         {(title || onClose) && (
-          <div className="px-5 sm:px-7 lg:px-8 py-3 sm:py-3.5 bg-navy-900 text-white flex items-center justify-between border-b border-navy-800 shrink-0">
+          <div className="px-5 sm:px-7 lg:px-8 py-3 sm:py-3.5 bg-navy-900 dark:bg-[#0B1220] text-white flex items-center justify-between border-b border-navy-800 dark:border-[#29384F] shrink-0">
             <div className="pr-3">
               {title && (
                 <h3 className="text-lg sm:text-[22px] lg:text-[23px] font-bold text-white flex items-center gap-2.5 leading-tight">

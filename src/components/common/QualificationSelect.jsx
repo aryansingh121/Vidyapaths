@@ -266,7 +266,7 @@ export default function QualificationSelect({
       <label
         id={`${id}-label`}
         htmlFor={`${id}-trigger`}
-        className="block text-xs font-bold text-navy-950 uppercase tracking-wider mb-1.5 select-none"
+        className="block text-xs font-bold text-navy-950 dark:text-slate-100 uppercase tracking-wider mb-1.5 select-none"
       >
         {label} <span className="text-orange-500">*</span>
       </label>
@@ -319,13 +319,13 @@ export default function QualificationSelect({
             hasError
               ? 'border-rose-400 bg-rose-50/30 text-rose-900 focus:border-rose-500 focus:ring-2 focus:ring-rose-500/20'
               : isOpen
-              ? 'border-orange-500 bg-white ring-2 ring-orange-500/20 shadow-sm'
+              ? 'border-orange-500 bg-white dark:bg-[#17243A] ring-2 ring-orange-500/20 shadow-sm'
               : value
-              ? 'border-slate-200 bg-white text-slate-800 hover:border-slate-300 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20'
-              : 'border-slate-200 bg-slate-50/50 text-slate-400 hover:border-slate-300 focus:border-orange-500 focus:bg-white focus:ring-2 focus:ring-orange-500/20'
+              ? 'border-slate-200 dark:border-[#29384F] bg-white dark:bg-[#17243A] text-slate-800 dark:text-slate-100 hover:border-slate-300 dark:hover:border-slate-600 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20'
+              : 'border-slate-200 dark:border-[#29384F] bg-slate-50/50 dark:bg-[#17243A] text-slate-400 hover:border-slate-300 dark:hover:border-slate-600 focus:border-orange-500 focus:bg-white dark:focus:bg-[#17243A] focus:ring-2 focus:ring-orange-500/20'
           } ${disabled ? 'opacity-60 cursor-not-allowed' : ''}`}
         >
-          <span className={`truncate block ${value ? 'text-slate-800 font-medium' : 'text-slate-400'}`}>
+          <span className={`truncate block ${value ? 'text-slate-800 dark:text-slate-100 font-medium' : 'text-slate-400'}`}>
             {value || placeholder}
           </span>
 
@@ -362,7 +362,7 @@ export default function QualificationSelect({
               maxHeight: `${dropdownCoords.maxHeight}px`,
               zIndex: 9999
             }}
-            className={`bg-white rounded-2xl border border-slate-200/90 shadow-2xl overflow-hidden flex flex-col transition-all duration-150 animate-in fade-in ${
+            className={`bg-white dark:bg-[#17243A] rounded-2xl border border-slate-200/90 dark:border-[#29384F] shadow-2xl overflow-hidden flex flex-col transition-all duration-150 animate-in fade-in ${
               openDirection === 'up'
                 ? 'slide-in-from-bottom-2 origin-bottom'
                 : 'slide-in-from-top-2 origin-top'
@@ -371,7 +371,7 @@ export default function QualificationSelect({
             {/* Options List Container */}
             <div
               ref={optionsListRef}
-              className="overflow-y-auto overscroll-contain py-1.5 focus:outline-none divide-y divide-slate-100/60"
+              className="overflow-y-auto overscroll-contain py-1.5 focus:outline-none divide-y divide-slate-100/60 dark:divide-[#29384F]/60"
             >
               {options.map((opt, index) => {
                 const isSelected = opt === value;
@@ -387,10 +387,10 @@ export default function QualificationSelect({
                     onMouseEnter={() => setFocusedIndex(index)}
                     className={`min-h-[44px] px-4 py-2.5 text-base sm:text-sm flex items-center justify-between cursor-pointer transition-colors select-none ${
                       isSelected
-                        ? 'bg-orange-50 text-orange-600 font-semibold'
+                        ? 'bg-orange-50 dark:bg-orange-950/60 text-orange-600 dark:text-orange-400 font-semibold'
                         : isFocused
-                        ? 'bg-orange-50/50 text-navy-950 font-medium'
-                        : 'text-slate-700 hover:bg-slate-50 hover:text-navy-950'
+                        ? 'bg-orange-50/50 dark:bg-[#1e2f4a] text-navy-950 dark:text-white font-medium'
+                        : 'text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-[#1e2f4a] hover:text-navy-950 dark:hover:text-white'
                     }`}
                   >
                     <span className="truncate pr-2">{opt}</span>

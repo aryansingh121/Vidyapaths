@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
   --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --font-heading: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
@@ -15,9 +17,25 @@
   --color-orange-600: #ea580c;
   --color-orange-50: #fff7ed;
   --color-orange-100: #ffedd5;
+
+  /* Premium Dark Mode Design Tokens */
+  --color-dark-bg: #0B1220;
+  --color-dark-surface: #111C2E;
+  --color-dark-card: #17243A;
+  --color-dark-border: #29384F;
+  --color-dark-text-primary: #F8FAFC;
+  --color-dark-text-secondary: #A8B3C7;
+  --color-dark-hover: #1e2e47;
 }
 
 @layer base {
+  html {
+    color-scheme: light;
+  }
+  html.dark {
+    color-scheme: dark;
+  }
+
   html, body {
     overflow-x: clip;
     max-width: 100vw;
@@ -25,6 +43,49 @@
     font-family: var(--font-sans);
     -webkit-text-size-adjust: 100%;
     text-size-adjust: 100%;
+  }
+
+  /* Smooth Theme Transitions */
+  html.dark body {
+    background-color: var(--color-dark-bg);
+    color: var(--color-dark-text-primary);
+  }
+
+  /* ========================================================
+     OPTIMIZED THEME TRANSITION STRATEGY
+     Targeted ~180ms transition for surface and text colors.
+     Avoids the universal wildcard (*) which thrashes DOM layout/style calculation.
+     Excludes box-shadow, filter, and transforms to ensure 60fps fluid toggling.
+     ======================================================== */
+  html.theme-transition,
+  html.theme-transition body,
+  html.theme-transition #root,
+  html.theme-transition header,
+  html.theme-transition nav,
+  html.theme-transition footer,
+  html.theme-transition main,
+  html.theme-transition section,
+  html.theme-transition article,
+  html.theme-transition aside,
+  html.theme-transition dialog,
+  html.theme-transition input,
+  html.theme-transition select,
+  html.theme-transition textarea,
+  html.theme-transition button,
+  html.theme-transition a,
+  html.theme-transition p,
+  html.theme-transition h1,
+  html.theme-transition h2,
+  html.theme-transition h3,
+  html.theme-transition h4,
+  html.theme-transition h5,
+  html.theme-transition h6,
+  html.theme-transition span {
+    transition: 
+      background-color 180ms cubic-bezier(0.4, 0, 0.2, 1),
+      border-color 180ms cubic-bezier(0.4, 0, 0.2, 1),
+      color 180ms cubic-bezier(0.4, 0, 0.2, 1) !important;
+    transition-delay: 0ms !important;
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -62,12 +123,21 @@
 ::-webkit-scrollbar-track {
   background: #f1f5f9;
 }
+.dark ::-webkit-scrollbar-track {
+  background: #0B1220;
+}
 ::-webkit-scrollbar-thumb {
   background: #cbd5e1;
   border-radius: 4px;
 }
+.dark ::-webkit-scrollbar-thumb {
+  background: #29384F;
+}
 ::-webkit-scrollbar-thumb:hover {
   background: #94a3b8;
+}
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #3B4D68;
 }
 
 /* ========================================================
@@ -83,12 +153,20 @@ textarea::placeholder {
   opacity: 1;
   font-weight: 400;
 }
+.dark input::placeholder,
+.dark textarea::placeholder {
+  color: #64748B;
+}
 
 input::-webkit-input-placeholder,
 textarea::-webkit-input-placeholder {
   color: #94A3B8;
   opacity: 1;
   font-weight: 400;
+}
+.dark input::-webkit-input-placeholder,
+.dark textarea::-webkit-input-placeholder {
+  color: #64748B;
 }
 
 input::-moz-placeholder,
@@ -97,12 +175,20 @@ textarea::-moz-placeholder {
   opacity: 1;
   font-weight: 400;
 }
+.dark input::-moz-placeholder,
+.dark textarea::-moz-placeholder {
+  color: #64748B;
+}
 
 input:-ms-input-placeholder,
 textarea:-ms-input-placeholder {
   color: #94A3B8;
   opacity: 1;
   font-weight: 400;
+}
+.dark input:-ms-input-placeholder,
+.dark textarea:-ms-input-placeholder {
+  color: #64748B;
 }
 
 /* Entered text styling for inputs, selects, and textareas */
@@ -116,6 +202,16 @@ select,
 textarea {
   color: #0B1F3A;
   font-weight: 400;
+}
+.dark input[type="text"],
+.dark input[type="email"],
+.dark input[type="tel"],
+.dark input[type="number"],
+.dark input[type="url"],
+.dark input[type="search"],
+.dark select,
+.dark textarea {
+  color: #F8FAFC;
 }
 
 /* ========================================================
@@ -146,16 +242,32 @@ select.is-placeholder {
   color: #94A3B8;
   font-weight: 400;
 }
+.dark select:has(option[value=""]:checked),
+.dark select.is-placeholder {
+  color: #64748B;
+}
 
 select:not(:has(option[value=""]:checked)) {
   color: #0B1F3A;
+  font-weight: 400;
+}
+.dark select:not(:has(option[value=""]:checked)) {
+  color: #F8FAFC;
   font-weight: 400;
 }
 
 select option[value=""] {
   color: #94A3B8;
 }
+.dark select option[value=""] {
+  color: #64748B;
+  background-color: #111C2E;
+}
 
 select option:not([value=""]) {
   color: #0B1F3A;
+}
+.dark select option:not([value=""]) {
+  color: #F8FAFC;
+  background-color: #17243A;
 }

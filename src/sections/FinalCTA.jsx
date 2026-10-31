@@ -16,7 +16,7 @@ export default function FinalCTA({ onOpenEnquiry, onOpenCounselling }) {
   };
 
   return (
-    <section className="py-20 bg-gradient-to-br from-navy-900 via-navy-950 to-navy-900 text-white relative overflow-hidden">
+    <section className="py-20 bg-gradient-to-br from-navy-900 via-navy-950 to-navy-900 dark:from-[#0B1220] dark:via-[#111C2E] dark:to-[#0B1220] border-t border-transparent dark:border-[#29384F]/60 text-white relative overflow-hidden transition-colors duration-200">
       {/* Decorative background glow */}
       <div className="absolute top-0 right-1/4 w-96 h-96 bg-orange-500/15 rounded-full blur-3xl pointer-events-none"></div>
       <div className="absolute bottom-0 left-1/4 w-80 h-80 bg-blue-500/15 rounded-full blur-3xl pointer-events-none"></div>

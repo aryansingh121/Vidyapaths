@@ -168,7 +168,7 @@ All production contact details and email targets are maintained in `src/data/sit
 ```javascript
 export const siteConfig = {
   name: "Vidyapaths",
-  tagline: "Right Guidance. Brighter Future.",
+  tagline: "Beginning Your Path",
   phone: "+91 98765 43210",               // Display phone
   phoneRaw: "+919876543210",             // Dialable phone
   whatsappNumber: "+919876543210",       // International format without '+'

@@ -3,12 +3,12 @@ import { useLocation } from 'react-router-dom';
 
 const routeMeta = {
   '/': {
-    title: 'Vidyapaths — Right Guidance. Brighter Future. | Career & Education Consultancy',
+    title: 'Vidyapaths — Beginning Your Path | Career & Education Consultancy',
     description: 'Vidyapaths is a student-focused Career & Education Consultancy helping students make confident decisions for college admissions, career guidance, internships, and study abroad.'
   },
   '/about': {
-    title: 'About Vidyapaths | Mission, Vision & Student-First Mentorship',
-    description: 'Learn about Vidyapaths, our ethical advisory philosophy, transparent college cutoffs analysis, and student-focused career guidance.'
+    title: 'About Vidyapaths: Your Trusted Partner from Classroom to Career',
+    description: 'We Bridge the Gap Between Academic Confusion and Lifelong Professional Success. Beginning Your Path with Vidyapaths.'
   },
   '/services': {
     title: 'Our Services | College Admissions, Career Counselling & Study Abroad — Vidyapaths',
