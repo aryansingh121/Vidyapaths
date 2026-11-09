@@ -26,10 +26,18 @@ export const siteConfig = {
   hours: "Mon - Sat: 9:30 AM - 6:30 PM",
 
   socials: {
-    instagram: "https://instagram.com/vidyapaths",
+    instagram: "https://www.instagram.com/vidyapaths.official?xtok=MTdidHNmZDkxazJnNQ==",
+    instagramUsername: "@vidyapaths.official",
     linkedin: "https://linkedin.com/company/vidyapaths",
     facebook: "https://facebook.com/vidyapaths",
     youtube: "https://youtube.com/@vidyapaths"
+  },
+
+  instagramCta: {
+    title: "Follow us on Instagram",
+    username: "@vidyapaths.official",
+    url: "https://www.instagram.com/vidyapaths.official?xtok=MTdidHNmZDkxazJnNQ==",
+    description: "Stay updated with education opportunities, career guidance, admissions updates, and student resources."
   }
 };
 

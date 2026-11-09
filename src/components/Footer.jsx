@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Phone, Mail, Clock, ArrowUpRight, MessageCircle } from 'lucide-react';
+import { InstagramIcon } from './SocialIcons';
 import { siteConfig } from '../data/siteData';
 
 const CURRENT_YEAR = new Date().getFullYear();
@@ -97,6 +98,26 @@ export default function Footer({ onOpenEnquiry, onOpenCounselling }) {
                 <span>WhatsApp</span>
               </a>
             </div>
+
+            {/* Subtle Instagram Follow CTA */}
+            <div className="pt-2">
+              <a
+                href={siteConfig.socials.instagram}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group inline-flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-medium text-slate-300 hover:text-white bg-navy-800/80 dark:bg-[#111C2E] hover:bg-navy-700/80 dark:hover:bg-[#17243A] border border-navy-700 dark:border-[#29384F] transition-all duration-200"
+                aria-label={`Follow us on Instagram (${siteConfig.socials.instagramUsername})`}
+              >
+                <div className="w-6 h-6 rounded-lg bg-gradient-to-tr from-amber-500 via-rose-500 to-purple-600 flex items-center justify-center text-white shrink-0 group-hover:scale-105 transition-transform shadow-xs">
+                  <InstagramIcon className="w-3.5 h-3.5" />
+                </div>
+                <div className="flex flex-col text-left">
+                  <span className="text-[10px] text-slate-400 uppercase tracking-wider font-semibold leading-tight">Follow us on Instagram</span>
+                  <span className="text-xs font-bold text-white group-hover:text-orange-400 leading-tight transition-colors">{siteConfig.socials.instagramUsername}</span>
+                </div>
+                <ArrowUpRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-white ml-1 transition-colors" />
+              </a>
+            </div>
           </div>
 
           {/* Quick Links */}
@@ -161,6 +182,19 @@ export default function Footer({ onOpenEnquiry, onOpenCounselling }) {
                 <Clock className="w-4 h-4 text-orange-400 shrink-0" />
                 <span>{siteConfig.hours}</span>
               </li>
+              <li className="flex items-center gap-3">
+                <InstagramIcon className="w-4 h-4 text-orange-400 shrink-0" />
+                <a 
+                  href={siteConfig.socials.instagram}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-white transition-colors flex items-center gap-1.5"
+                  aria-label={`Follow Vidyapaths on Instagram (${siteConfig.socials.instagramUsername})`}
+                >
+                  <span>Instagram:</span>
+                  <span className="text-orange-400 hover:text-orange-300 font-medium">{siteConfig.socials.instagramUsername}</span>
+                </a>
+              </li>
             </ul>
           </div>
 
@@ -188,6 +222,16 @@ export default function Footer({ onOpenEnquiry, onOpenCounselling }) {
             © {currentYear} Vidyapaths. All rights reserved. Built with precision for student success.
           </p>
           <div className="flex items-center space-x-6">
+            <a 
+              href={siteConfig.socials.instagram} 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="inline-flex items-center gap-1.5 text-slate-400 hover:text-white transition-colors"
+              aria-label={`Follow Vidyapaths on Instagram (${siteConfig.socials.instagramUsername})`}
+            >
+              <InstagramIcon className="w-3.5 h-3.5 text-orange-400" />
+              <span>Instagram</span>
+            </a>
             <span className="text-[11px] text-slate-500 hidden sm:inline">
               Transparent, Merit-based Career Guidance
             </span>

@@ -115,10 +115,11 @@ export default function Contact() {
                       href={siteConfig.socials.instagram}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="w-9 h-9 rounded-lg bg-white/10 hover:bg-orange-500 text-white flex items-center justify-center transition-colors"
-                      aria-label="Instagram"
+                      className="w-9 h-9 rounded-lg bg-white/10 hover:bg-gradient-to-tr hover:from-amber-500 hover:via-rose-500 hover:to-purple-600 text-white flex items-center justify-center transition-all group"
+                      aria-label={`Follow Vidyapaths on Instagram (${siteConfig.socials.instagramUsername})`}
+                      title={`Instagram: ${siteConfig.socials.instagramUsername}`}
                     >
-                      <InstagramIcon className="w-4 h-4" />
+                      <InstagramIcon className="w-4 h-4 group-hover:scale-110 transition-transform" />
                     </a>
                     <a
                       href={siteConfig.socials.linkedin}
@@ -148,6 +149,36 @@ export default function Contact() {
                       <YoutubeIcon className="w-4 h-4" />
                     </a>
                   </div>
+                </div>
+
+                {/* Instagram Follow CTA Card */}
+                <div className="pt-4 border-t border-navy-800 dark:border-[#1E2D44]">
+                  <a
+                    href={siteConfig.socials.instagram}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group block p-4 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/10 hover:border-orange-500/40 transition-all duration-200"
+                    aria-label={`Follow us on Instagram (${siteConfig.socials.instagramUsername})`}
+                  >
+                    <div className="flex items-start gap-3.5">
+                      <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-500 via-rose-500 to-purple-600 flex items-center justify-center text-white shrink-0 shadow-sm group-hover:scale-105 transition-transform">
+                        <InstagramIcon className="w-5 h-5" />
+                      </div>
+                      <div className="space-y-1">
+                        <div className="flex flex-wrap items-center gap-1.5">
+                          <span className="text-sm font-bold text-white group-hover:text-orange-400 transition-colors">
+                            Follow us on Instagram
+                          </span>
+                          <span className="text-xs text-orange-400 font-semibold font-mono">
+                            {siteConfig.socials.instagramUsername}
+                          </span>
+                        </div>
+                        <p className="text-xs text-slate-300 leading-relaxed">
+                          Stay updated with education opportunities, career guidance, admissions updates, and student resources.
+                        </p>
+                      </div>
+                    </div>
+                  </a>
                 </div>
 
               </div>

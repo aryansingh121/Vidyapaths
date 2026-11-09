@@ -1,8 +1,10 @@
 import React from 'react';
-import { Target, Eye, Sparkles } from 'lucide-react';
+import { Target, Eye, Sparkles, ArrowUpRight } from 'lucide-react';
 import SectionHeading from '../components/SectionHeading';
 import WhyVidyapaths from '../sections/WhyVidyapaths';
 import FinalCTA from '../sections/FinalCTA';
+import { siteConfig } from '../data/siteData';
+import { InstagramIcon } from '../components/SocialIcons';
 
 export default function About({ onOpenEnquiry, onOpenCounselling }) {
   return (
@@ -142,6 +144,34 @@ export default function About({ onOpenEnquiry, onOpenCounselling }) {
                 An academic degree is an investment. We map the curricular strength, alumni network, internship opportunities, and corporate placements before finalizing.
               </p>
             </div>
+          </div>
+
+          {/* Instagram Community CTA */}
+          <div className="mt-12 bg-white dark:bg-[#111C2E] rounded-2xl p-6 sm:p-7 border border-slate-200/80 dark:border-[#29384F] shadow-xs flex flex-col md:flex-row items-center justify-between gap-5 transition-colors">
+            <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4 text-center sm:text-left">
+              <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-amber-500 via-rose-500 to-purple-600 flex items-center justify-center text-white shrink-0 shadow-sm">
+                <InstagramIcon className="w-6 h-6" />
+              </div>
+              <div>
+                <h3 className="text-base sm:text-lg font-bold text-navy-900 dark:text-white flex flex-wrap items-center justify-center sm:justify-start gap-2">
+                  <span>Follow us on Instagram</span>
+                  <span className="text-orange-500 text-sm font-semibold font-mono">{siteConfig.socials.instagramUsername}</span>
+                </h3>
+                <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 mt-1 max-w-xl">
+                  Stay updated with education opportunities, career guidance, admissions updates, and student resources.
+                </p>
+              </div>
+            </div>
+            <a
+              href={siteConfig.socials.instagram}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-5 py-3 rounded-xl text-xs sm:text-sm font-bold text-white bg-orange-500 hover:bg-orange-600 shadow-sm transition-all shrink-0 cursor-pointer min-h-[44px]"
+              aria-label={`Follow Vidyapaths on Instagram (${siteConfig.socials.instagramUsername})`}
+            >
+              <span>Follow on Instagram</span>
+              <ArrowUpRight className="w-4 h-4" />
+            </a>
           </div>
         </div>
       </section>

@@ -18,6 +18,7 @@ import {
 } from 'lucide-react';
 import { siteConfig } from '../data/siteData';
 import { useTheme } from '../context/ThemeContext';
+import { InstagramIcon } from './SocialIcons';
 
 export default function Navbar({ onOpenEnquiry, onOpenCounselling }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -282,6 +283,25 @@ export default function Navbar({ onOpenEnquiry, onOpenCounselling }) {
               >
                 <Phone className="w-4 h-4 text-orange-500 shrink-0" />
                 <span className="truncate">Direct Support: {siteConfig.phone}</span>
+              </a>
+
+              {/* Mobile Instagram Profile Link */}
+              <a
+                href={siteConfig.socials.instagram}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-between w-full py-2 px-3 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-200 bg-slate-50 dark:bg-[#17243A] hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200 dark:border-[#29384F] min-h-[42px] transition-colors group"
+                aria-label={`Follow Vidyapaths on Instagram (${siteConfig.socials.instagramUsername})`}
+              >
+                <div className="flex items-center gap-2.5">
+                  <div className="w-6 h-6 rounded-lg bg-gradient-to-tr from-amber-500 via-rose-500 to-purple-600 flex items-center justify-center text-white shrink-0 shadow-xs">
+                    <InstagramIcon className="w-3.5 h-3.5" />
+                  </div>
+                  <span className="text-slate-600 dark:text-slate-300 group-hover:text-orange-500 transition-colors">
+                    Instagram: <strong className="text-navy-950 dark:text-white group-hover:text-orange-500">{siteConfig.socials.instagramUsername}</strong>
+                  </span>
+                </div>
+                <ArrowRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-orange-500 transition-colors" />
               </a>
 
               <button
