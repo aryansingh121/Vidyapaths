@@ -10,21 +10,20 @@ Vidyapaths operates on a **dual-transport lead ingestion pipeline**. Leads submi
 
 ```mermaid
 flowchart TD
-    User([Student Submits Form]) --> FormEngine[Enquiry / Comparison Form Component]
+    User([Student Submits Form]) --> FormEngine[Counselling / Enquiry Form Component]
     FormEngine --> Validate{Client-Side Validation}
     
     Validate -->|Fails| Feedback[Display Inline Errors & Focus First Invalid Input]
     Validate -->|Passes| Packaging[Construct Structured JSON Payload]
     
     Packaging --> LocalCache[(Browser localStorage: vidyapaths_leads)]
-    Packaging --> TransportCheck{Email Destination Check}
+    Packaging --> PrimaryAPI[POST /api/counselling or /api/enquiry]
     
-    TransportCheck -->|Live Verified Email| FormSubmit[POST Request to FormSubmit.co/ajax]
-    TransportCheck -->|Placeholder Email| LocalMock[Simulated Network Handshake 600ms]
-    
-    FormSubmit -->|HTTP 200 OK| Confirmation[Render Success State & Reset Form]
-    FormSubmit -->|Network Error| ErrorNotice[Alert User & Retain Local Backup]
-    LocalMock --> Confirmation
+    PrimaryAPI -->|HTTP 200 OK| Confirmation[Render Success State & Reset Form]
+    PrimaryAPI -->|HTTP 400 / 429| UserFeedback[Display Specific Actionable Error Alert]
+    PrimaryAPI -->|Offline / CDN Fallback| FallbackTransport[Direct FormSubmit Transport]
+    FallbackTransport -->|HTTP 200 OK| Confirmation
+    FallbackTransport -->|Error| ErrorNotice[Alert User with Direct WhatsApp Quick Link]
 ```
 
 ---
@@ -89,41 +88,29 @@ Rendered inside `src/components/ComparisonRequestForm.jsx`:
 
 ---
 
-## 4. FormSubmit.co Email Integration
+## 4. Production API Pipeline & Email Delivery
 
-Form submissions are dispatched asynchronously via AJAX POST requests to FormSubmit.co:
+Form submissions use a dual-tier resilient architecture:
 
-### API Request Specification
-- **Endpoint:** `https://formsubmit.co/ajax/${siteConfig.formSubmitEmail}`
+### 4.1 Tier 1: Production Serverless Function (`/api/counselling` & `/api/enquiry`)
+- **Primary Endpoint:** `/api/counselling` (same-origin, zero CORS issues, shielded from ad-blockers)
 - **HTTP Method:** `POST`
-- **Request Headers:**
-  ```http
-  Content-Type: application/json
-  Accept: application/json
-  ```
-- **Standard Payload Body:**
+- **Payload:** Structured JSON with the 4 student contact fields:
   ```json
   {
-    "_subject": "New Vidyapaths Enquiry — College Admission & Guidance",
-    "_template": "table",
-    "_captcha": "false",
-    "Service": "College Admission & Guidance",
-    "Full Name": "Aryan Singh",
-    "Phone Number": "+91 98765 43210",
-    "Email": "aryan@example.com",
-    "Preferred Course": "B.Tech Computer Science",
-    "Preferred College": "Delhi Technological University (DTU)",
-    "Source Page": "/colleges",
-    "Submission Time": "11/10/2026, 3:45:00 PM"
+    "name": "Aryan Kumar",
+    "phone": "7632091582",
+    "email": "aryankumarsingh123456789@gmail.com",
+    "qualification": "Undergraduate — Pursuing",
+    "source": "Get Free Counselling Modal"
   }
   ```
+- **Server-Side Validation:** Validates full name length, 10-digit Indian mobile number, email format, and permitted qualification.
+- **Rate-Limiting:** IP-based cooldown prevents accidental duplicate submissions and automated spam.
+- **Server Delivery:** Dispatches directly to Vidyapaths business email using URL-encoded form transport with 6-second timeout management.
 
-### FormSubmit One-Time Activation Workflow
-When deploying with a new production email address in `src/data/siteData.js`:
-1. Submit the first test form on the live website.
-2. FormSubmit will send an automated **"Confirm your email address"** email to the inbox.
-3. Click the activation link in the email once.
-4. All subsequent student enquiries will arrive directly in the inbox instantly.
+### 4.2 Tier 2: Resilient Client Fallback
+If deployed on static CDN environments where `/api` is unreachable (HTTP 404), client-side `enquiryService` automatically falls back to FormSubmit's URL-encoded form transport (`https://formsubmit.co/{recipientEmail}`).
 
 ---
 

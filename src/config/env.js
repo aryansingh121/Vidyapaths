@@ -30,8 +30,8 @@ export const env = Object.freeze({
   /** Official Contact Email Address */
   CONTACT_EMAIL: getEnv('VITE_CONTACT_EMAIL', 'Vidyapaths@gmail.com'),
 
-  /** API Base URL */
-  API_BASE_URL: getEnv('VITE_API_BASE_URL', 'https://formsubmit.co/ajax')
+  /** API Base URL (empty string defaults to same-origin Vercel serverless /api routes) */
+  API_BASE_URL: getEnv('VITE_API_BASE_URL', '')
 });
 
 export default env;

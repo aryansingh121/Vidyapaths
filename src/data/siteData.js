@@ -3,7 +3,7 @@
  * Centralized site metadata and contact configuration.
  * Powered by validated environment configs with safe defaults.
  */
-import { env } from '../config/env';
+import { env } from '../config/env.js';
 
 export const siteConfig = {
   name: "Vidyapaths",

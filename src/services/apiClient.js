@@ -3,7 +3,7 @@
  * Robust HTTP client with abort timeout, structured error handling,
  * and predictable response wrappers for client-side API requests.
  */
-import { env } from '../config/env';
+import { env } from '../config/env.js';
 
 export class ApiError extends Error {
   constructor(message, status = 0, data = null) {
@@ -12,6 +12,69 @@ export class ApiError extends Error {
     this.status = status;
     this.data = data;
   }
+}
+
+/**
+ * Formats user-friendly, specific error messages based on HTTP status,
+ * network state, and backend error payloads.
+ */
+export function formatApiErrorMessage(err, status = 0, data = null) {
+  // If client browser is explicitly offline
+  if (typeof navigator !== 'undefined' && navigator.onLine === false) {
+    return 'You appear to be offline. Please verify your internet connection and try again.';
+  }
+
+  // Request timeout / AbortError
+  if (err?.name === 'AbortError' || status === 408 || status === 504) {
+    return 'The enquiry server took too long to respond. Our mentors may be reviewing a high volume of requests — please try again in a few moments, or connect directly on WhatsApp.';
+  }
+
+  // HTTP 400: Bad Request / Validation Failure
+  if (status === 400) {
+    if (data?.error) return data.error;
+    if (data?.message) return data.message;
+    return 'Some of the submitted information is incomplete or invalid. Please check your entries and try again.';
+  }
+
+  // HTTP 401 / 403: Authorization / Access Restriction
+  if (status === 401 || status === 403) {
+    return 'Submission authorization could not be confirmed. Please refresh the page and try again.';
+  }
+
+  // HTTP 404: Endpoint Not Found
+  if (status === 404) {
+    return 'The enquiry submission service is temporarily unavailable. Please reach out to our team directly on WhatsApp (+91 8252332061).';
+  }
+
+  // HTTP 429: Rate Limit Exceeded
+  if (status === 429) {
+    if (data?.error) return data.error;
+    return 'Too many enquiry requests received from your connection. Please wait a minute before trying again.';
+  }
+
+  // HTTP 502: Bad Gateway / Upstream Mail Failure
+  if (status === 502) {
+    if (data?.error) return data.error;
+    return 'Email delivery service is momentarily delayed. Your details are saved locally — please contact us directly on WhatsApp.';
+  }
+
+  // HTTP 500 / 503: Internal Server Error
+  if (status >= 500) {
+    if (data?.error) return data.error;
+    return 'Our server experienced a temporary issue while recording your enquiry. Please try again shortly or connect with us via WhatsApp.';
+  }
+
+  // Network connection failure (e.g. ad-blocker, DNS glitch, browser connection abort)
+  if (err && (err.message === 'Failed to fetch' || err.name === 'TypeError')) {
+    return 'Unable to establish a secure connection to the enquiry server. Please check your connection or reach out on WhatsApp.';
+  }
+
+  return (
+    data?.error ||
+    data?.message ||
+    err?.message ||
+    'An unexpected error occurred while submitting your enquiry. Please try again.'
+  );
 }
 
 /**
@@ -57,9 +120,8 @@ export async function request(endpoint, options = {}, timeoutMs = 15000) {
     }
 
     if (!response.ok) {
-      const errorMessage = (parsedData && parsedData.message) || 
-        `Request failed with status ${response.status}: ${response.statusText}`;
-      throw new ApiError(errorMessage, response.status, parsedData);
+      const formattedMessage = formatApiErrorMessage(null, response.status, parsedData);
+      throw new ApiError(formattedMessage, response.status, parsedData);
     }
 
     return {
@@ -70,18 +132,13 @@ export async function request(endpoint, options = {}, timeoutMs = 15000) {
   } catch (err) {
     clearTimeout(timeoutId);
 
-    if (err.name === 'AbortError') {
-      return {
-        success: false,
-        error: 'Network request timed out. Please check your internet connection and try again.',
-        status: 408
-      };
-    }
+    const status = err.status || (err.name === 'AbortError' ? 408 : 0);
+    const friendlyError = formatApiErrorMessage(err, status, err.data);
 
     return {
       success: false,
-      error: err.message || 'An unexpected network error occurred.',
-      status: err.status || 0,
+      error: friendlyError,
+      status,
       data: err.data || null
     };
   }

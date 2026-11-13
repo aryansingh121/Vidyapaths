@@ -3,9 +3,9 @@
  * Business logic for student lead capture, email forwarding via FormSubmit,
  * and offline/local backup synchronization.
  */
-import { apiClient } from './apiClient';
-import { safeLocalStorage } from './storageService';
-import { siteConfig } from '../data/siteData';
+import { apiClient } from './apiClient.js';
+import { safeLocalStorage } from './storageService.js';
+import { siteConfig } from '../data/siteData.js';
 
 const LEADS_STORAGE_KEY = 'vidyapaths_leads';
 
@@ -45,6 +45,54 @@ export function backupLeadLocally(leadRecord) {
  */
 export function getStoredLeads() {
   return safeLocalStorage.getItem(LEADS_STORAGE_KEY, []);
+}
+
+/**
+ * Dispatches form data via direct url-encoded FormSubmit transport as fallback.
+ */
+async function dispatchDirectFormSubmit(emailBody, recipientEmail) {
+  const formSubmitUrl = `https://formsubmit.co/${encodeURIComponent(recipientEmail)}`;
+  const formPayload = new URLSearchParams();
+  for (const [key, value] of Object.entries(emailBody)) {
+    if (value !== undefined && value !== null) {
+      formPayload.append(key, String(value));
+    }
+  }
+
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 8000);
+
+  try {
+    const response = await fetch(formSubmitUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      body: formPayload.toString(),
+      signal: controller.signal
+    });
+    clearTimeout(timeoutId);
+
+    if (response.ok) {
+      return { success: true };
+    }
+    return {
+      success: false,
+      error: `Form delivery service returned status ${response.status}.`
+    };
+  } catch (err) {
+    clearTimeout(timeoutId);
+    if (err.name === 'AbortError') {
+      return {
+        success: false,
+        error: 'The request took too long to complete. Please try again or reach out on WhatsApp.'
+      };
+    }
+    return {
+      success: false,
+      error: err.message || 'Unable to connect to submission service.'
+    };
+  }
 }
 
 /**
@@ -114,13 +162,28 @@ export async function submitEnquiry({
     });
   }
 
-  // 4. Send via API client
+  // 4. Primary: Dispatch via same-origin /api/enquiry endpoint
+  const primaryResult = await apiClient.post('/api/enquiry', emailBody);
+
+  if (primaryResult.success) {
+    return {
+      success: true,
+      message: 'Thank you! Your enquiry has been submitted successfully. Our team will get in touch with you shortly.'
+    };
+  }
+
+  if (primaryResult.status === 400 || primaryResult.status === 429) {
+    return {
+      success: false,
+      error: primaryResult.error
+    };
+  }
+
+  // 5. Fallback: Direct URL-encoded dispatch to FormSubmit
   const recipientEmail = (siteConfig.formSubmitEmail || siteConfig.email || 'Vidyapaths@gmail.com').trim();
-  const endpoint = `https://formsubmit.co/ajax/${recipientEmail}`;
+  const fallbackResult = await dispatchDirectFormSubmit(emailBody, recipientEmail);
 
-  const result = await apiClient.post(endpoint, emailBody);
-
-  if (result.success) {
+  if (fallbackResult.success) {
     return {
       success: true,
       message: 'Thank you! Your enquiry has been submitted successfully. Our team will get in touch with you shortly.'
@@ -129,7 +192,7 @@ export async function submitEnquiry({
 
   return {
     success: false,
-    error: result.error || 'Submission failed. Please check your connection or contact us directly on WhatsApp.'
+    error: primaryResult.error || fallbackResult.error || 'Submission failed. Please connect with us directly on WhatsApp (+91 8252332061).'
   };
 }
 
@@ -239,7 +302,36 @@ export async function submitFreeCounselling({
 
   backupLeadLocally(leadRecord);
 
-  // 2. Assemble FormSubmit payload with exactly the 4 student details
+  // 2. Assemble Structured Enquiry Payload
+  const payload = {
+    name: name.trim(),
+    phone: normalizedPhone || phone.trim(),
+    email: email.trim(),
+    qualification: qualification.trim(),
+    source
+  };
+
+  // 3. Primary Dispatch: Same-origin Vercel serverless endpoint /api/counselling
+  const primaryResult = await apiClient.post('/api/counselling', payload);
+
+  if (primaryResult.success) {
+    return {
+      success: true,
+      message: primaryResult.data?.message || 'Thank you! Your counselling request has been received. Our senior counselling mentor will contact you shortly.'
+    };
+  }
+
+  // If primary returned a validation error (400) or rate-limit (429), surface it directly
+  if (primaryResult.status === 400 || primaryResult.status === 429) {
+    return {
+      success: false,
+      error: primaryResult.error
+    };
+  }
+
+  // 4. Secondary Fallback: Direct FormSubmit transport
+  console.warn('[enquiryService] Primary /api/counselling unavailable, falling back to direct form transport:', primaryResult.error);
+  const recipientEmail = (siteConfig.formSubmitEmail || siteConfig.email || 'Vidyapaths@gmail.com').trim();
   const emailBody = {
     _subject: `New Free Counselling Enquiry — ${name.trim()} (Vidyapaths)`,
     _template: 'table',
@@ -254,12 +346,9 @@ export async function submitFreeCounselling({
     'Submission Date': indianDate
   };
 
-  const recipientEmail = (siteConfig.formSubmitEmail || siteConfig.email || 'Vidyapaths@gmail.com').trim();
-  const endpoint = `https://formsubmit.co/ajax/${recipientEmail}`;
+  const fallbackResult = await dispatchDirectFormSubmit(emailBody, recipientEmail);
 
-  const result = await apiClient.post(endpoint, emailBody);
-
-  if (result.success) {
+  if (fallbackResult.success) {
     return {
       success: true,
       message: 'Thank you! Your counselling request has been received. Our senior counselling mentor will contact you shortly.'
@@ -268,7 +357,7 @@ export async function submitFreeCounselling({
 
   return {
     success: false,
-    error: result.error || 'Submission failed. Please check your internet connection or reach out on WhatsApp.'
+    error: primaryResult.error || fallbackResult.error || 'Submission failed. Please connect with us directly on WhatsApp (+91 8252332061).'
   };
 }
 
